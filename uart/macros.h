@@ -1,3 +1,5 @@
+#define REGR(x) (*((volatile unsigned int *)(x)))
+#define REGW(x,val) (*((volatile unsigned int *)(x))) = val
 /* GPIO PORT Base Macro */
 #define IO_PORTA_BASE 0x40004000
 #define IO_PORTB_BASE 0x40005000
@@ -8,9 +10,18 @@
 
 /* GPIO Registers* offset */
 /* belows are theirs bits' info  and position*/
-#define GPIOAFSEL_REG 0x420
+#define GPIOAFSEL_REG 0x420 // GPIO alternative function select
 // bit AFSEL 7:0
 
-#define GPIOPCTL_REG 0x52C
+#define GPIOPCTL_REG 0x52C // GPIO peripheral control
 // bit PMC7n 4*(n+1)-1:4*(n+1)-4 : Port Mux control, n = 0->7
 // n for select port PIN and value in "Table 10-2. GPIO Pins and Alternate Functions (64LQFP)"
+#define GPIOSLR_REG 0x518
+#define GPIODR2R_REG 0x500
+
+/* System Control base */
+#define SYSCTL_BASE 0x400FE000
+/* System Control Register offset*/
+#define RCGCUART_REG 0x618 
+#define RCGCGPIO_REG 0x608 
+
