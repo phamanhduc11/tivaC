@@ -1,5 +1,5 @@
-#define REGR(x) (*((volatile unsigned int *)(x)))
-#define REGW(x,val) (*((volatile unsigned int *)(x))) = val
+#define REGR(addr) (*((volatile unsigned int *)(addr)))
+#define REGW(addr,val) (*((volatile unsigned int *)(addr))) = val
 /* GPIO PORT Base Macro */
 #define IO_PORTA_BASE 0x40004000
 #define IO_PORTB_BASE 0x40005000
@@ -25,3 +25,7 @@
 #define RCGCUART_REG 0x618 
 #define RCGCGPIO_REG 0x608 
 
+#define GPIO_UART0_RX_PIN 0
+#define GPIO_UART0_RX_VAL 1
+#define GPIO_UART0_TX_PIN 1
+#define GPIO_UART0_TX_VAL 1

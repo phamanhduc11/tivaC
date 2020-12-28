@@ -19,12 +19,12 @@ struct uList {
 };
 
 /* private function, will be move to c file when finish develop*/
-static int GPIOModuleEnable(int uartBase);
-static int uartModuleClockEnable(int uartBase);
-static int uartModuleClockDisable(int uartBase);
-static int uartGPIOAltFunctionSet(int uartBase);
-static int uartGPIOAltFunctionClear(int uartBase);
-static int uartPortControl(int uartBase); // config as table 23-5 page 1351
+static int GPIOModuleEnable(struct uList const * uartCtx);
+static int uartModuleClockEnable(struct uList const * uartCtx);
+static int uartModuleClockDisable(struct uList const * uartCtx);
+static int uartGPIOAltFunctionSet(struct uList const * uartCtx);
+static int uartGPIOAltFunctionClear(struct uList const * uartCtx);
+static int uartPortControl(struct uList const * uartCtx); // config as table 23-5 page 1351
 
 
 struct uList const * uartLookUp(int uartVal){
@@ -97,6 +97,10 @@ static int uartGPIOAltFunctionSet(struct uList const * uartCtx){
 
 static int uartCtxPortControl(struct uList const * uartCtx){
     int uart = uartCtx->uartN;
+    int port = uartCtx->GPIOport;
+    int regVal = REGR(port+GPIOPCTL_REG);
+    regVal = regVal | (GPIO_UART0_RX_VAL << GPIO_UART0_RX_PIN*4 | GPIO_UART0_TX_VAL << GPIO_UART0_TX_PIN*4);
+    REGW(port+GPIOPCTL_REG,regVal);
 }
 
 // Develop as Initialization from Page 902
@@ -107,4 +111,31 @@ int uartInitialize(int uartBase){
     uartGPIOAltFunctionSet(uartCtx); //  enable alternative function for gpio port
     // step 4 ?
     uartCtxPortControl(uartCtx); // select gpio pin according gpio port from uartCtxGPIOAltFunctionSet
+}
+
+int uartConfigure(int systemClock, unsigned int baudrate, struct uList *uartCtx){
+    int regVal;
+    int uartBase = uartCtx->UARTbase;
+    unsigned int divisor;
+    // clear UARTEN bit from UARTCTL register
+    regVal = REGR(uartBase+UARTCTL_REG);
+    regVal = regVal & ~(1<<UARTCTL_BIT_UARTEN_POS);
+    REGW(uartBase+UARTCTL_REG,regVal);
+    // Set integer divisor in UARTIBRD register
+    divisor = (((systemClock * 8)/baudrate) + 1)/2;
+    REGW(uartBase+UARTIBRD_REG, divisor/64);
+    // set fraction divisor in UARTFBRD register
+    REGW(uartBase+UARTIBRD_REG, divisor%64);
+    // set line control in UARTLCRH register
+    regVal = REGR(uartBase+UARTLCRH_REG);
+    regVal = regVal & (0x3&UARTLCRH_BIT_WLEN_MASK << UARTLCRH_BIT_WLEN_POS);
+    REGW(uartBase+UARTLCRH_REG,regVal);
+    // config clock source UARTCC register
+    // use default system Clock
+    // OPTIONAL: uDMA config
+    // set UARTEN in UARTCTL register
+    regVal = REGR(uartBase+UARTCTL_REG);
+    regVal = regVal | (1<<UARTCTL_BIT_UARTEN_POS);
+    REGW(uartBase+UARTCTL_REG,regVal);
+    return 0;
 }
