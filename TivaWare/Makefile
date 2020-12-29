@@ -38,10 +38,10 @@
 #******************************************************************************
 
 DIRS=driverlib \
-     grlib     \
-     sensorlib \
-     usblib    \
-     examples
+      grlib     \
+      sensorlib \
+      usblib    \
+      examples
 
 all::
 	@for i in ${DIRS};                  \
