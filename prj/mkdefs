@@ -1,4 +1,3 @@
-
 #Toolchains
 CC = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
@@ -33,7 +32,7 @@ OUTDIR = build
 # Set the compiler CPU/FPU options.
 #
 CPU=-mcpu=cortex-m4
-FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=softfp
 
 #
 # The flags passed to the assembler.
@@ -56,7 +55,8 @@ CFLAGS=-mthumb             \
 	-Wall               \
 	-pedantic           \
 	-DPART_${PART}      \
-	-c
+	-c                  
+	# --print-multi-lib
 
 
 #
@@ -82,13 +82,13 @@ CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 
 
 ${OUTDIR}/%.o: %.c
-	@if [ -d "./${OUTDIR}" ];                         \
+	if [ -d "${OUTDIR}" ];                         \
 	 then                                            \
-	  ${CC} ${CFLAGS} -D${OUTDIR} -o $@ $^;          \
+	  ${CC} ${CFLAGS} -D${OUTDIR} -o $@ $<;          \
 	 else                                            \
 	  ${MKDIR} ${OUTDIR}           ;                  \
-	  ${CC} ${CFLAGS} -D${OUTDIR} -o $@ $^ ;          \
-	 fi
+	  ${CC} ${CFLAGS} -D${OUTDIR} -o $@ $< ;          \
+	fi
 
 ${OUTDIR}/%.a:
 	$(AR) -cr $@ $^
@@ -96,7 +96,7 @@ ${OUTDIR}/%.a:
 ${OUTDIR}/%.axf:
 	@if [ 'x${SCATTERgcc_${notdir ${@:.axf=}}}' = x ];                    \
 	 then                                                                 \
-	     ldname="${PROJECT_PATH}/gcc/standalone.ld";                              \
+	     ldname="${ROOT}/gcc/standalone.ld";                              \
 	 else                                                                 \
 	     ldname="${SCATTERgcc_${notdir ${@:.axf=}}}";                     \
 	 fi;                                                                  \

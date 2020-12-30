@@ -15,17 +15,18 @@ OUTDIR = build
 # TIVAWARE_PATH: path to tivaware folder
 TIVAWARE_PATH = ../../TivaWare
 PROJECT_PATH = ..
+INCLUDE_PATH += $(TIVAWARE_PATH) $(PROJECT_PATH)
 -include ${PROJECT_PATH}/mkdefs
 
 
 all: ${OUTDIR}
-all: ${OUTDIR}/libdriver.a
+all: ${OUTDIR}/libuart.a
 
 #
 # The rule to clean out all the build products.
 #
 clean:
-	@rm -rf ${OUTDIR} ${wildcard *~}
+	@rm -rf ${OUTDIR} #${wildcard *~}
 
 #
 # The rule to create the target directoy.
@@ -37,7 +38,7 @@ ${OUTDIR}:
 #
 # Rules for building the driver library.
 #
-${OUTDIR}/libdriver.a: ${OUTDIR}/uart.o
+${OUTDIR}/libuart.a: ${OUTDIR}/uart.o
 #
 # Include the automatically generated dependency files.
 #

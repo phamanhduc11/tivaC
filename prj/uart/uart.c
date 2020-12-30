@@ -95,22 +95,23 @@ static int uartGPIOAltFunctionSet(struct uList const * uartCtx){
     return 0;
 }
 
-static int uartCtxPortControl(struct uList const * uartCtx){
+static int uartPortControl(struct uList const * uartCtx){
     int uart = uartCtx->uartN;
     int port = uartCtx->GPIOport;
     int regVal = REGR(port+GPIOPCTL_REG);
     regVal = regVal | (GPIO_UART0_RX_VAL << GPIO_UART0_RX_PIN*4 | GPIO_UART0_TX_VAL << GPIO_UART0_TX_PIN*4);
     REGW(port+GPIOPCTL_REG,regVal);
+    return 0;
 }
 
 // Develop as Initialization from Page 902
 int uartInitialize(int uartBase){
-    struct uList const *uartCtx = uartCtxLookUp(uartBase);
+    struct uList const *uartCtx = uartLookUp(uartBase);
     GPIOModuleEnable(uartCtx); // enable GPIO port
     uartModuleClockEnable(uartCtx); // enable clock for uartCtx module
     uartGPIOAltFunctionSet(uartCtx); //  enable alternative function for gpio port
     // step 4 ?
-    uartCtxPortControl(uartCtx); // select gpio pin according gpio port from uartCtxGPIOAltFunctionSet
+    uartPortControl(uartCtx); // select gpio pin according gpio port from uartCtxGPIOAltFunctionSet
 }
 
 int uartConfigure(int systemClock, unsigned int baudrate, struct uList *uartCtx){

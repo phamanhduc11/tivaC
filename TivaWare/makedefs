@@ -177,7 +177,7 @@ ${COMPILER}${SUFFIX}/%.o: %.c
 	 else                                                 \
 	     echo ${CC} ${CFLAGS} -D${COMPILER} -o ${@} ${<}; \
 	 fi
-	@${CC} ${CFLAGS} -D${COMPILER} -o ${@} ${<}
+	${CC} ${CFLAGS} -D${COMPILER} -o ${@} ${<}
 ifneq ($(findstring CYGWIN, ${os}), )
 	@if [ -e ${@:.o=.d} ];                                   \
 	then                                                     \

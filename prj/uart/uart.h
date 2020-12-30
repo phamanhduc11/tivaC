@@ -41,7 +41,7 @@ BRD = BRDI + BRDF = UARTSysClk / (ClkDiv*Baud Rate)
 ClkDiv = 16 (set HSE bit) or 8 (clear HSE bit)
 
 */
-;
+
 
 enum uartNum {
     uart0 = 0,
@@ -60,5 +60,5 @@ enum uartNum {
 
 
 /* public function*/
-int uartInitialize(int uartBase)
+int uartInitialize(int uartBase);
 #endif
