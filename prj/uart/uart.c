@@ -25,6 +25,8 @@ static int uartModuleClockDisable(struct uList const * uartCtx);
 static int uartGPIOAltFunctionSet(struct uList const * uartCtx);
 static int uartGPIOAltFunctionClear(struct uList const * uartCtx);
 static int uartPortControl(struct uList const * uartCtx); // config as table 23-5 page 1351
+static int uartSendData(struct uList const* uartCtx, char * ch, int len);
+static int uartReadData(struct uList const* uartCtx, char *ch, int len);
 
 
 struct uList const * uartLookUp(int uartVal){
@@ -121,14 +123,9 @@ int uartConfigure(int systemClock, unsigned int baudrate, struct uList *uartCtx)
     // clear UARTEN bit from UARTCTL register
     regVal = REGR(uartBase+UARTCTL_REG);
     regVal = regVal & ~(1<<UARTCTL_BIT_UARTEN_POS);
-    REGW(uartBase+UARTCTL_REG,regVal);
-    // Set integer divisor in UARTIBRD register
-    divisor = (((systemClock * 8)/baudrate) + 1)/2;
-    REGW(uartBase+UARTIBRD_REG, divisor/64);
-    // set fraction divisor in UARTFBRD register
-    REGW(uartBase+UARTIBRD_REG, divisor%64);
-    // set line control in UARTLCRH register
-    regVal = REGR(uartBase+UARTLCRH_REG);
+    REGW(uartBase+UARTCTL_REG,regVal); // Set integer divisor in UARTIBRD register divisor = (((systemClock * 8)/baudrate) + 1)/2;
+       REGW(uartBase+UARTIBRD_REG, divisor/64); // set fraction divisor in UARTFBRD register REGW(uartBase+UARTIBRD_REG, divisor%64); // set line control in UARTLCRH register
+          regVal = REGR(uartBase+UARTLCRH_REG);
     regVal = regVal & (0x3&UARTLCRH_BIT_WLEN_MASK << UARTLCRH_BIT_WLEN_POS);
     REGW(uartBase+UARTLCRH_REG,regVal);
     // config clock source UARTCC register
@@ -140,3 +137,48 @@ int uartConfigure(int systemClock, unsigned int baudrate, struct uList *uartCtx)
     REGW(uartBase+UARTCTL_REG,regVal);
     return 0;
 }
+
+enum flagStatus{
+    UART1_CTS_ASSERTED = 0,
+    UART1_CTS_NASSERTED,
+    UART_BUSY,
+    UART_NBUSY,
+    UART_RXFIFO_NEMPTY,
+    UART_RXFIFO_EMPTY_FEN,
+    UART_RXFIFO_EMPTY_NFEN,
+    UART_TXFIFO_NFULL,
+    UART_TXFIFO_FULL_FEN,
+    UART_TXFIFO_FULL_NFEN,
+    UART_RXFIFO_NFULL,
+    UART_RXFIFO_FULL_FEN,
+    UART_RXFIFO_FULL_NFEN,
+    UART_TXFIFO_NEMPTY,
+    UART_TXFIFO_EMPTY_FEN,
+    UART_TXFIFO_EMPTY_NFEN,
+    UART_F_ERROR = 0xFF
+    };
+
+static unsigned int getRegBitValue(unsigned int regBase, unsigned int regOffset, unsigned int pos, unsigned int mask){
+    return (REGR(regBase+regOffset) & (1 << pos)) & mask;
+}
+
+static unsigned int uartFlagCheck(unsigned int uartBase, unsigned pos, unsigned mask){
+    unsigned int fen = getRegBitValue(uartBase,UARTLCRH_REG,UARTLCRH_BIT_FEN_POS,UARTLCRH_BIT_FEN_MASK);
+    unsigned int ret = getRegBitValue(uartBase,UARTFR_REG,pos,mask);
+    if (UARTFR_BIT_TXFE_POS == pos){
+        
+    }
+    else if (UART_BIT_)
+    
+}
+
+static int uartSendData(struct uList const* uartCtx, char * ch, int len){
+    unsigned int uartBase = uartCtx->UARTbase;
+    // TODO Check Trans FIFO full?
+
+
+    return 0;
+}
+
+
+static int uartReadData(struct uList const* uartCtx, char *ch, int len);
