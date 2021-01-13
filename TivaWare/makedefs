@@ -219,7 +219,7 @@ ${COMPILER}${SUFFIX}/%.a:
 # The rule for linking the application.
 #
 ${COMPILER}${SUFFIX}/%.axf:
-	@if [ 'x${SCATTERgcc_${notdir ${@:.axf=}}}' = x ];                    \
+	if [ 'x${SCATTERgcc_${notdir ${@:.axf=}}}' = x ];                    \
 	 then                                                                 \
 	     ldname="${ROOT}/gcc/standalone.ld";                              \
 	 else                                                                 \
@@ -240,6 +240,6 @@ ${COMPILER}${SUFFIX}/%.axf:
 	      ${LDFLAGSgcc_${notdir ${@:.axf=}}}                              \
 	      ${LDFLAGS} -o ${@} $(filter %.o %.a, ${^})                      \
 	      '${LIBM}' '${LIBC}' '${LIBGCC}'
-	@${OBJCOPY} -O binary ${@} ${@:.axf=.bin}
+	${OBJCOPY} -O binary ${@} ${@:.axf=.bin}
 endif
 

@@ -44,8 +44,8 @@ ${OUTDIR}:
 #
 # Rules for building the main example.
 #
-${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
 ${OUTDIR}/main.axf: ${OUTDIR}/main.o
+${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
 ${OUTDIR}/main.axf: ${OUTDIR}/uartstdio.o
 ${OUTDIR}/main.axf: ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a
 # ${OUTDIR}/main.axf: ${PREMAKE_DIR}/${OUTDIR}/libuart.a

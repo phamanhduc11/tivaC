@@ -6,26 +6,6 @@ AR = arm-none-eabi-ar
 RM = rm 
 MKDIR = mkdir -p
 #
-
-# The location of the C compiler
-# ARMGCC_ROOT is used by some makefiles that need to know where the compiler
-# is installed.
-#
-ARMGCC_ROOT:=${shell dirname '${shell sh -c "which ${CC}"}'}/..
-#
-# Get the location of libgcc.a from the GCC front-end.
-#
-LIBGCC:=${shell ${CC} ${CFLAGS} -print-libgcc-file-name}
-#
-# Get the location of libc.a from the GCC front-end.
-#
-LIBC:=${shell ${CC} ${CFLAGS} -print-file-name=libc.a}
-#
-# Get the location of libm.a from the GCC front-end.
-#
-LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
-#
-
 OUTDIR = build
 
 #
@@ -79,6 +59,23 @@ endif
 #
 AFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+# The location of the C compiler
+# ARMGCC_ROOT is used by some makefiles that need to know where the compiler
+# is installed.
+#
+ARMGCC_ROOT:=${shell dirname '${shell sh -c "which ${CC}"}'}/..
+#
+# Get the location of libgcc.a from the GCC front-end.
+#
+LIBGCC:=${shell ${CC} ${CFLAGS} -print-libgcc-file-name}
+#
+# Get the location of libc.a from the GCC front-end.
+#
+LIBC:=${shell ${CC} ${CFLAGS} -print-file-name=libc.a}
+#
+# Get the location of libm.a from the GCC front-end.
+#
+LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
 
 
 ${OUTDIR}/%.o: %.c

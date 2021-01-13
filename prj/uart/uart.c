@@ -1,6 +1,5 @@
 #include "uart.h"
 #include "macros.h"
-#include <stdio.h>
 
 
 struct uList {
@@ -168,7 +167,7 @@ static unsigned int uartFlagCheck(unsigned int uartBase, unsigned pos, unsigned 
     if (UARTFR_BIT_TXFE_POS == pos){
         
     }
-    else if (NULL);
+    else if (0);
     
 }
 
