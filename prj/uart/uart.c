@@ -168,7 +168,7 @@ static unsigned int uartFlagCheck(unsigned int uartBase, unsigned pos, unsigned 
     if (UARTFR_BIT_TXFE_POS == pos){
         
     }
-    else if (UART_BIT_)
+    else if (NULL);
     
 }
 

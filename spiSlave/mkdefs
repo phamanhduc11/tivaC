@@ -32,7 +32,7 @@ OUTDIR = build
 # Set the compiler CPU/FPU options.
 #
 CPU=-mcpu=cortex-m4
-FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=softfp
+FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
 
 #
 # The flags passed to the assembler.

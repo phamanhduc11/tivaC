@@ -58,8 +58,7 @@ extern "C"
 // Prototypes for the APIs.
 //
 //*****************************************************************************
-extern void UARTStdioConfig(uint32_t ui32Port, uint32_t ui32Baud,
-                            uint32_t ui32SrcClock);
+extern void UARTStdioConfig(uint32_t ui32PortNum, uint32_t ui32Baud, uint32_t ui32SrcClock);
 extern int UARTgets(char *pcBuf, uint32_t ui32Len);
 extern unsigned char UARTgetc(void);
 extern void UARTprintf(const char *pcString, ...);
