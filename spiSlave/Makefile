@@ -18,6 +18,7 @@ VERBOSE = 1
 #
 # Include the common make definitions.
 #
+DEBUG = 1
 include ${PROJECT_PATH}/mkdefs
 #
 # The default rule, which causes the main example to be built.

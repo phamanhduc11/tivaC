@@ -26,7 +26,6 @@
 #define __UARTSTDIO_H__
 
 #include <stdarg.h>
-
 //*****************************************************************************
 //
 // If building with a C++ compiler, make all of the definitions in this header
