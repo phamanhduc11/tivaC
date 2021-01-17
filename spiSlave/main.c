@@ -150,7 +150,7 @@ InitSPI2(void)
     //
     // Configure and enable the SSI2 port for SPI slave mode.
     //
-    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_2,
+    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_3,
     				   SSI_MODE_SLAVE, 5000, 8);
 
     //
@@ -163,7 +163,7 @@ InitSPI2(void)
 // Global variables used in interrupt handler and the main loop.
 //
 //*****************************************************************************
-#define NUM_SSI_DATA 3
+#define NUM_SSI_DATA 20
 volatile unsigned long g_ulSSI2RXTO = 0;
 unsigned long g_ulDataRx2[NUM_SSI_DATA];
 
@@ -180,12 +180,13 @@ SSI2IntHandler(void)
 {
 	unsigned long ulStatus, ulIndex;
 
-    UARTprintf("In SSI Int\n");
+//    UARTprintf("In SSI Int\n");
 	//
 	// Read interrupt status.
 	//
-	ulStatus = SSIIntStatus(SSI2_BASE, 1);
-
+	ulStatus = SSIIntStatus(SSI2_BASE, 0);
+//	UARTprintf("%x\n",ulStatus);
+//	ulStatus = SSIIntStatus(SSI2_BASE, 1);
 	//
 	// Check the reason for the interrupt.
 	//
@@ -195,13 +196,13 @@ SSI2IntHandler(void)
 		// Interrupt is because of RX time out.  So increment counter to tell
 		// main loop that RX timeout interrupt occurred.
 		//
-		g_ulSSI2RXTO++;
+		g_ulSSI2RXTO = true;
 
 		//
 		// Read NUM_SSI_DATA bytes of data from SSI2 RX FIFO.
 		//
 		// for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
-		for(ulIndex = 0; ulIndex < 1; ulIndex++)
+		for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
 		{
 			SSIDataGet(SSI2_BASE, &g_ulDataRx2[ulIndex]);
 		}
@@ -251,7 +252,7 @@ InitSPI0(void)
     //
     // Configure and enable the SSI0 port for SPI master mode.
     //
-    SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_2,
+    SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_3,
     				   SSI_MODE_MASTER, 660000, 8);
 
     //
@@ -260,13 +261,13 @@ InitSPI0(void)
     SSIEnable(SSI0_BASE);
 }
 
-#define SLAVE_ADDRESS 0x3C
+#define SLAVE_ADDRESS 0x4D
 static uint32_t g_ui32DataRx;
 static bool g_bIntFlag = false;
 void
 I2C0SlaveIntHandler(void)
 {
-    UARTprintf("\nInt Debug 1\n");
+    UARTprintf("\nInt I2C\n");
     //
     // Clear the I2C0 interrupt flag.
     //
@@ -299,14 +300,14 @@ void I2CInit(void){
     // to use external pull-ups that are faster than the internal pull-ups.
     // Refer to the datasheet for more information.
     //
-    HWREG(I2C0_BASE + I2C_O_MCR) |= 0x01;
+//    HWREG(I2C0_BASE + I2C_O_MCR) |= 0x01;
     IntEnable(INT_I2C0);
     I2CSlaveIntEnableEx(I2C0_BASE, I2C_SLAVE_INT_DATA);
-    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
+//    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
 
     I2CSlaveEnable(I2C0_BASE);
     I2CSlaveInit(I2C0_BASE, SLAVE_ADDRESS);
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);
+//    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);
 
 }
 
@@ -349,6 +350,7 @@ int main(){
     InitSPI2();
 
     SSIIntEnable(SSI2_BASE, SSI_RXTO);
+    UARTprintf("Int mask %x\n",HWREG(SSI2_BASE + SSI_O_IM));
     while(SSIDataGetNonBlocking(SSI2_BASE, &g_ulDataRx2[0]))
     {
     }
@@ -359,45 +361,43 @@ int main(){
     UARTprintf("Hello, world!\n");
     
     I2CInit();
-    ui32DataTx = 'I';
-    UARTprintf("Transferring from: Master -> Slave\n");
+//    ui32DataTx = 'I';
+//    UARTprintf("Transferring from: Master -> Slave\n");
 
     //
     // Display the data that I2C0 is transferring.
     //
-    UARTprintf("  Sending: '%c'", ui32DataTx);
+//    UARTprintf("  Sending: '%c'", ui32DataTx);
 
     //
     // Place the data to be sent in the data register.
     //
-    UARTprintf("\n Debug 1\n");
-    I2CMasterDataPut(I2C0_BASE, ui32DataTx);
-
-    //
-    // Initiate send of single piece of data from the master.  Since the
-    // loopback mode is enabled, the Master and Slave units are connected
-    // allowing us to receive the same data that we sent out.
-    //
-    UARTprintf("\n Debug 2\n");
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
-    UARTprintf("\n Debug 3\n");
+//    UARTprintf("\n Debug 1\n");
+//    I2CMasterDataPut(I2C0_BASE, ui32DataTx);
+//
+//    //
+//    // Initiate send of single piece of data from the master.  Since the
+//    // loopback mode is enabled, the Master and Slave units are connected
+//    // allowing us to receive the same data that we sent out.
+//    //
+//    UARTprintf("\n Debug 2\n");
+//    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+//    UARTprintf("\n Debug 3\n");
 
     //
     // Wait for interrupt to occur.
     //
-    while(!g_bIntFlag)
-    {
-    }
+
 
     //
     // Display that interrupt was received.
     //
-    UARTprintf("\n  Slave Interrupt Received!\n");
+//    UARTprintf("\n  Slave Interrupt Received!\n");
 
     //
     // Display the data that the slave has received.
     //
-    UARTprintf("  Received: '%c'\n\n", g_ui32DataRx);
+//    UARTprintf("  Received: '%c'\n\n", g_ui32DataRx);
 
     // ulDataTx0[0] = 's';
     // ulDataTx0[1] = 'p';
@@ -491,13 +491,33 @@ int main(){
 	// 	//
 	// 	UARTprintf("\n\nTest Passed.\n\n");
     // }
+     for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
+     {
+         //
+         // Display the data that SSI is transferring.
+         //
+         ulDataTx0[ulindex] = (1+ulindex);
+         UARTprintf("'%d' ", ulDataTx0[ulindex]);
 
+         //
+         // Send the data using the "blocking" put function.  This function
+         // will wait until there is room in the send FIFO before returning.
+         // This allows you to assure that all the data you send makes it into
+         // the send FIFO.
+         //
+         SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
+     }
+    int i;
+    UARTprintf("\nEnd Write\n ");
     while(1){
         if (g_ulSSI2RXTO > 0){
-            UARTprintf("%d",g_ulDataRx2[0]);
-            UARTprintf("%d",g_ulDataRx2[1]);
-            UARTprintf("%d\n",g_ulDataRx2[2]);
-            g_ulSSI2RXTO--;
+            UARTprintf("Start print\n");
+            for(i=0;i<NUM_SSI_DATA;i++){
+                UARTprintf("%d",g_ulDataRx2[i]%10);
+            }
+            UARTprintf("\n");
+            UARTprintf("End Print\n");
+            g_ulSSI2RXTO = false;
 
         }
     }
