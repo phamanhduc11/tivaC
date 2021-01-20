@@ -493,22 +493,23 @@ int main(){
 	// 	//
 	// 	UARTprintf("\n\nTest Passed.\n\n");
     // }
-    //  for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
-    //  {
-    //      //
-    //      // Display the data that SSI is transferring.
-    //      //
-    //      ulDataTx0[ulindex] = (1+ulindex);
-    //      UARTprintf("'%d' ", ulDataTx0[ulindex]);
+    UARTprintf("slave setting %x\n", *(volatile uint32_t*)(SSI2_BASE+0x4));
+     for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
+     {
+         //
+         // Display the data that SSI is transferring.
+         //
+         ulDataTx0[ulindex] = (1+ulindex);
+         UARTprintf("'%d' ", ulDataTx0[ulindex]);
 
-    //      //
-    //      // Send the data using the "blocking" put function.  This function
-    //      // will wait until there is room in the send FIFO before returning.
-    //      // This allows you to assure that all the data you send makes it into
-    //      // the send FIFO.
-    //      //
-    //      SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
-    //  }
+         //
+         // Send the data using the "blocking" put function.  This function
+         // will wait until there is room in the send FIFO before returning.
+         // This allows you to assure that all the data you send makes it into
+         // the send FIFO.
+         //
+         SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
+     }
     int i;
     UARTprintf("\nEnd Write\n ");
     while(1){
