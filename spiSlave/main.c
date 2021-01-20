@@ -150,7 +150,7 @@ InitSPI2(void)
     //
     // Configure and enable the SSI2 port for SPI slave mode.
     //
-    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_3,
+    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
     				   SSI_MODE_SLAVE, 5000, 8);
 
     //
@@ -185,8 +185,8 @@ SSI2IntHandler(void)
 	// Read interrupt status.
 	//
 	ulStatus = SSIIntStatus(SSI2_BASE, 0);
-//	UARTprintf("%x\n",ulStatus);
-//	ulStatus = SSIIntStatus(SSI2_BASE, 1);
+	// UARTprintf("%x\n",ulStatus);
+	ulStatus = SSIIntStatus(SSI2_BASE, 1);
 	//
 	// Check the reason for the interrupt.
 	//
@@ -196,7 +196,7 @@ SSI2IntHandler(void)
 		// Interrupt is because of RX time out.  So increment counter to tell
 		// main loop that RX timeout interrupt occurred.
 		//
-		g_ulSSI2RXTO = true;
+		g_ulSSI2RXTO++;
 
 		//
 		// Read NUM_SSI_DATA bytes of data from SSI2 RX FIFO.
@@ -204,7 +204,9 @@ SSI2IntHandler(void)
 		// for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
 		for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
 		{
+            // UARTprintf("Num %d\n",ulIndex);
 			SSIDataGet(SSI2_BASE, &g_ulDataRx2[ulIndex]);
+            // UARTprintf("End %d\n",ulIndex);
 		}
 	}
 
@@ -491,22 +493,22 @@ int main(){
 	// 	//
 	// 	UARTprintf("\n\nTest Passed.\n\n");
     // }
-     for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
-     {
-         //
-         // Display the data that SSI is transferring.
-         //
-         ulDataTx0[ulindex] = (1+ulindex);
-         UARTprintf("'%d' ", ulDataTx0[ulindex]);
+    //  for(ulindex = 0; ulindex < NUM_SSI_DATA; ulindex++)
+    //  {
+    //      //
+    //      // Display the data that SSI is transferring.
+    //      //
+    //      ulDataTx0[ulindex] = (1+ulindex);
+    //      UARTprintf("'%d' ", ulDataTx0[ulindex]);
 
-         //
-         // Send the data using the "blocking" put function.  This function
-         // will wait until there is room in the send FIFO before returning.
-         // This allows you to assure that all the data you send makes it into
-         // the send FIFO.
-         //
-         SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
-     }
+    //      //
+    //      // Send the data using the "blocking" put function.  This function
+    //      // will wait until there is room in the send FIFO before returning.
+    //      // This allows you to assure that all the data you send makes it into
+    //      // the send FIFO.
+    //      //
+    //      SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
+    //  }
     int i;
     UARTprintf("\nEnd Write\n ");
     while(1){
