@@ -45,6 +45,7 @@ extern int main(void);
 extern void UART0IntHandler(void);
 extern void SSI2IntHandler(void);
 extern void I2C0SlaveIntHandler(void);
+extern void SVCIntHandler(void);
 //*****************************************************************************
 //
 // Reserve space for the system stack.
@@ -73,7 +74,7 @@ void (* const g_pfnVectors[])(void) =
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved
-    IntDefaultHandler,                      // SVCall handler
+    SVCIntHandler,                      // SVCall handler
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
