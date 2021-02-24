@@ -1,0 +1,1 @@
+"./boot_demo1.obj" "./startup_ccs.obj" "/home/paduc/Clone/tivaC/TivaWare/examples/boards/ek-tm4c123gxl/boot_demo1/boot_demo1_ccs.cmd" -l"/home/paduc/Clone/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" -llibc.a 

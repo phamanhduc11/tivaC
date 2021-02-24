@@ -348,6 +348,14 @@ void I2CInit(void){
 
 }
 
+int justSample(void){
+    volatile int a = 5;
+    volatile int b;
+    b = a;
+    a = b+a;
+    while(1){
+    };
+}
 int main(){
     unsigned long ulDataTx0[NUM_SSI_DATA];
     unsigned long ulDataRx0[NUM_SSI_DATA];

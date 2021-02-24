@@ -42,11 +42,8 @@ static void IntDefaultHandler(void);
 //
 //*****************************************************************************
 extern int main(void);
-extern int justSample(void);
-extern void UART0IntHandler(void);
-extern void SSI2IntHandler(void);
-extern void I2C0SlaveIntHandler(void);
-extern void SVCIntHandler(void);
+extern void CANIntHandler(void);
+// extern void UART0IntHandler(void);
 //*****************************************************************************
 //
 // Reserve space for the system stack.
@@ -75,7 +72,7 @@ void (* const g_pfnVectors[])(void) =
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved
-    SVCIntHandler,                      // SVCall handler
+    IntDefaultHandler,                      // SVCall handler
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
@@ -85,10 +82,10 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
-    UART0IntHandler,                      // UART0 Rx and Tx
+    IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
-    I2C0SlaveIntHandler,                      // I2C0 Master and Slave
+    IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
     IntDefaultHandler,                      // PWM Generator 1
@@ -119,7 +116,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Timer 3 subtimer B
     IntDefaultHandler,                      // I2C1 Master and Slave
     IntDefaultHandler,                      // Quadrature Encoder 1
-    IntDefaultHandler,                      // CAN0
+    CANIntHandler,                      // CAN0
     IntDefaultHandler,                      // CAN1
     0,                                      // Reserved
     0,                                      // Reserved
@@ -137,7 +134,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port J
     IntDefaultHandler,                      // GPIO Port K
     IntDefaultHandler,                      // GPIO Port L
-    SSI2IntHandler,                      // SSI2 Rx and Tx
+    IntDefaultHandler,                      // SSI2 Rx and Tx
     IntDefaultHandler,                      // SSI3 Rx and Tx
     IntDefaultHandler,                      // UART3 Rx and Tx
     IntDefaultHandler,                      // UART4 Rx and Tx
