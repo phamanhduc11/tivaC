@@ -90,7 +90,8 @@ FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
 #
 # The flags passed to the assembler.
 #
-AFLAGS=-mthumb \
+#AFLAGS=-mthumb \
+AFLAGS=-marm \
        ${CPU}  \
        ${FPU}  \
        -MD
@@ -98,7 +99,8 @@ AFLAGS=-mthumb \
 #
 # The flags passed to the compiler.
 #
-CFLAGS=-mthumb             \
+#CFLAGS=-mthumb             \
+CFLAGS=-marm \
        ${CPU}              \
        ${FPU}              \
        -ffunction-sections \

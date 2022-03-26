@@ -19,21 +19,21 @@ gcc/httpd.o: \
  ../../../../third_party/lwip-1.4.1/src/include/lwip/netif.h \
  ../../../../third_party/lwip-1.4.1/src/include/ipv4/lwip/icmp.h \
  ../../../../third_party/lwip-1.4.1/apps/httpserver_raw/fs.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/string.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/_ansi.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/newlib.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/_newlib_version.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/config.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/machine/ieeefp.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/features.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/reent.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/_ansi.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/lib/gcc/arm-none-eabi/10.2.1/include/stddef.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/_types.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/machine/_types.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/machine/_default_types.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/lock.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/cdefs.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/string.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/stdlib.h \
- /home/pad/Downloads/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/machine/stdlib.h
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\string.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\_ansi.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\newlib.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\_newlib_version.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\config.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\machine\ieeefp.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\features.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\reent.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\_ansi.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\lib\gcc\arm-none-eabi\10.2.1\include\stddef.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\_types.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\machine\_types.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\machine\_default_types.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\lock.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\cdefs.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\string.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\stdlib.h \
+ d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\machine\stdlib.h

@@ -150,8 +150,8 @@ InitSPI2(void)
     //
     // Configure and enable the SSI2 port for SPI slave mode.
     //
-    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
-    				   SSI_MODE_SLAVE, 5000, 8);
+    SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_1,
+    				   SSI_MODE_MASTER, 300000, 8);
 
     //
     // Enable the SSI2 module.
@@ -190,6 +190,7 @@ SSI2IntHandler(void)
 	//
 	// Check the reason for the interrupt.
 	//
+        UARTprintf("\nint Write\n ");
 	if(ulStatus & SSI_RXTO)
 	{
 		//
@@ -351,12 +352,12 @@ int main(){
     //
     InitSPI2();
 
-    SSIIntEnable(SSI2_BASE, SSI_RXTO);
+    // SSIIntEnable(SSI2_BASE, SSI_RXTO);
     UARTprintf("Int mask %x\n",HWREG(SSI2_BASE + SSI_O_IM));
     while(SSIDataGetNonBlocking(SSI2_BASE, &g_ulDataRx2[0]))
     {
     }
-    SSIIntClear(SSI2_BASE, SSI_RXTO);
+    // SSIIntClear(SSI2_BASE, SSI_RXTO);
 
     // Hello!
     //
@@ -434,7 +435,7 @@ int main(){
     // been transferred.  This is specific to this example as both the SSI
     // master and slave are on the same microcontroller.
     //
-    IntEnable(INT_SSI2);
+    // IntEnable(INT_SSI2);
 
     //
     // Wait for the SSI2 RXTO interrupt to fire and data read from RXFIFO.
@@ -510,7 +511,7 @@ int main(){
          //
          SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
      }
-    int i;
+    int i,u=0;
     UARTprintf("\nEnd Write\n ");
     while(1){
         if (g_ulSSI2RXTO > 0){
