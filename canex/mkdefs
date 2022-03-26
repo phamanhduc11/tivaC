@@ -6,15 +6,22 @@ AR = arm-none-eabi-ar
 RM = rm 
 MKDIR = mkdir -p
 #
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 OUTDIR = build
 
 #
 # Set the compiler CPU/FPU options.
 #
 CPU=-mcpu=cortex-m4
+<<<<<<< HEAD
 FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard 
+=======
+FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 
 #
 # The flags passed to the assembler.
@@ -51,11 +58,23 @@ LDFLAGS=--gc-sections
 # variable is set.
 #
 ifdef DEBUG 
+<<<<<<< HEAD
 CFLAGS+=-g -D DEBUG -O0
+=======
+CFLAGS+=-g -DDEBUG -O0
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 else
 CFLAGS+=-Os
 endif
 
+<<<<<<< HEAD
+=======
+#
+# Add the include file paths to AFLAGS and CFLAGS.
+#
+AFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 # The location of the C compiler
 # ARMGCC_ROOT is used by some makefiles that need to know where the compiler
 # is installed.
@@ -73,6 +92,7 @@ LIBC:=${shell ${CC} ${CFLAGS} -print-file-name=libc.a}
 # Get the location of libm.a from the GCC front-end.
 #
 LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
+<<<<<<< HEAD
 #
 
 #
@@ -80,6 +100,8 @@ LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
 #
 AFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+=======
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 
 
 ${OUTDIR}/%.o: %.c

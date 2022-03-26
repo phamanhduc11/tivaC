@@ -7,6 +7,10 @@ MCU=TM4C123GH6PM
 PROJECT_PATH = .
 TIVAWARE_PATH = ../TivaWare
 VPATH=../TivaWare/utils
+<<<<<<< HEAD
+=======
+
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 #
 # Where to find header files that do not live in the source directory.
 #
@@ -16,17 +20,34 @@ VERBOSE = 1
 #
 # Include the common make definitions.
 #
+<<<<<<< HEAD
+=======
+# DEBUG = 1
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 include ${PROJECT_PATH}/mkdefs
 #
 # The default rule, which causes the main example to be built.
 #
+<<<<<<< HEAD
 all: ${OUTDIR}
 all: ${OUTDIR}/main.axf
 
+=======
+# all: driver
+all: ${OUTDIR}
+all: ${OUTDIR}/main.axf
+
+driver:
+	${MAKE} -C ${PREMAKE_DIR} 
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 #
 # The rule to clean out all the build products.
 #
 clean:
+<<<<<<< HEAD
+=======
+	# ${MAKE} -C ${PREMAKE_DIR} clean
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 	rm -rf ${OUTDIR} ${wildcard *~}
 
 #
@@ -37,11 +58,20 @@ ${OUTDIR}:
 
 #
 # Rules for building the main example.
+<<<<<<< HEAD
 #o
 ${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
 ${OUTDIR}/main.axf: ${OUTDIR}/main.o
 ${OUTDIR}/main.axf: ${OUTDIR}/uartstdio.o
 ${OUTDIR}/main.axf: ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a
+=======
+#
+${OUTDIR}/main.axf: ${OUTDIR}/main.o
+${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
+${OUTDIR}/main.axf: ${OUTDIR}/uartstdio.o
+${OUTDIR}/main.axf: ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a
+# ${OUTDIR}/main.axf: ${PREMAKE_DIR}/${OUTDIR}/libuart.a
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 ${OUTDIR}/main.axf: ${MCU}.ld
 SCATTERgcc_main=${MCU}.ld
 ENTRY_main=ResetISR

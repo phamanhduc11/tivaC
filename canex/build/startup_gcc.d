@@ -1,4 +1,5 @@
 build/startup_gcc.o: startup_gcc.c \
+<<<<<<< HEAD
  d\:\gcc-arm-none-eabi-10-2020-q4-major\lib\gcc\arm-none-eabi\10.2.1\include\stdbool.h \
  d\:\gcc-arm-none-eabi-10-2020-q4-major\lib\gcc\arm-none-eabi\10.2.1\include\stdint.h \
  d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\stdint.h \
@@ -20,4 +21,13 @@ build/startup_gcc.o: startup_gcc.c \
  d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\lock.h \
  d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\cdefs.h \
  d\:\gcc-arm-none-eabi-10-2020-q4-major\arm-none-eabi\include\sys\string.h \
+=======
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/lib/gcc/arm-none-eabi/10.2.1/include/stdint.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/stdint.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/machine/_default_types.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/features.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/_newlib_version.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/_intsup.h \
+ /home/paduc/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/_stdint.h \
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
  ../TivaWare/inc/hw_nvic.h ../TivaWare/inc/hw_types.h

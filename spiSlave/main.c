@@ -18,6 +18,7 @@
 #include "driverlib/i2c.h"
 #include "utils/uartstdio.h"
 #include "driverlib/debug.h"
+#include "inc/hw_uart.h"
 #ifdef DEBUG
 void
 __error__(char *pcFilename, uint32_t ui32Line)
@@ -25,6 +26,41 @@ __error__(char *pcFilename, uint32_t ui32Line)
     while(1);
 }
 #endif
+
+#define __ASM __asm /*!< asm keyword for GNU Compiler */ 
+#define __INLINE inline /*!< inline keyword for GNU Compiler */ 
+#define __STATIC_INLINE static inline 
+volatile uint32_t _lrDbg;
+volatile uint32_t _controlDbg;
+/** 
+\brief Get Link Register 
+\details Returns the current value of the Link Register (LR). 
+\return LR Register value 
+*/ 
+__attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_LR(void) 
+{ 
+  register uint32_t result; 
+
+  __ASM volatile ("MOV %0, LR\n" : "=r" (result) ); 
+  return(result); 
+} 
+
+__attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void) 
+{ 
+  register uint32_t result; 
+
+      __asm("    mrs     r0, CONTROL\n"
+          "    bx      lr\n"
+          : "=r" (result));
+  return(result); 
+} 
+
+void SVCIntHandler(void){
+    _lrDbg = __get_LR();
+    UARTprintf("in SVC->LR register: %x\n",_lrDbg);
+    _controlDbg = __get_CONTROL();
+    UARTprintf("in SVC->CONTROL register: %x\n",_controlDbg);
+}
 
 void
 ConfigureUART(void)
@@ -163,10 +199,10 @@ InitSPI2(void)
 // Global variables used in interrupt handler and the main loop.
 //
 //*****************************************************************************
-#define NUM_SSI_DATA 20
+#define NUM_SSI_DATA 8
 volatile unsigned long g_ulSSI2RXTO = 0;
+volatile unsigned long g_ulSSI2RXWidth = 0;
 unsigned long g_ulDataRx2[NUM_SSI_DATA];
-
 //*****************************************************************************
 //
 // Interrupt handler for SSI2 peripheral in slave mode.  It reads the interrupt
@@ -184,14 +220,16 @@ SSI2IntHandler(void)
 	//
 	// Read interrupt status.
 	//
-	ulStatus = SSIIntStatus(SSI2_BASE, 0);
-	// UARTprintf("%x\n",ulStatus);
 	ulStatus = SSIIntStatus(SSI2_BASE, 1);
 	//
 	// Check the reason for the interrupt.
 	//
+<<<<<<< HEAD
         UARTprintf("\nint Write\n ");
 	if(ulStatus & SSI_RXTO)
+=======
+	if(ulStatus & SSI_RXTO & SSI_RXFF)
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
 	{
 		//
 		// Interrupt is because of RX time out.  So increment counter to tell
@@ -203,6 +241,7 @@ SSI2IntHandler(void)
 		// Read NUM_SSI_DATA bytes of data from SSI2 RX FIFO.
 		//
 		// for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
+        // while(HWREG())
 		for(ulIndex = 0; ulIndex < NUM_SSI_DATA; ulIndex++)
 		{
             // UARTprintf("Num %d\n",ulIndex);
@@ -314,6 +353,14 @@ void I2CInit(void){
 
 }
 
+int justSample(void){
+    volatile int a = 5;
+    volatile int b;
+    b = a;
+    a = b+a;
+    while(1){
+    };
+}
 int main(){
     unsigned long ulDataTx0[NUM_SSI_DATA];
     unsigned long ulDataRx0[NUM_SSI_DATA];
@@ -352,6 +399,7 @@ int main(){
     //
     InitSPI2();
 
+<<<<<<< HEAD
     // SSIIntEnable(SSI2_BASE, SSI_RXTO);
     UARTprintf("Int mask %x\n",HWREG(SSI2_BASE + SSI_O_IM));
     while(SSIDataGetNonBlocking(SSI2_BASE, &g_ulDataRx2[0]))
@@ -359,6 +407,39 @@ int main(){
     }
     // SSIIntClear(SSI2_BASE, SSI_RXTO);
 
+=======
+    SSIIntEnable(SSI2_BASE, SSI_RXTO| SSI_RXFF);
+    {
+
+        UARTprintf("\tDump UART registers value:\n");
+        UARTprintf("UART Data: %x\n",HWREG(UART0_BASE+ UART_O_DR));
+        UARTprintf("UART RecvSta: %x\n",HWREG(UART0_BASE+ UART_O_RSR));
+        UARTprintf("UART Flag: %x\n",HWREG(UART0_BASE+ UART_O_FR));
+        UARTprintf("UART IrDA : %x\n",HWREG(UART0_BASE+ UART_O_ILPR));
+        UARTprintf("UART Integer BRD: %x\n",HWREG(UART0_BASE+ UART_O_IBRD));
+        UARTprintf("UART Fraction BRD: %x\n",HWREG(UART0_BASE+ UART_O_FBRD));
+        UARTprintf("UART Line Control: %x\n",HWREG(UART0_BASE+ UART_O_LCRH));
+        UARTprintf("UART Control: %x\n",HWREG(UART0_BASE+ UART_O_CTL));
+        UARTprintf("UART Interrupt FIFO Select: %x\n",HWREG(UART0_BASE+ UART_O_IFLS));
+        UARTprintf("UART Int Mask: %x\n",HWREG(UART0_BASE+ UART_O_IM));
+        UARTprintf("UART Raw Int Status: %x\n",HWREG(UART0_BASE+ UART_O_RIS));
+        UARTprintf("UART Mask Int Status: %x\n",HWREG(UART0_BASE+ UART_O_MIS));
+        UARTprintf("UART Peripheral Properties: %x\n",HWREG(UART0_BASE+ UART_O_PP));
+    }
+    while(SSIDataGetNonBlocking(SSI2_BASE, &g_ulDataRx2[0]))
+    {
+    }
+    SSIIntClear(SSI2_BASE, SSI_RXTO);
+    _lrDbg = __get_LR();
+    UARTprintf("LR register: %x\n",_lrDbg);
+    _controlDbg = __get_CONTROL();
+    UARTprintf("CONTROL register: %x\n",_controlDbg);
+    __asm("SVC #0");
+    _lrDbg = __get_LR();
+    UARTprintf("after LR register: %x\n",_lrDbg);
+    _controlDbg = __get_CONTROL();
+    UARTprintf("after CONTROL register: %x\n",_controlDbg);
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
     // Hello!
     //
     UARTprintf("Hello, world!\n");
@@ -511,8 +592,13 @@ int main(){
          //
          SSIDataPut(SSI2_BASE, ulDataTx0[ulindex]);
      }
+<<<<<<< HEAD
     int i,u=0;
     UARTprintf("\nEnd Write\n ");
+=======
+    int i;
+    UARTprintf("\nEnd Write\n");
+>>>>>>> ac7f5bf2e1a5e94e3365253217efd271569c0882
     while(1){
         if (g_ulSSI2RXTO > 0){
             UARTprintf("Start print\n");
