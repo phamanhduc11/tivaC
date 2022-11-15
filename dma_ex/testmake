@@ -1,0 +1,5 @@
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+$(info MKLIST = $(MAKEFILE_LIST))
+$(info mkfilepath = $(mkfile_path))
+$(info current_dir = $(current_dir))

@@ -26,9 +26,54 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>gtimer_driver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/gtimer_driver.c</locationURI>
+		</link>
+		<link>
+			<name>gtimer_driver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/gtimer_driver.h</locationURI>
+		</link>
+		<link>
+			<name>log_debug.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/log_debug.c</locationURI>
+		</link>
+		<link>
+			<name>log_debug.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/log_debug.h</locationURI>
+		</link>
+		<link>
 			<name>main.c</name>
 			<type>1</type>
-			<location>D:/Workspace/tivaC/dma_ex/main.c</location>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/main.c</locationURI>
+		</link>
+		<link>
+			<name>main3.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/main.c</locationURI>
+		</link>
+		<link>
+			<name>usbd_driver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/usbd_driver.c</locationURI>
+		</link>
+		<link>
+			<name>usbd_driver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/usbd_driver.h</locationURI>
+		</link>
+		<link>
+			<name>usbd_framework.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/usbd_framework.c</locationURI>
+		</link>
+		<link>
+			<name>usbd_framework.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/usbd_framework.h</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

@@ -3,6 +3,10 @@
         "uart.h": "c",
         "usblib.h": "c",
         "debug.h": "c",
-        "hw_memmap.h": "c"
+        "hw_memmap.h": "c",
+        "stdbool.h": "c",
+        "log_debug.h": "c",
+        "usbstandards.h": "c",
+        "include.h": "c"
     }
 }

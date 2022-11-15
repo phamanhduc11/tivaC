@@ -4,15 +4,14 @@ MCU=TM4C123GH6PM
 #
 # The base directory for TivaWare.
 #
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-PROJECT_PATH = $(current_dir)
-TIVAWARE_PATH = $(current_dir)/../TivaWare
-VPATH=$(current_dir)/../TivaWare/utils
+PROJECT_PATH = .
+TIVAWARE_PATH = ../TivaWare
+VPATH=../TivaWare/utils
 #
 # Where to find header files that do not live in the source directory.
 #
 ` = .
+DEBUG = -g
 INCLUDE_PATH += ${TIVAWARE_PATH}
 VERBOSE = 1
 #
@@ -43,6 +42,8 @@ ${OUTDIR}:
 ${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
 ${OUTDIR}/main.axf: ${OUTDIR}/main.o
 ${OUTDIR}/main.axf: ${OUTDIR}/uartstdio.o
+${OUTDIR}/main.axf: ${OUTDIR}/usbd_driver.o
+${OUTDIR}/main.axf: ${OUTDIR}/usbd_framework.o
 ${OUTDIR}/main.axf: ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a
 ${OUTDIR}/main.axf: ${MCU}.ld
 SCATTERgcc_main=${MCU}.ld
