@@ -41,7 +41,7 @@ static void IntDefaultHandler(void);
 // The entry point for the application.
 //
 //*****************************************************************************
-extern int main(void);
+extern void main(void);
 extern void UART0IntHandler(void);
 extern void SSI2IntHandler(void);
 extern void I2C0SlaveIntHandler(void);
@@ -83,10 +83,10 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
-    UART0IntHandler,                      // UART0 Rx and Tx
+    IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
-    I2C0SlaveIntHandler,                      // I2C0 Master and Slave
+    IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
     IntDefaultHandler,                      // PWM Generator 1
@@ -135,7 +135,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port J
     IntDefaultHandler,                      // GPIO Port K
     IntDefaultHandler,                      // GPIO Port L
-    SSI2IntHandler,                      // SSI2 Rx and Tx
+    IntDefaultHandler,                      // SSI2 Rx and Tx
     IntDefaultHandler,                      // SSI3 Rx and Tx
     IntDefaultHandler,                      // UART3 Rx and Tx
     IntDefaultHandler,                      // UART4 Rx and Tx

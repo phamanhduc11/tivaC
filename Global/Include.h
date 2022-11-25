@@ -10,32 +10,35 @@ static inline unsigned int bit_mask(unsigned int high, unsigned int low)
     }
     if ((high == low) && (high == 0))
         return 1;
-    if (high > 31 | high == 0 | low > 31)
+    if ((high > 31) | (high == 0) | (low > 31))
         return 0x10101010; // error handle
 
     return ((1ULL << (high + 1)) - 1) - ((1 << low) - 1);
 }
 
-#define GET_BITS_MASK(MASK)         ({  \
-        int _mask=MASK;                 \
-        while(_mask) {                  \
-           if(_mask&1) break;           \
-           _mask = _mask >> 1;          \
-        }                               \
-        _mask;                          \
-            })
+static inline unsigned int GET_SHIFTBITS_MASK(unsigned int MASK)
+{  
+    unsigned int _mask=MASK;                 
+    while(_mask) {                  
+        if(_mask&1) break;           
+        _mask = _mask >> 1;          
+    }                               
+    return _mask;                          
+}
 
-#define GET_MASK_POS(MASK)        ({    \
-        int _pos = 0, _mask=MASK;       \
-        while(_mask) {                  \
-           if(_mask&1) break;           \
-           _pos++;                      \
-           _mask = _mask >> 1;          \
-        }                               \
-        _pos;                           \
-            })
+static inline unsigned int GET_MASK_POS(unsigned int MASK)
+{    
+    unsigned int _pos = 0, _mask=MASK;       
+    while(_mask) {                  
+        if(_mask&1) break;           
+        _pos++;                      
+        _mask = _mask >> 1;          
+    }                               
+    return _pos;                           
+}
 
-#define SET_MASK_VAL(VAL,MASK) ((VAL & GET_BITS_MASK(MASK)) << GET_MASK_POS(MASK))
+#define SET_MASK_VAL(REG, MASK, MASK_VAL) ( REG = (REG & ~MASK) | ((MASK_VAL & GET_SHIFTBITS_MASK(MASK)) << GET_MASK_POS(MASK)))
+
 
 
 #define BIT0    (1<<0)

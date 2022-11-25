@@ -1,0 +1,86 @@
+ifndef COMPILER
+COMPILER=gcc
+endif
+
+#Toolchains
+CC = arm-none-eabi-gcc
+OBJCOPY = arm-none-eabi-objcopy
+LD = arm-none-eabi-ld
+AR = arm-none-eabi-ar
+RM = rm 
+MKDIR = mkdir -p
+#
+# Dump files for debug and check
+#
+# LDFLAGS += -Xlinker -Map=${OUTDIR}/main.map 
+
+#
+# Set the compiler CPU/FPU options.
+#
+CPU=-mcpu=cortex-m4
+FPU=-mfpu=fpv4-sp-d16 -mfloat-abi=hard 
+
+#
+# The flags passed to the assembler.
+#
+AFLAGS=-mthumb \
+	${CPU}  \
+	${FPU}  \
+	-MD
+
+#
+# The flags passed to the compiler.
+#
+CFLAGS=-mthumb             \
+	${CPU}              \
+	${FPU}              \
+	-ffunction-sections \
+	-fdata-sections     \
+	-MD                 \
+	-std=c99            \
+	-Wall               \
+	-pedantic           \
+	-DPART_${MCU}       \
+	-c                  
+	# --print-multi-lib
+
+
+#
+# The flags passed to the linker.
+#
+LDFLAGS +=--gc-sections
+
+#
+# Tell the compiler to include debugging information if the DEBUG environment
+# variable is set.
+#
+ifdef DEBUG 
+CFLAGS+=-g -DDEBUG -O0
+else
+CFLAGS+=-Os
+endif
+
+# The location of the C compiler
+# ARMGCC_ROOT is used by some makefiles that need to know where the compiler
+# is installed.
+#
+ARMGCC_ROOT:=${shell dirname '${shell sh -c "which ${CC}"}'}/..
+#
+# Get the location of libgcc.a from the GCC front-end.
+#
+LIBGCC:=${shell ${CC} ${CFLAGS} -print-libgcc-file-name}
+#
+# Get the location of libc.a from the GCC front-end.
+#
+LIBC:=${shell ${CC} ${CFLAGS} -print-file-name=libc.a}
+#
+# Get the location of libm.a from the GCC front-end.
+#
+LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
+#
+
+#
+# Add the include file paths to AFLAGS and CFLAGS.
+#
+AFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}

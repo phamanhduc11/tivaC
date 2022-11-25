@@ -5,8 +5,9 @@ MCU=TM4C123GH6PM
 # The base directory for TivaWare.
 #
 PROJECT_PATH = .
-TIVAWARE_PATH = ../TivaWare
-VPATH=../TivaWare/utils
+TIVAWARE_PATH = ../../TivaWare
+VPATH=../../TivaWare/utils
+OUTDIR = Build
 
 PREMAKE_DIR = uart
 #
@@ -14,16 +15,23 @@ PREMAKE_DIR = uart
 #
 ` = .
 INCLUDE_PATH += ${TIVAWARE_PATH}
+INCLUDE_PATH +=: ${SELF_DRV}
 VERBOSE = 1
 #
 # Include the common make definitions.
 #
 DEBUG = 1
+include ${PROJECT_PATH}/padMake.mk
+include ${PROJECT_PATH}/mkdefflags
 include ${PROJECT_PATH}/mkdefs
 #
 # The default rule, which causes the main example to be built.
 #
 # all: driver
+
+.DEFAULT_GOAL := all
+
+all: ${PAD_MAKE}
 all: ${OUTDIR}
 all: ${OUTDIR}/main.axf
 
@@ -49,6 +57,7 @@ ${OUTDIR}/main.axf: ${OUTDIR}/main.o
 ${OUTDIR}/main.axf: ${OUTDIR}/startup_gcc.o
 ${OUTDIR}/main.axf: ${OUTDIR}/uartstdio.o
 ${OUTDIR}/main.axf: ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a
+${OUTDIR}/main.axf: ${PAD_BUILD_OBJECTS}
 # ${OUTDIR}/main.axf: ${PREMAKE_DIR}/${OUTDIR}/libuart.a
 ${OUTDIR}/main.axf: ${MCU}.ld
 SCATTERgcc_main=${MCU}.ld

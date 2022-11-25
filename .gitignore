@@ -1,4 +1,7 @@
 .vscode
 *.o
 *.axf
-TivaWare
+*.o
+*.d
+*.bin
+a.out

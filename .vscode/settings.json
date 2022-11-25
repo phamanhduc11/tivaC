@@ -7,6 +7,10 @@
         "stdbool.h": "c",
         "log_debug.h": "c",
         "usbstandards.h": "c",
-        "include.h": "c"
+        "include.h": "c",
+        "sys.h": "c",
+        "fpu.h": "c",
+        "can.h": "c",
+        "i2c.h": "c"
     }
 }

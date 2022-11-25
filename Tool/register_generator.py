@@ -32,6 +32,9 @@ def output(inputFile, cmpFormat):
             found = 2
             return True
         if (found == 1):
+            if("_REG" in line): 
+                print()
+                print(line.replace("\n",""))
             if("#define" in line):
                 splitStr = line.split(',')
                 high = splitStr[0][splitStr[0].find("(bitmask("):].replace('(bitmask(', '')
@@ -47,10 +50,8 @@ def output(inputFile, cmpFormat):
 
 
 
-headerPath = os.path.join(os.getcwd(), "INC")
+headerPath = os.path.join(os.getcwd(), "../INC")
 inputFileName = "sys.h"
-outputFileName = "test.h"
-outputFile = open(outputFileName, 'w')
 inputFile = open(os.path.join(headerPath, inputFileName), 'r')
 if (not inputFile.readable()):
     print("Openfile: error")
