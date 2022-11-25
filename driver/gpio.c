@@ -9,14 +9,14 @@ void PAD_GPIOI2CPinConfig(void) {
     // Enable GPIOB Clock
     PAD_SysPeripheralClockEnable(SYSCTL_RCGCGPIO_ADDR);
     // Enable alternate function, value 3
-    //- Set pin to use alternate function
+    ///- Set pin to use alternate function
     REGW(GPIOPB_APB_BASE + GPIOAFSEL_REG_OFF, REGR(GPIOPB_APB_BASE + GPIOAFSEL_REG_OFF) | BIT2 | BIT3);
-    //- Set open-drain to SDA
+    ///- Set open-drain to SDA
     REGW(GPIOPB_APB_BASE + GPIOODR_REG_OFF,REGR(GPIOPB_APB_BASE + GPIOODR_REG_OFF) | BIT3);
-    //- Set alter function to I2C
+    REGW(GPIOPB_APB_BASE + GPIODEN_REG_OFF,REGR(GPIOPB_APB_BASE + GPIODEN_REG_OFF) | BIT3)
+    ///- Set alter function to I2C
     regTemp = REGR(GPIOPB_APB_BASE + GPIOPCTL_REG_OFF);
     SET_MASK_VAL(regTemp, 0xf00, 3);
     SET_MASK_VAL(regTemp, 0x0f0, 3);
-    REGW(GPIOPB_APB_BASE + GPIOPCTL_REG_OFF, regTemp)
-
+    REGW(GPIOPB_APB_BASE + GPIOPCTL_REG_OFF, regTemp);
 }

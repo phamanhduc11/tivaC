@@ -19,5 +19,6 @@
 #define GPIOPCTL_REG_OFF    0x52C
 #define GPIOAFSEL_REG_OFF   0x420
 #define GPIOODR_REG_OFF     0x50C
+#define GPIODEN_REG_OFF     0x51C
 
 #endif
