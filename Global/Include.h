@@ -38,6 +38,9 @@ static inline unsigned int bit_mask(unsigned int high, unsigned int low)
 #define SET_MASK_VAL(VAL,MASK) ((VAL & GET_BITS_MASK(MASK)) << GET_MASK_POS(MASK))
 
 
+#define REGW(ADDRESS,VALUE) (*(unsigned int*) (ADDRESS) = (VALUE))
+#define REGR(ADDRESS)       (*(unsigned int*) ADDRESS)
+
 #define BIT0    (1<<0)
 #define BIT1    (1<<1)
 #define BIT2    (1<<2)

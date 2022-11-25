@@ -12,7 +12,11 @@ void PAD_SysPeripheralClockEnable(uint32_t regBase) {
             // Only using I2C0 module
             SYSCTL_RCGCI2C_REG |= BIT0;
             break;
+        case SYSCTL_RCGCGPIO_ADDR:
+            // Only using GPIOB module
+            SYSCTL_RCGCGPIO_REG |= BIT1;
+            break;
+        default:
             //Do nothing
     }
-    
 }

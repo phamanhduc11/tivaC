@@ -7,6 +7,7 @@
         "stdbool.h": "c",
         "log_debug.h": "c",
         "usbstandards.h": "c",
-        "include.h": "c"
+        "include.h": "c",
+        "sys.h": "c"
     }
 }
