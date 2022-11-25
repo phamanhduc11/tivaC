@@ -5,6 +5,7 @@
 #define SYSCTL_BASE 0x400FE000
 
 #define SYSCTL_RCGCI2C_REG          *(unsigned int*)(SYSCTL_BASE + 0x620)   //Inter-Integrated Circuit Run Mode Clock Gating Control
+#define SYSCTL_RCGCI2C_ADDR                              (SYSCTL_BASE + 0x620)   //Inter-Integrated Circuit Run Mode Clock Gating Control
 #define SYSCTL_RCC_REG              *(unsigned int*)(SYSCTL_BASE + 0x060)     //Run-Mode Clock Configuration
 #define SYSCTL_RCC2_REG             *(unsigned int*)(SYSCTL_BASE + 0x070)     //Run-Mode Clock Configuration 2
 
@@ -31,5 +32,8 @@
 #define RCC_PWRDN2_MASK     0x00002000
 #define RCC_BYPASS2_MASK    0x00000800
 #define RCC_OSCSRC2_MASK    0x00000070
+
+// APIs
+void PAD_SysPeripheralClockEnable(uint32_t regBase);
 
 #endif
