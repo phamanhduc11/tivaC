@@ -4,12 +4,15 @@
 // Register Map//
 #define SYSCTL_BASE 0x400FE000
 
-#define SYSCTL_RCC_REG              *(unsigned int*)(SYSCTL_BASE + 0x060)       //Run-Mode Clock Configuration
-#define SYSCTL_RCC2_REG             *(unsigned int*)(SYSCTL_BASE + 0x070)       //Run-Mode Clock Configuration 2
-#define SYSCTL_RCGCI2C_REG          *(unsigned int*)(SYSCTL_BASE + 0x620)       //Inter-Integrated Circuit Run Mode Clock Gating Control
-#define SYSCTL_PLLSTAT_REG          *(unsigned int*)(SYSCTL_BASE + 0x168)       //PLL Status
-#define SYSCTL_RIS_REG              *(unsigned int*)(SYSCTL_BASE + 0x050)       //Raw Interrupt Status
-#define SYSCTL_MISC_REG             *(unsigned int*)(SYSCTL_BASE + 0x058)       //Masked Interrupt Status and Clear
+#define SYSCTL_RCC_REG              *(unsigned int*)(SYSCTL_BASE + 0x060)   //Run-Mode Clock Configuration
+#define SYSCTL_RCC2_REG             *(unsigned int*)(SYSCTL_BASE + 0x070)   //Run-Mode Clock Configuration 2
+#define SYSCTL_RCGCI2C_REG          *(unsigned int*)(SYSCTL_BASE + 0x620)   //Inter-Integrated Circuit Run Mode Clock Gating Control
+#define SYSCTL_RCGCI2C_ADDR         (SYSCTL_BASE + 0x620)                   //Inter-Integrated Circuit Run Mode Clock Gating Control
+#define SYSCTL_RCGCGPIO_REG         *(unsigned int*)(SYSCTL_BASE + 0x608)   //General-Purpose Input/Output Run Mode Clock Gating Control
+#define SYSCTL_RCGCGPIO_ADDR        (SYSCTL_BASE + 0x608)                   //General-Purpose Input/Output Run Mode Clock Gating Control
+#define SYSCTL_PLLSTAT_REG          *(unsigned int*)(SYSCTL_BASE + 0x168)   //PLL Status
+#define SYSCTL_RIS_REG              *(unsigned int*)(SYSCTL_BASE + 0x050)   //Raw Interrupt Status
+#define SYSCTL_MISC_REG             *(unsigned int*)(SYSCTL_BASE + 0x058)   //Masked Interrupt Status and Clear
 
 /*
 // Registers Mask //
@@ -126,6 +129,7 @@
 
 // SYSCTL_RCC2_REG
 
-//
+// APIs
+void PAD_SysPeripheralClockEnable(uint32_t regBase);
 void PAD_SysClockSet(void);
 #endif

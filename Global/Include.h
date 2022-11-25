@@ -41,6 +41,9 @@ static inline unsigned int GET_MASK_POS(unsigned int MASK)
 
 
 
+#define REGW(ADDRESS,VALUE) (*(unsigned int*) (ADDRESS) = (VALUE))
+#define REGR(ADDRESS)       (*(unsigned int*) ADDRESS)
+
 #define BIT0    (1<<0)
 #define BIT1    (1<<1)
 #define BIT2    (1<<2)
