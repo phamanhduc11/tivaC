@@ -68,6 +68,7 @@ void PAD_SysPeripheralClockEnable(uint32_t regBase) {
             SYSCTL_RCGCGPIO_REG |= BIT1;
             break;
         default:
+            break;
             //Do nothing
     }
 }

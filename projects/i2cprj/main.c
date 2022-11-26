@@ -97,6 +97,7 @@ void InitConsole()
 
 void main(void){
     PAD_SysClockSet();
+    I2C_Init();
     InitConsole();
     UARTprintf("Test 1\n");
     UARTprintf("Test 2\n");

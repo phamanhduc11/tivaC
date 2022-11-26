@@ -1,5 +1,6 @@
 #ifndef __SYS_H__
 #define __SYS_H__
+#include <stdint.h>
 #include "Global/Include.h"
 // Register Map//
 #define SYSCTL_BASE 0x400FE000
