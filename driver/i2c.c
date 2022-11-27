@@ -4,6 +4,7 @@
 #include "INC/i2c.h"
 #include "INC/gpio.h"
 #include "INC/sys.h"
+#include "Global/Include.h"
 
 void I2C_Init(void) {
     // Refer 16.4
@@ -14,7 +15,7 @@ void I2C_Init(void) {
     // 6.Initialize I2C Master
     I2CMCR_REG = 0x10;
     // 7.Set SCL clock 333KHz
-    I2CMTPR_REG = 11;
+    I2CMTPR_REG = 11;//7 16MHZ - 11 80MHz
     // 8.Set Slave address?
 
     // 9.Set data to be transfer?
@@ -34,6 +35,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
 
     if (slaveAddress >= 128) {
         ret = false;
+        __error__(__FILE__, __LINE__);
         goto exit;
     }
     I2CMSA_REG = (slaveAddress << 1) & 0xfe;
@@ -43,6 +45,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
         // small delay
     }
     if (delay == 0) {
+        __error__(__FILE__, __LINE__);
         ret = false;
         goto exit;
     }
@@ -63,6 +66,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
                 if ((I2CMCS_REG & BIT4) == 0) {
                     I2CMCS_REG = (I2CMCS_REG & ~0x17) | (BIT2);
                 }
+                __error__(__FILE__, __LINE__);
                 ret = false;
                 goto exit;
             }
@@ -77,6 +81,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
                 delay = 8192;
                 while((I2CMCS_REG & BIT0) && --delay);
                 if ((delay == 0) | (I2CMCS_REG & BIT1)) {
+                    __error__(__FILE__, __LINE__);
                     ret = false;
                     goto exit;
                 }
@@ -88,6 +93,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
         while((I2CMCS_REG & BIT0) && --delay);
         if ((delay == 0) | (I2CMCS_REG & BIT1)) {
             ret = false;
+            __error__(__FILE__, __LINE__);
             goto exit;
         }
     }

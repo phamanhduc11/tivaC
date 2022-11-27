@@ -1,6 +1,11 @@
 #ifndef __STANDARD_DEF__
 #define __STANDARD_DEF__
 
+#ifndef DEBUG
+#define DEBUG 1
+void __error__(char *pcFilename, uint32_t ui32Line);
+#endif
+
 static inline unsigned int bit_mask(unsigned int high, unsigned int low)
 {
     if (low > high) {
@@ -37,7 +42,7 @@ static inline unsigned int GET_MASK_POS(unsigned int MASK)
     return _pos;                           
 }
 
-#define SET_MASK_VAL(REG, MASK, MASK_VAL) ( REG = (REG & ~MASK) | ((MASK_VAL & GET_SHIFTBITS_MASK(MASK)) << GET_MASK_POS(MASK)))
+#define SET_MASK_VAL(REG, MASK, MASK_VAL) (REG = (REG & ~MASK) | ((MASK_VAL & GET_SHIFTBITS_MASK(MASK)) << GET_MASK_POS(MASK)))
 
 
 

@@ -21,4 +21,7 @@
 #define GPIOODR_REG_OFF     0x50C
 #define GPIODEN_REG_OFF     0x51C
 
+
+// APIs
+void PAD_GPIOI2CPinConfig(void);
 #endif

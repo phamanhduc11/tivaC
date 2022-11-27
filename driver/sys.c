@@ -11,6 +11,7 @@
  * 
  ********************************/
 void PAD_SysClockSet(void) {
+#if defined(gcc)
     uint32_t u32Delay = 0;
     // uint32_t u32RCC = SYSCTL_RCC_REG;
     // uint32_t u32RCC2 = SYSCTL_RCC2_REG;
@@ -52,6 +53,7 @@ void PAD_SysClockSet(void) {
     // Enable PLL by clear BYPASS
     SET_MASK_VAL(SYSCTL_RCC_REG, RCC_BYPASS_MASK, RCC_BYPASS_CLR);
     SET_MASK_VAL(SYSCTL_RCC2_REG, RCC2_BYPASS2_MASK, RCC_BYPASS_CLR);
+#endif
 }
 
 
