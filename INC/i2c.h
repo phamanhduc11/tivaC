@@ -34,6 +34,7 @@
 // Init APIs
 void I2C_Init(void);
 // Master Control APIs
-
+bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data);
+bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data);
 // Slave Control APIs
 #endif

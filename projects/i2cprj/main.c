@@ -96,9 +96,11 @@ void InitConsole()
 }
 
 void main(void){
+    uint8_t testdata = 0x71;
     PAD_SysClockSet();
     I2C_Init();
     InitConsole();
+    I2C_WriteBytes(0x13, 1, &testdata);
     UARTprintf("Test 1\n");
     UARTprintf("Test 2\n");
     UARTprintf("Clock=%d\r\n", SysCtlClockGet());
