@@ -57,13 +57,13 @@ void main(void){
 #if defined(gcc)
     PAD_SysClockSet();
 #else
-    SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT |
-                       SYSCTL_XTAL_16MHZ);
+    SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
 #endif
-    I2C_Init();
     InitConsole();
-    // I2C_WriteBytes(0x13, 1, &testdata);
+    I2C_Init();
+    I2C_WriteBytes(0x13, 1, &testdata);
     UARTprintf("Test 1\n");
     UARTprintf("Test 2\n");
     UARTprintf("Clock=%d\r\n", SysCtlClockGet());
+    while(1);
 }
