@@ -26,14 +26,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>gtimer_driver.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/gtimer_driver.c</locationURI>
+			<name>Global</name>
+			<type>2</type>
+			<location>D:/Workspace/tivaC/Global</location>
 		</link>
 		<link>
-			<name>gtimer_driver.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/gtimer_driver.h</locationURI>
+			<name>INC</name>
+			<type>2</type>
+			<location>D:/Workspace/tivaC/INC</location>
+		</link>
+		<link>
+			<name>driver</name>
+			<type>2</type>
+			<location>D:/Workspace/tivaC/driver</location>
 		</link>
 		<link>
 			<name>log_debug.c</name>
@@ -47,6 +52,11 @@
 		</link>
 		<link>
 			<name>main.c</name>
+			<type>1</type>
+			<location>D:/Workspace/tivaC/projects/i2cprj/main.c</location>
+		</link>
+		<link>
+			<name>main2.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/main.c</locationURI>
 		</link>

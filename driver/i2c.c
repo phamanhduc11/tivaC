@@ -6,7 +6,10 @@
 #include "INC/sys.h"
 #include "Global/Include.h"
 
+static const uint32_t gI2CDelay = 1;
+
 void I2C_Init(void) {
+    uint32_t i2c_clk = 100000;
     // Refer 16.4
     // 1.Initialize Module I2C0
     PAD_SysPeripheralClockEnable(SYSCTL_RCGCI2C_ADDR);
@@ -14,8 +17,9 @@ void I2C_Init(void) {
     PAD_GPIOI2CPinConfig();
     // 6.Initialize I2C Master
     I2CMCR_REG = 0x10;
-    // 7.Set SCL clock 333KHz
-    I2CMTPR_REG = 11;//7 16MHZ - 11 80MHz
+    // 7.Set SCL clock 100KHz
+    I2CMTPR_REG = (uint32_t)(SysCtlClockGet()/(i2c_clk*20)) -1;//7 16MHZ - 11 80MHz
+    I2CMCLKOCNT_REG = 0xda;
     // 8.Set Slave address?
 
     // 9.Set data to be transfer?
@@ -31,7 +35,7 @@ void I2C_Init(void) {
 bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
     bool ret = true;
     uint32_t index = 0;
-    uint32_t delay = 8192;
+    uint32_t delay = gI2CDelay;
 
     if (slaveAddress >= 128) {
         ret = false;
@@ -41,7 +45,7 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
     I2CMSA_REG = (slaveAddress << 1) & 0xfe;
     I2CMDR_REG = data[index++];
 
-    while((I2CMCS_REG & BIT6) && --delay) {
+    while((I2CMCS_REG & BIT6) && delay) {
         // small delay
     }
     if (delay == 0) {
@@ -51,7 +55,8 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
     }
 
     if (count == 1) {
-        I2CMCS_REG = (I2CMCS_REG & ~0x17) | 0x7;
+        // I2CMCS_REG = (I2CMCS_REG & ~0x17) | 0x7;
+        I2CMCS_REG = (I2CMCS_REG & ~0x17) | 0x3; // test and worked
     }
     else {
         I2CMCS_REG = (I2CMCS_REG & ~0x17) | 0x3;
@@ -60,8 +65,8 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
     if (count != 1) { // Multibytes
         do 
         {
-            delay = 8192;
-            while((I2CMCS_REG && BIT0) & --delay);
+            delay = gI2CDelay;
+            while((I2CMCS_REG & BIT0));
             if ((delay == 0) || (I2CMCS_REG & BIT1)) {
                 if ((I2CMCS_REG & BIT4) == 0) {
                     I2CMCS_REG = (I2CMCS_REG & ~0x17) | (BIT2);
@@ -70,7 +75,6 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
                 ret = false;
                 goto exit;
             }
-
             I2CMDR_REG = data[index++];
             if (index != count) { // Keep sending
                 I2CMCS_REG = (I2CMCS_REG & ~0x17) | BIT0;
@@ -78,9 +82,10 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
             else { // Send last byte and STOP
                 I2CMCS_REG = (I2CMCS_REG & ~0x17) | (BIT2 | BIT0);
 
-                delay = 8192;
-                while((I2CMCS_REG & BIT0) && --delay);
-                if ((delay == 0) | (I2CMCS_REG & BIT1)) {
+                delay = gI2CDelay;
+                while(--delay);
+                while((I2CMCS_REG & BIT0));
+                if ((I2CMCS_REG & BIT1)) {
                     __error__(__FILE__, __LINE__);
                     ret = false;
                     goto exit;
@@ -89,16 +94,19 @@ bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data) {
         } while (index != count);
     }
     else { // Single byte
-        delay = 8192;
-        while((I2CMCS_REG & BIT0) && --delay);
-        if ((delay == 0) | (I2CMCS_REG & BIT1)) {
+        delay = gI2CDelay;
+        while(--delay);
+        while((I2CMCS_REG & BIT0));
+        if ((I2CMCS_REG & BIT1)) {
             ret = false;
             __error__(__FILE__, __LINE__);
             goto exit;
         }
+        I2CMCS_REG = (I2CMCS_REG & ~0x17) | BIT2; // test and worked
     }
 
 exit:
+    I2CMCS_REG = (I2CMCS_REG & ~0x17) | BIT2; // test and worked
     return ret;
 }
 
@@ -106,7 +114,7 @@ exit:
 bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data) {
     bool ret = true;
     uint32_t index = 0;
-    uint32_t delay = 8192;
+    uint32_t delay = gI2CDelay;
 
     if (slaveAddress >= 128) {
         ret = false;
@@ -114,16 +122,18 @@ bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data) {
     }
     I2CMSA_REG = (slaveAddress << 1) | BIT0;
 
-    while((I2CMCS_REG & BIT6) && --delay) {
+    while((I2CMCS_REG & BIT6) && delay) {
         // small delay
     }
     if (delay == 0) {
+        __error__(__FILE__, __LINE__);
         ret = false;
         goto exit;
     }
 
     if (count == 1) {
-        I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT2 | BIT1 | BIT0);
+        // I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT2 | BIT1 | BIT0);
+        I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT1 | BIT0); // test and worked
     }
     else {
         I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT3 | BIT1 | BIT0);
@@ -131,12 +141,14 @@ bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data) {
 
     if (count != 1) {
         do{
-            delay = 8192;
-            while((I2CMCS_REG & BIT0) && --delay);
-            if ((delay == 0) || (I2CMCS_REG & BIT1)) {
+            delay = gI2CDelay;
+            while(--delay);
+            while((I2CMCS_REG & BIT0));
+            if ((I2CMCS_REG & BIT1)) {
                 if ((I2CMCS_REG & BIT4) == 0) {
                     I2CMCS_REG = (I2CMCS_REG & ~0x17) | (BIT2);
                 }
+                __error__(__FILE__, __LINE__);
                 ret = false;
                 goto exit;
             }
@@ -145,8 +157,10 @@ bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data) {
             if (index == (count - 1)) {
                 I2CMCS_REG = (I2CMCS_REG & ~0x1f) | (BIT2 | BIT0);
                 delay = 8192;
-                while ((I2CMCS_REG & BIT0) && --delay);
-                if ((delay == 0) || (I2CMCS_REG & BIT1)) {
+                while(--delay);
+                while ((I2CMCS_REG & BIT0));
+                if ((I2CMCS_REG & BIT1)) {
+                    __error__(__FILE__, __LINE__);
                     ret = false;
                     goto exit;
                 }
@@ -159,16 +173,19 @@ bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data) {
         } while (index != count);
     }
     else {
-        delay = 8192;
-        while((I2CMCS_REG & BIT0) && --delay);
-        if ((delay == 0) | (I2CMCS_REG & BIT1)) {
+        delay = gI2CDelay;
+        while(--delay);
+        while((I2CMCS_REG & BIT0));
+        if ((I2CMCS_REG & BIT1)) {
+            __error__(__FILE__, __LINE__);
             ret = false;
             goto exit;
         }
-
-        data[index++] = (uint8_t) I2CMDR_REG;
+        I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT2); // test and worked
+        data[index++] = I2CMDR_REG;
     }
 
 exit:
+    I2CMCS_REG = (I2CMCS_REG & ~0x1F) | (BIT2); // test and worked
     return ret;
 }

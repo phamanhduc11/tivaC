@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 // TivaWare
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
@@ -30,8 +31,11 @@
 #include "Global/Include.h"
 #include "INC/sys.h"
 #include "INC/i2c.h"
+#include "INC/device/eeprom.h"
 
-#if DEBUG
+#define AT24C64_ADDR 0x50
+uint8_t cData[8192] = {0};
+#if 1
 void
 __error__(char *pcFilename, uint32_t ui32Line)
 {
@@ -52,8 +56,30 @@ void InitConsole()
     UARTStdioConfig(0, 115200, MAP_SysCtlClockGet());
 }
 
+void eepromDump(uint32_t size, uint8_t * dData) {
+    uint32_t x;
+    uint8_t startAddr[2] = {0,0};
+    I2C_WriteBytes(AT24C64_ADDR, 2, startAddr); // mulbytes Eeprom read ok
+    I2C_ReadBytes(AT24C64_ADDR, 8192, cData);   // Eeprom read ok
+    printf("Start of eepromDump\r\n");
+    printf("      00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\r\n");
+    for (x = 0; x < size; x++) {
+        if ((x%16 == 0)) {
+            if(x) printf("\r\n");
+            printf("%04x: ", x);
+        }
+        printf("%02x ", dData[x]);
+    }
+    printf("\r\nEnd of eepromDump\r\n");
+}
+
+
 void main(void){
-    uint8_t testdata = 0x71;
+    uint8_t testbuff[8] = {0xaa,0xaa};
+    uint8_t mulbytes[8] = {0x8,0x9,0x0a,0xb,0xc,0xd,0xe,0xf};
+    uint32_t i = 256;
+    // while(--i) cData[i] = 0xAA;
+
 #if defined(gcc)
     PAD_SysClockSet();
 #else
@@ -61,9 +87,21 @@ void main(void){
 #endif
     InitConsole();
     I2C_Init();
-    I2C_WriteBytes(0x13, 1, &testdata);
-    UARTprintf("Test 1\n");
-    UARTprintf("Test 2\n");
+    memset(cData, 0xAA, sizeof(uint8_t)*8192);
+
+    // I2C Eeprom
+    // eepromDump(8192, cData);
+    // eepromRead(0x20, 3, testbuff);
+    // i = 8192*10;
+    // while(--i);
+    // eepromWrite(0x1000, 8, mulbytes);
+    // i = 8192*10;
+    // while(--i);
+    // eepromDump(8192, cData);
+    //
+
+
+
     UARTprintf("Clock=%d\r\n", SysCtlClockGet());
     while(1);
 }

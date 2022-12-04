@@ -7,4 +7,5 @@
 	<codegenToolVersion value="5.2.6"/>
 	<isElfFormat value="true"/>
 	<createSlaveProjects value=""/>
+	<isTargetManual value="false"/>
 </projectOptions>
