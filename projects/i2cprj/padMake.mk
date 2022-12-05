@@ -16,6 +16,7 @@ PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gpio.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gtimer_driver.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/i2c.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/sys.c
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/spi.c
 #
 
 # Real output file path from current path
