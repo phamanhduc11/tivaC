@@ -2,6 +2,7 @@
 #include <string.h>
 #include <INC/i2c.h>
 #include <INC/spi.h>
+#include <INC/device/eeprom.h>
 
 #include <Global/Include.h>
 // AT24C32/64
@@ -24,7 +25,7 @@ void eepromWrite(uint32_t writeAddr, uint32_t size, uint8_t *wData) {
         // below code using 1 byte transfer
         uint8_t startFrame[2] = { 0x28 | ((writeAddr & 0x700) >> 8) , (writeAddr & 0xff)};
         memcpy(eepromBuffer, startFrame, 2);
-        memcpy(eeprombuffer+2, wData, size);
+        memcpy(eepromBuffer+2, wData, size);
         SPI_WriteBytes(size + 2, eepromBuffer);
     }
 }
@@ -42,4 +43,17 @@ void eepromRead(uint32_t readAddr, uint32_t size, uint8_t *rData) {
         SPI_WriteBytes(2, startFrame);
         SPI_ReadBytes(size, rData);
     }
+}
+
+// Current only for SPI 
+void eepromErase(uint32_t addr, uint32_t size) {
+    if (deviceMode == SPIMode) {
+        uint8_t startFrame[2] = { 0x30 | ((addr & 0x700) >> 8) , (addr & 0xff)};
+        SPI_WriteBytes(2, startFrame);
+    }
+    
+}
+
+void eepromEraseAll(void) {
+
 }

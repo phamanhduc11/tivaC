@@ -17,6 +17,8 @@ PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gtimer_driver.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/i2c.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/sys.c
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/spi.c
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/device/eeprom.c
+
 #
 
 # Real output file path from current path
@@ -41,6 +43,7 @@ ${PAD_BUILD_OBJECTS}:| ${PAD_OBJDIR}
 
 ${PAD_OBJDIR}:
 	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/${PAD_DRV_PATH}
+	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/${PAD_DRV_PATH}/device
 
 ${PAD_MAKE}: ${PAD_BUILD_OBJECTS}
 	@echo "${PAD_DRV_FILE_PATH}"
