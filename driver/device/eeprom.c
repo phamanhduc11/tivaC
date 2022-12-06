@@ -5,12 +5,18 @@
 #include <INC/device/eeprom.h>
 
 #include <Global/Include.h>
-// AT24C32/64
-#define AT24C64_ADDR 0x50
 
 uint8_t deviceMode = InvalidMode;
 
 static uint8_t eepromBuffer[64]; // will be initialized to 0 by startup code.
+
+void setEEPROMProtocol(uint32_t mode) {
+    if (mode < Mode_MAX) {
+        deviceMode = (uint8_t) mode;
+    } else {
+        deviceMode = InvalidMode;
+    }
+}
 
 void eepromWrite(uint32_t writeAddr, uint32_t size, uint8_t *wData) {
     if (deviceMode == I2CMode) {

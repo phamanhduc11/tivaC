@@ -66,8 +66,6 @@ void InitConsole()
 void eepromDump(uint32_t size, uint8_t * dData) {
     uint32_t x;
     uint8_t startAddr[2] = {0,0};
-    I2C_WriteBytes(AT24C64_ADDR, 2, startAddr); // mulbytes Eeprom read ok
-    I2C_ReadBytes(AT24C64_ADDR, 8192, cData);   // Eeprom read ok
     printf("Start of eepromDump\r\n");
     printf("      00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\r\n");
     for (x = 0; x < size; x++) {
@@ -93,10 +91,12 @@ int main(void){
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
 #endif
     InitConsole();
-    I2C_Init();
-    setEEPROMProtocol(I2CMode);
+    SystemDebug.log(DEBUG_ERR, RED_LOG "This is for testing %d" END_LOG, 5050);
+    SystemDebug.log(DEBUG_ERR, GREEN_LOG "This is for testing %d" END_LOG, 5050);
+    SystemDebug.log(DEBUG_ERR, BLUE_LOG "This is for testing %d" END_LOG, 5050);
+    setEEPROMProtocol(SPIMode);
     memset(cData, 0xAA, sizeof(uint8_t)*8192);
-    // I2C Eeprom
+    // SPI Eeprom
     eepromDump(8192, cData);
     eepromRead(0x20, 3, testbuff);
     i = 8192*10;
@@ -104,7 +104,7 @@ int main(void){
     eepromWrite(0x1000, 8, mulbytes);
     i = 8192*10;
     while(--i);
-    printf("---------------CHECK----------------\r\n");
+    printf("---------------CHECK----------------");
     eepromDump(8192, cData);
     //
 
