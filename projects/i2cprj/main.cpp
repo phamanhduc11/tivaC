@@ -35,14 +35,38 @@
 
 #define AT24C64_ADDR 0x50
 uint8_t cData[8192] = {0};
-#if 1
+
+
+#ifdef __cplusplus
+#warning "test build????"
+extern "C"
+{
+#endif
 void
 __error__(char *pcFilename, uint32_t ui32Line)
 {
     UARTprintf("[DEBUG] %s:%d\r\n", pcFilename, ui32Line);
 //    while(1);
 }
+#ifdef __cplusplus
+}
 #endif
+
+class testOut {
+    public:
+        int a;
+        int b;
+    void test(void) {
+        printf("[]\r\n");
+        test(1,2);
+    }
+    private:
+        int c;
+        int d;
+    void test(int a, int b) {
+        printf("[call from]\r\n");
+    }
+};
 
 void InitConsole()
 {
@@ -74,7 +98,7 @@ void eepromDump(uint32_t size, uint8_t * dData) {
 }
 
 
-void main(void){
+int main(void){
     uint8_t testbuff[8] = {0xaa,0xaa};
     uint8_t mulbytes[8] = {0x8,0x9,0x0a,0xb,0xc,0xd,0xe,0xf};
     uint32_t i = 256;
@@ -88,7 +112,6 @@ void main(void){
     InitConsole();
     I2C_Init();
     memset(cData, 0xAA, sizeof(uint8_t)*8192);
-
     // I2C Eeprom
     // eepromDump(8192, cData);
     // eepromRead(0x20, 3, testbuff);
@@ -104,4 +127,5 @@ void main(void){
 
     UARTprintf("Clock=%d\r\n", SysCtlClockGet());
     while(1);
+    return 0;
 }

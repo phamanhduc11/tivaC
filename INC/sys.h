@@ -2,6 +2,12 @@
 #define __SYS_H__
 #include <stdint.h>
 #include "Global/Include.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // Register Map//
 #define SYSCTL_BASE 0x400FE000
 
@@ -133,4 +139,9 @@
 // APIs
 void PAD_SysPeripheralClockEnable(uint32_t regBase);
 void PAD_SysClockSet(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

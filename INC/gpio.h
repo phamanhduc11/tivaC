@@ -1,6 +1,11 @@
 #ifndef __GPIO_H__
 #define __GPIO_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define GPIOPA_APB_BASE  0x40004000
 #define GPIOPB_APB_BASE  0x40005000
 #define GPIOPC_APB_BASE  0x40006000
@@ -25,4 +30,9 @@
 
 // APIs
 void PAD_GPIOI2CPinConfig(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

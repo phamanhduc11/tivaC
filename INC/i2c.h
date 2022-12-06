@@ -2,6 +2,12 @@
 #define __I2C_HW__
 #include <stdint.h>
 #include <stdbool.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // Master Registers
 #define I2C_BASE 0x40020000
 #define I2CMSA_REG      *(volatile unsigned int*)(I2C_BASE    + 0x0)   // M/Slave Address                  (RW)
@@ -39,4 +45,9 @@ void I2C_Init(void);
 bool I2C_WriteBytes(uint8_t slaveAddress, uint32_t count, uint8_t *data);
 bool I2C_ReadBytes(uint32_t slaveAddress, uint32_t count, uint8_t *data);
 // Slave Control APIs
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

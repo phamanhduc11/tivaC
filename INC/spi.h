@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define SPI_BASE 0x40008000
 
 #define SPI_SSICR0         *(volatile unsigned int*) (SPI_BASE + 0x000)        // RW    0x0000.0000 SSI Control 0
@@ -32,4 +37,9 @@
 //APIs
 bool SPI_WriteBytes(uint32_t count, uint8_t *data);
 bool SPI_ReadBytes(uint32_t count, uint8_t *data);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

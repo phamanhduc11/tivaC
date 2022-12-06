@@ -4,6 +4,7 @@ endif
 
 #Toolchains
 CC = arm-none-eabi-gcc
+CXX = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
 LD = arm-none-eabi-ld
 AR = arm-none-eabi-ar
@@ -44,6 +45,19 @@ CFLAGS=-mthumb             \
 	-c                  
 	# --print-multi-lib
 
+CXXFLAGS=-mthumb             \
+	${CPU}              \
+	${FPU}              \
+	-ffunction-sections \
+	-fdata-sections     \
+	-fno-exceptions     \
+	-MD                 \
+	-std=c++11            \
+	-Wall               \
+	-pedantic           \
+	-DPART_${MCU}       \
+	-c                  
+	# --print-multi-lib
 
 #
 # The flags passed to the linker.
@@ -84,3 +98,4 @@ LIBM:=${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
 #
 AFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 CFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+CXXFLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}

@@ -2,10 +2,12 @@
 #define __STANDARD_DEF__
 #include <stdint.h>
 
-#ifndef DEBUG
-#define DEBUG 1
-void __error__(char *pcFilename, uint32_t ui32Line);
+#ifdef __cplusplus
+extern "C"
+{
 #endif
+
+void __error__(char *pcFilename, uint32_t ui32Line);
 
 extern void
 UARTprintf(const char *pcString, ...);
@@ -86,4 +88,9 @@ static inline unsigned int GET_MASK_POS(unsigned int MASK)
 #define BIT29   (1<<29)
 #define BIT30   (1<<30)
 #define BIT31   (1<<31)
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
