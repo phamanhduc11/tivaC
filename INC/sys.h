@@ -17,6 +17,8 @@ extern "C"
 #define SYSCTL_RCGCI2C_ADDR         (SYSCTL_BASE + 0x620)                   //Inter-Integrated Circuit Run Mode Clock Gating Control
 #define SYSCTL_RCGCGPIO_REG         *(unsigned int*)(SYSCTL_BASE + 0x608)   //General-Purpose Input/Output Run Mode Clock Gating Control
 #define SYSCTL_RCGCGPIO_ADDR        (SYSCTL_BASE + 0x608)                   //General-Purpose Input/Output Run Mode Clock Gating Control
+#define SYSCTL_RCGCSSI_REG          *(unsigned int*)(SYSCTL_BASE + 0x61C)   //Synchronous Serial Interface Run Mode Clock Gating Control
+#define SYSCTL_RCGCSSI_ADDR         (SYSCTL_BASE + 0x61C)                   //Synchronous Serial Interface Run Mode Clock Gating Control
 #define SYSCTL_PLLSTAT_REG          *(unsigned int*)(SYSCTL_BASE + 0x168)   //PLL Status
 #define SYSCTL_RIS_REG              *(unsigned int*)(SYSCTL_BASE + 0x050)   //Raw Interrupt Status
 #define SYSCTL_MISC_REG             *(unsigned int*)(SYSCTL_BASE + 0x058)   //Masked Interrupt Status and Clear
@@ -135,6 +137,17 @@ extern "C"
 
 
 // SYSCTL_RCC2_REG
+
+typdef enum {
+    eModule_0,
+    eModule_1,
+    eModule_2,
+    eModule_3,
+    eModule_4,
+    eModule_5,
+    eModule_6,
+    eModule_7,
+}
 
 // APIs
 void PAD_SysPeripheralClockEnable(uint32_t regBase);

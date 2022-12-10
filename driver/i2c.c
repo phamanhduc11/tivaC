@@ -12,7 +12,7 @@ void I2C_Init(void) {
     uint32_t i2c_clk = 100000;
     // Refer 16.4
     // 1.Initialize Module I2C0
-    PAD_SysPeripheralClockEnable(SYSCTL_RCGCI2C_ADDR);
+    PAD_SysPeripheralClockEnable(SYSCTL_RCGCI2C_ADDR, eModule_0);
     // 2-5
     PAD_GPIOI2CPinConfig();
     // 6.Initialize I2C Master

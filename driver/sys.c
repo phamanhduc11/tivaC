@@ -58,17 +58,24 @@ void PAD_SysClockSet(void) {
 
 
 
-void PAD_SysPeripheralClockEnable(uint32_t regBase) {
+/*********************************
+ * \brief Enable Peripheral Clock,
+ * \param regBase Enable Module Clock register address
+ * \param eModule Choose which module to enable
+ * \return None.
+ * 
+ ********************************/
+void PAD_SysPeripheralClockEnable(uint32_t regBase, uint32_t eModule) {
     switch(regBase)
     {
         case SYSCTL_RCGCI2C_ADDR:
-            // Only using I2C0 module
-            SYSCTL_RCGCI2C_REG |= BIT0;
+            SYSCTL_RCGCI2C_REG |= 1 << eModule;
             break;
         case SYSCTL_RCGCGPIO_ADDR:
-            // Only using GPIOB module
-            SYSCTL_RCGCGPIO_REG |= BIT1;
+            SYSCTL_RCGCGPIO_REG |= 1 << eModule;
             break;
+        case SYSCTL_RCGCSSI_ADDR:
+            SYSCTL_RCGCSSI_REG |= 1 << eModule;
         default:
             break;
             //Do nothing
