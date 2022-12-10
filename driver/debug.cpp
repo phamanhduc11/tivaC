@@ -6,6 +6,13 @@
 
 #include "INC/debug.h"
 
+
+void __error__(char *pcFilename, uint32_t ui32Line)
+{
+    UARTprintf("[DEBUG] %s:%d\r\n", pcFilename, ui32Line);
+//    while(1);
+}
+
 static char const * const _get_log_level_string(DebugLevel const log_level)
 {
     switch(log_level)

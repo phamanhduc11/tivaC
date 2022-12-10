@@ -65,7 +65,7 @@ void PAD_SysClockSet(void) {
  * \return None.
  * 
  ********************************/
-void PAD_SysPeripheralClockEnable(uint32_t regBase, uint32_t eModule) {
+void PAD_SysPeripheralClockEnable(uint32_t regBase, EModule eModule) {
     switch(regBase)
     {
         case SYSCTL_RCGCI2C_ADDR:

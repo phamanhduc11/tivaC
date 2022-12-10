@@ -26,7 +26,7 @@ typedef enum {
 // Current code only use SSI0 device
 class SPIInterface {
         static uint8_t isInitialized;
-        uint8_t *deviceName;
+        const char *deviceName;
         bool isUsable;
         uint8_t GPIOInit(SPI_DEV eModule);
         uint8_t moduleInitialize(SPI_DEV eModule);

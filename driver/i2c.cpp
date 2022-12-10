@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+#include "driverlib/sysctl.h"
+
 #include "INC/i2c.h"
 #include "INC/gpio.h"
 #include "INC/sys.h"

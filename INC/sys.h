@@ -138,7 +138,7 @@ extern "C"
 
 // SYSCTL_RCC2_REG
 
-typdef enum {
+typedef enum {
     eModule_0,
     eModule_1,
     eModule_2,
@@ -147,10 +147,10 @@ typdef enum {
     eModule_5,
     eModule_6,
     eModule_7,
-}
+} EModule;
 
 // APIs
-void PAD_SysPeripheralClockEnable(uint32_t regBase);
+void PAD_SysPeripheralClockEnable(uint32_t regBase, EModule eModule);
 void PAD_SysClockSet(void);
 
 #ifdef __cplusplus

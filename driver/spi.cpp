@@ -3,6 +3,9 @@
 
 #include <Global/Include.h>
 #include <INC/spi.h>
+#include <INC/debug.h>
+#include <INC/gpio.h>
+#include <INC/sys.h>
 
 #define SPI_STR   "SPI"
 
@@ -68,19 +71,19 @@ bool SPI_ReadBytes(uint32_t count, uint8_t *data) {
   return false;
 }
 
-//class SPIInterface {
-//        static uint8_t isInitialized;
-//        uint8_t *deviceName;
-//        bool isUsable;
-//        uint8_t GPIOInit(uint32_t baseAddr);
-//        uint8_t moduleInitialize(uint32_t baseAddr);
-//    public:
-//        SPIInterface(SPI_DEV device);
-//        uint8_t write(uint32_t wSize, uint8_t *wBuffer);
-//        uint8_t read(uint32_t rSize, uint8_t *rBuffer);
-//};
+// class SPIInterface {
+//         static uint8_t isInitialized;
+//         const uint8_t *deviceName;
+//         bool isUsable;
+//         uint8_t GPIOInit(SPI_DEV eModule);
+//         uint8_t moduleInitialize(SPI_DEV eModule);
+//     public:
+//         SPIInterface(SPI_DEV device);
+//         uint8_t write(uint32_t wSize, uint8_t *wBuffer);
+//         uint8_t read(uint32_t rSize, uint8_t *rBuffer);
+// };
 
-SPIInterface::isInitialized = 0;
+uint8_t SPIInterface::isInitialized = 0;
 
 SPIInterface::SPIInterface(SPI_DEV device) {
   uint8_t status = 0xff;
@@ -93,31 +96,31 @@ SPIInterface::SPIInterface(SPI_DEV device) {
     return;
   }
 
-  devBaseAddr = GPIOthing;
-  status = this->GPIOInit(devBaseAddr);
+  status = this->GPIOInit(device);
   if(status) {
     SystemDebug.log(DEBUG_WRN, "%s %d GPIO initializd failed: errno %d", this->deviceName, device, status);
     return;
   }
 
   devBaseAddr = getSPIAddr(device);
-  status = this->moduleInitialize(devBaseAddr);
+  status = this->moduleInitialize(device);
   if(status) {
-    systemDebug.log(DEBUG_WRN, "%s %d module initialize failed: errno %d", this->deviceName, device, status);
+    SystemDebug.log(DEBUG_WRN, "%s %d module initialize failed: errno %d", this->deviceName, device, status);
     return;
   }
 
 }
 
-SPIInterface::GPIOInit(SPI_DEV eModule) {
-  
+uint8_t SPIInterface::GPIOInit(SPI_DEV eModule) {
+  return 0;
 }
 
-SPIInterface::moduleInitialize(SPI_DEV eModule) {
+uint8_t SPIInterface::moduleInitialize(SPI_DEV eModule) {
+  uint8_t status = 0xff;
   // 1 Enable SSI Clock
   PAD_SysPeripheralClockEnable(SYSCTL_RCGCSSI_ADDR, eModule_0);
   // 2 -> 5 Config SSI pin on port A
   PAD_GPIOSSIPinConfig();
   // 3 Frame support
-  
+  return status;
 }

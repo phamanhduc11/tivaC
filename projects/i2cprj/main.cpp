@@ -37,19 +37,6 @@
 uint8_t cData[8192] = {0};
 
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-void
-__error__(char *pcFilename, uint32_t ui32Line)
-{
-    UARTprintf("[DEBUG] %s:%d\r\n", pcFilename, ui32Line);
-//    while(1);
-}
-#ifdef __cplusplus
-}
-#endif
 
 void InitConsole()
 {
@@ -101,7 +88,7 @@ int main(void){
     eepromRead(0x20, 3, testbuff);
     i = 8192*10;
     while(--i);
-    eepromWrite(0x1000, 8, mulbytes);
+    // eepromWrite(0x1000, 8, mulbytes); // Common in case of too many write times due to reboot
     i = 8192*10;
     while(--i);
     printf("---------------CHECK----------------\r\n");

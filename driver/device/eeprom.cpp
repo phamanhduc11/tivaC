@@ -6,13 +6,13 @@
 
 #include <Global/Include.h>
 
-uint8_t deviceMode = InvalidMode;
+uint32_t deviceMode = InvalidMode;
 
 static uint8_t eepromBuffer[64]; // will be initialized to 0 by startup code.
 
 void setEEPROMProtocol(uint32_t mode) {
     if (mode < Mode_MAX) {
-        deviceMode = (uint8_t) mode;
+        deviceMode = mode;
     } else {
         deviceMode = InvalidMode;
     }
@@ -21,7 +21,7 @@ void setEEPROMProtocol(uint32_t mode) {
 void eepromWrite(uint32_t writeAddr, uint32_t size, uint8_t *wData) {
     if (deviceMode == I2CMode) {
         // I2C eeprom only allow to write 32 bytes in 1 transfer => Missing
-        uint8_t startFrame[2] = {(writeAddr & 0x1f00) >> 8, (writeAddr & 0xff)};
+        uint8_t startFrame[2] = { (uint8_t) (writeAddr & 0x1f00) >> 8, (writeAddr & 0xff)};
         memcpy(eepromBuffer, startFrame, 2);
         memcpy(eepromBuffer+2, wData, size);
         I2C_WriteBytes(AT24C64_ADDR, size+2, eepromBuffer);

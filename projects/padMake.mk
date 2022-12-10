@@ -12,12 +12,12 @@ space:= $(empty) $(empty)
 #
 
 #File Path file Workspace
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gpio.c
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gtimer_driver.c
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/i2c.c
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/sys.c
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/spi.c
-PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/device/eeprom.c
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gpio.cpp
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/gtimer_driver.cpp
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/i2c.cpp
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/sys.cpp
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/spi.cpp
+PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/device/eeprom.cpp
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/debug.cpp
 
 #

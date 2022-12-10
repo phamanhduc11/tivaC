@@ -11,6 +11,7 @@
         "sys.h": "c",
         "fpu.h": "c",
         "can.h": "c",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "string.h": "c"
     }
 }

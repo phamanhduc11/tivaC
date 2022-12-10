@@ -1,19 +1,23 @@
 ${OUTDIR}/%.o: %.c
-	if [ -d "${OUTDIR}" ];                         \
+	@if [ -d "${OUTDIR}" ];                         \
 	 then                                            \
 	  ${CC} ${CFLAGS} -D${COMPILER} -o $@ $<;          \
+	  echo "[CC] $@ from $^";  \
 	 else                                            \
 	  ${MKDIR} ${OUTDIR}           ;                  \
 	  ${CC} ${CFLAGS} -D${COMPILER} -o $@ $< ;          \
+	  echo "[CC] $@ from $^";  \
 	fi
 
 ${OUTDIR}/%.o: %.cpp
-	if [ -d "${OUTDIR}" ];                         \
+	@if [ -d "${OUTDIR}" ];                         \
 	 then                                            \
 	  ${CXX} ${CXXFLAGS} -D${COMPILER} -o $@ $<;          \
+	  echo "[CXX] $@ from $^";  \
 	 else                                            \
 	  ${MKDIR} ${OUTDIR}           ;                  \
 	  ${CXX} ${CXXFLAGS} -D${COMPILER} -o $@ $< ;          \
+	  echo "[CXX] $@ from $^";  \
 	fi
 
 ${OUTDIR}/%.a:

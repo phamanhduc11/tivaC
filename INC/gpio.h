@@ -30,6 +30,7 @@ extern "C"
 
 // APIs
 void PAD_GPIOI2CPinConfig(void);
+void PAD_GPIOSSIPinConfig(void);
 
 #ifdef __cplusplus
 }

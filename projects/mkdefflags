@@ -54,6 +54,8 @@ CXXFLAGS=-mthumb             \
 	-MD                 \
 	-std=c++11            \
 	-Wall               \
+	-Wno-write-strings     \
+	-Wno-narrowing      \
 	-pedantic           \
 	-DPART_${MCU}       \
 	-c                  
