@@ -26,6 +26,7 @@ extern "C"
 #define GPIOODR_REG_OFF     0x50C
 #define GPIODEN_REG_OFF     0x51C
 #define GPIODR2R_REG_OFF    0x500
+#define GPIOPUR_REG_OFF     0x510
 
 
 // APIs

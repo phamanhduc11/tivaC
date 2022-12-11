@@ -6,3 +6,6 @@
 *.bin
 a.out
 TivaWare/*
+projects/spiprj/Build/main.dis
+projects/spiprj/Build/main.map
+.vscode/settings.json

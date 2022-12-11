@@ -49,7 +49,25 @@ void DebugInterface::log(DebugLevel level, const char *pcString, ...) {
     va_start(vaArgP, pcString);
     if(level >= this->debugLevel) {
         UARTprintf("[%s]", _get_log_level_string(level));
+
+        switch (level)
+        {
+        case DEBUG_WRN:
+            UARTprintf(YELLOW_LOG);
+            break;
+
+        case DEBUG_ERR:
+            UARTprintf(RED_LOG);
+            break;
+
+        default:
+            break;
+        }
+
         UARTvprintf(pcString, vaArgP);
+        if (level >= DEBUG_WRN) {
+            UARTprintf(END_LOG);
+        }
         UARTprintf("\r\n");
     }
     va_end(vaArgP);

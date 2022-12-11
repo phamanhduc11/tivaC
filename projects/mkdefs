@@ -46,3 +46,5 @@ ${OUTDIR}/%.axf:
 	      ${LDFLAGS} -o ${@} $(filter %.o %.a, ${^})                      \
 	      '${LIBM}' '${LIBC}' '${LIBGCC}'
 	@${OBJCOPY} -O binary ${@} ${@:.axf=.bin}
+	${OBJDUMP} -x $@ > ${@:.axf=.map}
+	${OBJDUMP} -D $@ > ${@:.axf=.dis}

@@ -3,8 +3,8 @@
 #define RED_LOG     "\033[31m"
 #define GREEN_LOG   "\033[32m"
 #define BLUE_LOG    "\033[34m"
+#define YELLOW_LOG  "\033[33m"
 #define END_LOG     "\033[0m"
-
 
 typedef enum {
     DEBUG_LV0,

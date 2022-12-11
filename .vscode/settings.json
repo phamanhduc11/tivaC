@@ -12,6 +12,7 @@
         "fpu.h": "c",
         "can.h": "c",
         "i2c.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "gpio.h": "c"
     }
 }

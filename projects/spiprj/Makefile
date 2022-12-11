@@ -21,9 +21,9 @@ VERBOSE = 1
 # Include the common make definitions.
 #
 DEBUG = 1
-include ${PROJECT_PATH}/padMake.mk
-include ${PROJECT_PATH}/mkdefflags
-include ${PROJECT_PATH}/mkdefs
+include ${PROJECT_PATH}/../padMake.mk
+include ${PROJECT_PATH}/../mkdefflags
+include ${PROJECT_PATH}/../mkdefs
 #
 # The default rule, which causes the main example to be built.
 #

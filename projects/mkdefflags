@@ -6,6 +6,7 @@ endif
 CC = arm-none-eabi-gcc
 CXX = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
+OBJDUMP = arm-none-eabi-objdump
 LD = arm-none-eabi-ld
 AR = arm-none-eabi-ar
 RM = rm 

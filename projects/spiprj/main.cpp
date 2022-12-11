@@ -36,21 +36,6 @@
 
 uint8_t cData[8192] = {0};
 
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-void
-__error__(char *pcFilename, uint32_t ui32Line)
-{
-    UARTprintf("[DEBUG] %s:%d\r\n", pcFilename, ui32Line);
-//    while(1);
-}
-#ifdef __cplusplus
-}
-#endif
-
 void InitConsole()
 {
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -91,9 +76,8 @@ int main(void){
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
 #endif
     InitConsole();
-    SystemDebug.log(DEBUG_ERR, RED_LOG "This is for testing %d" END_LOG, 5050);
-    SystemDebug.log(DEBUG_ERR, GREEN_LOG "This is for testing %d" END_LOG, 5050);
-    SystemDebug.log(DEBUG_ERR, BLUE_LOG "This is for testing %d" END_LOG, 5050);
+    SystemDebug.log(DEBUG_ERR, "This is for testing %d" , 5050);
+    SystemDebug.log(DEBUG_WRN, "This is for testing %d" , 5050);
     setEEPROMProtocol(SPIMode);
     memset(cData, 0xAA, sizeof(uint8_t)*8192);
     // SPI Eeprom
