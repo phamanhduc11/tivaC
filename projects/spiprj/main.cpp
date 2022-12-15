@@ -31,10 +31,12 @@
 #include "Global/Include.h"
 #include "INC/sys.h"
 #include "INC/i2c.h"
+#include "INC/spi.h"
 #include "INC/device/eeprom.h"
 #include "INC/debug.h"
 
 uint8_t cData[8192] = {0};
+SPIInterface *spi;
 
 void InitConsole()
 {
@@ -63,7 +65,11 @@ void eepromDump(uint32_t size, uint8_t * dData) {
     printf("\r\nEnd of eepromDump\r\n");
 }
 
-
+extern "C" {
+void SSIInterruptHandler(void) {
+    spi->interruptHandler();
+}
+}
 int main(void){
     uint8_t testbuff[8] = {0xaa,0xaa};
     uint8_t mulbytes[8] = {0x8,0x9,0x0a,0xb,0xc,0xd,0xe,0xf};
@@ -76,9 +82,14 @@ int main(void){
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
 #endif
     InitConsole();
+    SPIInterface spi0(SPI0_DEV, SPI_Mode_0, 1000000, 8);
+    spi = &spi0;
     SystemDebug.log(DEBUG_ERR, "This is for testing %d" , 5050);
     SystemDebug.log(DEBUG_WRN, "This is for testing %d" , 5050);
+
+    spi0.interruptMaskSet(SSI_RORMIS | SSI_RTMIS | SSI_RXMIS | SSI_TXMIS);
     setEEPROMProtocol(SPIMode);
+    spi0.write(8, mulbytes);
     memset(cData, 0xAA, sizeof(uint8_t)*8192);
     // SPI Eeprom
     eepromDump(8192, cData);

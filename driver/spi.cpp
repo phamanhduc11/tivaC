@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #include "driverlib/sysctl.h"
+#include "driverlib/debug.h"
 
 #include <Global/Include.h>
 #include <INC/spi.h>
@@ -42,7 +43,7 @@
 #define SPI_SSIPCellID2    *(volatile unsigned int*) (SPI_BASE + 0xFF8)        // RO    0x0000.0005 SSI PrimeCell Identification 2
 #define SPI_SSIPCellID3    *(volatile unsigned int*) (SPI_BASE + 0xFFC)        // RO    0x0000.00B1 SSI PrimeCell Identification 3
 
-static uint32_t getSPIAddr(SPI_DEV device) {
+static uint32_t getSPIAddr(eSPI_DEV device) {
   switch (device) {
     case SPI0_DEV:
       return SPI0_BASE;
@@ -65,33 +66,30 @@ bool SPI_ReadBytes(uint32_t count, uint8_t *data) {
   return false;
 }
 
-// class SPIInterface {
-//         static uint8_t isInitialized;
-//         const uint8_t *deviceName;
-//         bool isUsable;
-//         uint8_t GPIOInit(SPI_DEV eModule);
-//         uint8_t moduleInitialize(SPI_DEV eModule);
-//     public:
-//         SPIInterface(SPI_DEV device);
-//         uint8_t write(uint32_t wSize, uint8_t *wBuffer);
-//         uint8_t read(uint32_t rSize, uint8_t *rBuffer);
-// };
-
+static volatile uint16_t bugBuffer[1024] = {0,};
+static volatile uint16_t fakeIndex = 0;
 uint8_t SPIInterface::isInitialized = 0;
 
-SPIInterface::SPIInterface(SPI_DEV device, SPI_Mode transMode, uint32_t setClock, uint8_t bitSize) {
+SPIInterface::SPIInterface(eSPI_DEV device, eSPI_Mode transMode, uint32_t setClock, uint8_t bitSize) {
   uint8_t status = 0xff;
   uint32_t devBaseAddr = 0xfffffff;
   this->deviceName  = SPI_STR;
   this->isUsable    = false;
   this->setClock    = setClock;
+  this->bitSize     = bitSize;
+  this->wData       = (uint8_t *)0;
+  this->wSize       = 0;
+  this->rSize       = 0;
+  this->wIndex      = 0;
+  this->rIndex      = 0;
+  this->handlerStatus  = 0;
 
   if(device & this->isInitialized) {
     SystemDebug.log(DEBUG_WRN, "%s %d module is already initialized and used!!", this->deviceName, device);
     return;
   }
 
-  devBaseAddr = getSPIAddr(device);
+  //devBaseAddr = getSPIAddr(device);
   status = this->moduleInitialize(device);
   if(status) {
     SystemDebug.log(DEBUG_WRN, "%s %d module initialize failed: errno %d", this->deviceName, device, status);
@@ -106,14 +104,12 @@ SPIInterface::SPIInterface(SPI_DEV device, SPI_Mode transMode, uint32_t setClock
 
 }
 
-uint8_t SPIInterface::moduleInitialize(SPI_DEV eModule) {
-  uint8_t status = 0xff;
+uint8_t SPIInterface::moduleInitialize(eSPI_DEV eModule) {
   // 1 Enable SSI Clock
   PAD_SysPeripheralClockEnable(SYSCTL_RCGCSSI_ADDR, eModule_0);
   // 2 -> 5 Config SSI pin on port A
   PAD_GPIOSSIPinConfig();
   // 3 Frame support
-  
   return 0;
 }
 
@@ -125,22 +121,22 @@ uint8_t SPIInterface::moduleInitialize(SPI_DEV eModule) {
 // 0 : Capture Data on first clock edge transition
 // 1 : Capture Data on second clock edge transition
 
-static uint8_t getFrameModeValue(SPI_Mode mode) {
+static uint8_t getFrameModeValue(eSPI_Mode mode) {
   switch(mode) {
     case SPI_Mode_0:
-      return 0b00;
+      return 0x0;
     case SPI_Mode_1:
-      return 0b01;
+      return 0x1;
     case SPI_Mode_2:
-      return 0b10;
+      return 0x2; 
     case SPI_Mode_3:
-      return 0b11;
+      return 0x3;
     default:
       return 0x0;
   }
 } 
 
-uint8_t SPIInterface::frameSupport(SPI_Mode transMode, uint8_t bitSize) {
+uint8_t SPIInterface::frameSupport(eSPI_Mode transMode, uint8_t bitSize) {
   uint32_t tempVal = 0;
   // Refer 15.4 Frame formats
   // 1 - Ensure SSE Bit is clear
@@ -160,15 +156,132 @@ uint8_t SPIInterface::frameSupport(SPI_Mode transMode, uint8_t bitSize) {
   // 6 - Optional uDMA
   // 7 - Enable SSI
   SPI_SSICR1 |= BIT1;
-  //
   return 0;
 }
 
 
-uint8_t SPIInterface::write(uint32_t wSize, uint8_t *wBuffer) {
-  return 0;
+uint8_t SPIInterface::write(uint32_t wSize, void *wBuffer) {
+  uint8_t status = 0;
+  if (wSize != 0) {
+    this->wSize = wSize;
+    this->wIndex = 0;
+    this->wData = (uint8_t *)wBuffer;
+
+    // Write handling
+    while ((this->wSize != this->wIndex) && (0 == (SPI_SSISR & BIT3))) {
+        SPI_SSIDR = this->wData[this->wIndex++];
+    }
+  } 
+  else {
+    SystemDebug.log(DEBUG_WRN, "[%s] Write request with 0 size!!!", this->deviceName);
+    status = 1;
+  }
+  return status;
 }
 
-uint8_t SPIInterface::read(uint32_t rSize, uint8_t *rBuffer) {
-  return 0;
+uint8_t SPIInterface::read(uint32_t rSize, void *rBuffer) {
+  uint8_t status = 0;
+  if (rSize != 0) {
+    this->rIndex = 0;
+    this->rSize = wSize;
+    this->rData = (uint8_t *) rBuffer;
+
+    // Read handling
+    while ((this->rSize != this->rIndex) && (SPI_SSISR & BIT2)) {
+        this->rData[rIndex++] = SPI_SSIDR;
+    }
+  }
+  else {
+    SystemDebug.log(DEBUG_WRN, "[%s] Read request with 0 size", this->deviceName);
+    status = 1;
+  }
+  return status;
+}
+
+void SPIInterface::interruptMaskSet(int flags) {
+  ASSERT(flags & SSI_RORMIS
+      || flags & SSI_RTMIS
+      || flags & SSI_RXMIS
+      || flags & SSI_TXMIS
+         )
+  SPI_SSIIM = flags;
+}
+
+void SPIInterface::interruptClear(eSSI_INT flags) {
+  ASSERT(flags & SSI_RORMIS
+      || flags & SSI_RTMIS
+      || flags & SSI_RXMIS
+      || flags & SSI_TXMIS
+         )
+  SPI_SSIICR = flags;
+}
+
+void SPIInterface::rwHandler(void) {
+  // Write handling
+  while ((this->wSize != this->wIndex) && (0 == (SPI_SSISR & BIT3))) {
+      SPI_SSIDR = this->wData[this->wIndex++];
+  }
+
+  // Read handling
+  while ((this->rSize != this->rIndex) && (SPI_SSISR & BIT2)) {
+      this->rData[rIndex++] = SPI_SSIDR;
+  }
+
+  // Dummy read if requested buffer received enough data but there are still more data
+  if ((this->rSize == this->rIndex) && (SPI_SSISR & BIT2)) {
+    while ((this->rSize == this->rIndex) && SPI_SSISR & BIT2) {
+      bugBuffer[fakeIndex++] = SPI_SSIDR; 
+      if (fakeIndex >= 4096) {
+        fakeIndex = 0;
+      }
+    }
+
+    if (fakeIndex >= 4096) {
+      fakeIndex = 0;
+    }
+    bugBuffer[fakeIndex++] = 0xAA; // magic space
+  }
+}
+
+eSSI_HANDLE_STATUS SPIInterface::isWriting(void) {
+  eSSI_HANDLE_STATUS status = SSI_HANDLE_OK;
+  if (this->wSize != this->wIndex)
+    status = SSI_WRITE_ERR;
+  
+  return status;
+}
+eSSI_HANDLE_STATUS SPIInterface::isReading(void) {
+  eSSI_HANDLE_STATUS status = SSI_HANDLE_OK;
+  if (this->rSize != this->rIndex)
+    status = SSI_READ_ERR;
+  
+  return status;
+}
+
+void SPIInterface::interruptHandler(void) {
+  uint32_t status = SPI_SSIIM;
+  this->handlerStatus = SPI_SSISR;
+
+  if (status & SSI_RORMIS) {
+    // Handle receive over run
+    SPI_SSIICR |= SSI_RORMIS;
+  }
+
+  if (status & SSI_RTMIS) {
+    // Handle receive time-out
+    rwHandler();
+    SPI_SSIICR |= SSI_RTMIS;
+  }
+
+  if (status & SSI_RXMIS) {
+    // Handle receive status int
+    rwHandler();
+    SPI_SSIICR |= SSI_RTMIS;
+  }
+
+  if (status & SSI_TXMIS) {
+    // Handle transmit status int
+    rwHandler();
+    SPI_SSIICR |= SSI_TXMIS;
+  }
 }

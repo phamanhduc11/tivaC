@@ -24,11 +24,11 @@ static char const * const _get_log_level_string(DebugLevel const log_level)
         case DEBUG_LV2:
             return "LV2";
         case DEBUG_LOG:
-            return "DEBUG_LOG";
+            return "LOG";
         case DEBUG_WRN:
-            return "DEBUG_WRN";
+            return "WRN";
         case DEBUG_ERR:
-            return "DEBUG_ERR";
+            return "ERR";
         default:
             return "ERROR LEVEL";
     }

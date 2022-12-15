@@ -41,8 +41,10 @@ static void IntDefaultHandler(void);
 //
 //*****************************************************************************
 extern void _c_int00(void);
-extern void USBInterruptStatus(void);
+//extern void USBInterruptStatus(void);
 extern void Timer0AIntHandler(void);
+extern void UARTIntHandler(void);
+extern void SSIInterruptHandler(void);
 //*****************************************************************************
 //
 // Linker variable that marks the top of the stack.
@@ -91,7 +93,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port E
     IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
-    IntDefaultHandler,                      // SSI0 Rx and Tx
+    SSIInterruptHandler,                      // SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
@@ -129,7 +131,7 @@ void (* const g_pfnVectors[])(void) =
     0,                                      // Reserved
     0,                                      // Reserved
     IntDefaultHandler,                      // Hibernate
-    USBInterruptStatus,                      // USB0
+    IntDefaultHandler,                      // USB0
     IntDefaultHandler,                      // PWM Generator 3
     IntDefaultHandler,                      // uDMA Software Transfer
     IntDefaultHandler,                      // uDMA Error
@@ -278,8 +280,8 @@ FaultISR(void)
     //
     // Enter an infinite loop.
     //
-    UARTprintf("NVIC_FAULT_STAT=%x, FAULTADDR=%x\n", *(unsigned int*)0xE000ED28, *(unsigned int*)0xE000ED38);
-    UARTprintf("RCGCGPIO = %x \n", *(unsigned int*)  (0x400FE000 + 0x608));
+    //UARTprintf("NVIC_FAULT_STAT=%x, FAULTADDR=%x\n", *(unsigned int*)0xE000ED28, *(unsigned int*)0xE000ED38);
+    //UARTprintf("RCGCGPIO = %x \n", *(unsigned int*)  (0x400FE000 + 0x608));
     while(1)
     {
     }
