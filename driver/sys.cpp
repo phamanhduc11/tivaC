@@ -76,6 +76,10 @@ void PAD_SysPeripheralClockEnable(uint32_t regBase, EModule eModule) {
             break;
         case SYSCTL_RCGCSSI_ADDR:
             SYSCTL_RCGCSSI_REG |= 1 << eModule;
+        case SYSCTL_RCGCTIMER_ADDR:
+            SYSCTL_RCGCTIMER_REG |= 1 << eModule;
+        case SYSCTL_RCGCWTIMER_ADDR:
+            SYSCTL_RCGCWTIMER_REG |= 1 << eModule;
         default:
             break;
             //Do nothing

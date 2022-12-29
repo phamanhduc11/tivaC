@@ -21,17 +21,23 @@ extern "C"
 #define GPIOPF_AHB_BASE  0x4005D000
 
 
+#define GPIODATA_REG_OFF    0x0 
+#define GPIODIR_REG_OFF     0x400 
 #define GPIOPCTL_REG_OFF    0x52C
 #define GPIOAFSEL_REG_OFF   0x420
 #define GPIOODR_REG_OFF     0x50C
 #define GPIODEN_REG_OFF     0x51C
 #define GPIODR2R_REG_OFF    0x500
 #define GPIOPUR_REG_OFF     0x510
+#define GPIOPDR_REG_OFF     0x514
 
 
 // APIs
 void PAD_GPIOI2CPinConfig(void);
 void PAD_GPIOSSIPinConfig(void);
+void PAD_GPIOSSICSPinConfig(bool isUse);
+void PAD_GPIOPinSet(uint32_t baseAddr, uint8_t pinNum);
+void PAD_GPIOPinClear(uint32_t baseAddr, uint8_t pinNum);
 
 #ifdef __cplusplus
 }

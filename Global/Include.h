@@ -1,6 +1,7 @@
 #ifndef __STANDARD_DEF__
 #define __STANDARD_DEF__
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -94,5 +95,51 @@ static inline unsigned int GET_MASK_POS(unsigned int MASK)
 #ifdef __cplusplus
 }
 #endif
+
+uint32_t getIndexFromStrList(void *listName, const char *targetStr, uint32_t offset);
+
+typedef struct {
+    const char *name;
+    uint8_t lowBit;
+    uint8_t highBit;
+} regBitInfo;
+
+typedef struct {
+    const char *name;
+} stringSearch;
+
+class PHY_Reg_Bit;
+class PHY_Register;
+class PHY_Reg_Bit{
+    public:
+        const char* name;
+        PHY_Register *parent;
+        uint32_t pos;
+        uint32_t bitmask;
+        PHY_Reg_Bit(PHY_Register *parent, const char *bitName, uint8_t lowBit, uint8_t highBit); // no dynamic allocation so can't use this
+        PHY_Reg_Bit(void);
+        void update(PHY_Register *parent, const char *bitName, uint8_t lowBit, uint8_t highBit);
+        uint32_t operator()(void);
+        void operator=(uint32_t value);
+        void dumpInfo(void);
+};
+
+class PHY_Register{
+    private:
+        uint32_t baseAddr;
+        uint32_t addrOffset;
+        uint32_t *regAddress;
+        regBitInfo *bitInfoList;
+        PHY_Reg_Bit *bitList;
+    public:
+        const char *name;
+        PHY_Register(const char *name, uint32_t baseAddr, uint32_t offset, PHY_Reg_Bit *bitList, regBitInfo *bitInfoList);
+        PHY_Register(void);
+        void update(const char *name, uint32_t baseAddr, uint32_t offset, PHY_Reg_Bit *bitList, regBitInfo *bitInfoList);
+        void baseAddrUpdate(uint32_t baseAddr);
+        uint32_t operator()(void);
+        PHY_Reg_Bit operator[](const char *bitName);
+        void operator=(int32_t value);
+};
 
 #endif

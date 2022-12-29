@@ -11,8 +11,8 @@ extern "C"
 #endif
 
 //APIs
-bool SPI_WriteBytes(uint32_t count, uint8_t *data);
-bool SPI_ReadBytes(uint32_t count, uint8_t *data);
+void SPI_WriteBytes(uint32_t count, uint8_t *data);
+void SPI_ReadBytes(uint32_t count, uint8_t *data);
 
 #ifdef __cplusplus
 }
@@ -26,10 +26,12 @@ typedef enum {
 } eSPI_DEV;
 
 typedef enum {
+    SPI_Mode_TI,
     SPI_Mode_0,
     SPI_Mode_1,
     SPI_Mode_2,
     SPI_Mode_3,
+    SPI_Mode_Microwire,
     SPI_MAX,
 } eSPI_Mode;
 
@@ -50,6 +52,7 @@ typedef enum {
 
 // Current code only use SSI0 device
 class SPIInterface {
+    private:
         static uint8_t isInitialized;
         const char *deviceName;
         bool isUsable;
@@ -63,7 +66,6 @@ class SPIInterface {
         volatile uint32_t rIndex;
         volatile uint32_t handlerStatus;
         uint8_t moduleInitialize(eSPI_DEV eModule);
-        void interruptClear(eSSI_INT flags);
         void rwHandler(void);
     public:
         SPIInterface(eSPI_DEV device, eSPI_Mode transMode, uint32_t setClock, uint8_t bitSize);
@@ -72,8 +74,12 @@ class SPIInterface {
         uint8_t read(uint32_t rSize, void *rBuffer);
         eSSI_HANDLE_STATUS isWriting(void);
         eSSI_HANDLE_STATUS isReading(void);
+        void interruptClear(int flags);
         void interruptMaskSet(int flags);
         void interruptHandler(void);
+        void setUseModuleFssPin(bool isUse);
+        void setCSPin(void);
+        void clearCSPin(void);
 };
 
 #endif

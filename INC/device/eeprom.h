@@ -17,9 +17,18 @@ enum eepromTransferMode {
   InvalidMode=0xff,
 };
 
+enum eepromDevice {
+  EEPROM_TYPE_93C,
+  EEPROM_TYPE_24C,
+  EEPROM_TYPE_INVALID,
+  EEPROM_TYPE_MAX
+};
+
 void eepromWrite(uint32_t writeAddr, uint32_t size, uint8_t *wData);
 void eepromRead(uint32_t readAddr, uint32_t size, uint8_t *rData);
+void eepromWriteEnable(void);
 void setEEPROMProtocol(uint32_t mode);
+void setEEPROMType(uint32_t eepromType);
 
 #ifdef __cplusplus
 }

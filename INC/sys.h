@@ -19,6 +19,10 @@ extern "C"
 #define SYSCTL_RCGCGPIO_ADDR        (SYSCTL_BASE + 0x608)                   //General-Purpose Input/Output Run Mode Clock Gating Control
 #define SYSCTL_RCGCSSI_REG          *(unsigned int*)(SYSCTL_BASE + 0x61C)   //Synchronous Serial Interface Run Mode Clock Gating Control
 #define SYSCTL_RCGCSSI_ADDR         (SYSCTL_BASE + 0x61C)                   //Synchronous Serial Interface Run Mode Clock Gating Control
+#define SYSCTL_RCGCTIMER_REG        *(unsigned int*)(SYSCTL_BASE + 0x604)
+#define SYSCTL_RCGCTIMER_ADDR       (SYSCTL_BASE + 0x604)
+#define SYSCTL_RCGCWTIMER_REG       *(unsigned int*)(SYSCTL_BASE + 0x65C)
+#define SYSCTL_RCGCWTIMER_ADDR      (SYSCTL_BASE + 0x65C)
 #define SYSCTL_PLLSTAT_REG          *(unsigned int*)(SYSCTL_BASE + 0x168)   //PLL Status
 #define SYSCTL_RIS_REG              *(unsigned int*)(SYSCTL_BASE + 0x050)   //Raw Interrupt Status
 #define SYSCTL_MISC_REG             *(unsigned int*)(SYSCTL_BASE + 0x058)   //Masked Interrupt Status and Clear

@@ -1,3 +1,5 @@
+#include <driverlib/debug.h>
+
 #include "Global/Include.h"
 #include "INC/sys.h"
 #include "INC/gpio.h"
@@ -33,12 +35,14 @@ void PAD_GPIOSSIPinConfig(void) {
     // Enable alternate function, value 2
     ///- Set pin to use alternate function
     REGW(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF, REGR(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF) | BIT2 | BIT3 | BIT4 | BIT5);
-    ///- Set digital enable to all coresponding pin
-    REGW(GPIOPA_APB_BASE + GPIODEN_REG_OFF,REGR(GPIOPA_APB_BASE + GPIODEN_REG_OFF) | BIT2 | BIT3 | BIT4 | BIT5);
     ///- Set internal pull-up pins for SSI
     REGW(GPIOPA_APB_BASE + GPIOPUR_REG_OFF,REGR(GPIOPA_APB_BASE + GPIOPUR_REG_OFF) | BIT2 | BIT3 | BIT4 | BIT5);
+    ///- Set internal pull-down pins for SSI
+    REGW(GPIOPA_APB_BASE + GPIOPDR_REG_OFF,REGR(GPIOPA_APB_BASE + GPIOPDR_REG_OFF) | BIT5);
     /// GPIO Pad 2mA
     REGW(GPIOPA_APB_BASE + GPIODR2R_REG_OFF, REGR(GPIOPA_APB_BASE + GPIODR2R_REG_OFF) | BIT2 | BIT3 | BIT4 | BIT5);
+    ///- Set digital enable to all coresponding pin
+    REGW(GPIOPA_APB_BASE + GPIODEN_REG_OFF,REGR(GPIOPA_APB_BASE + GPIODEN_REG_OFF) | BIT2 | BIT3 | BIT4 | BIT5);
     ///- Set alter function to I2C
     regTemp = REGR(GPIOPA_APB_BASE + GPIOPCTL_REG_OFF);
     SET_MASK_VAL(regTemp, 0xf00, 2);
@@ -46,4 +50,42 @@ void PAD_GPIOSSIPinConfig(void) {
     SET_MASK_VAL(regTemp, 0xf0000, 2);
     SET_MASK_VAL(regTemp, 0xf00000, 2);
     REGW(GPIOPA_APB_BASE + GPIOPCTL_REG_OFF, regTemp);
+}
+
+void PAD_GPIOSSICSPinConfig(bool isUse) {
+    // This Fss pin is already configured
+    // Enable alternate function, value 2
+    // Set pin to use alternate function
+    if (isUse)
+        REGW(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF, REGR(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF) | BIT3);
+    else
+    {
+        REGW(GPIOPA_APB_BASE + GPIODIR_REG_OFF, REGR(GPIOPA_APB_BASE + GPIODIR_REG_OFF) | BIT3);
+        REGW(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF, REGR(GPIOPA_APB_BASE + GPIOAFSEL_REG_OFF) & ~BIT3);
+    }
+}
+
+void PAD_GPIOPinSet(uint32_t baseAddr, uint8_t pinNum) {
+    ASSERT( pinNum == BIT0 
+         || pinNum == BIT1
+         || pinNum == BIT2
+         || pinNum == BIT3
+         || pinNum == BIT4
+         || pinNum == BIT5
+         || pinNum == BIT6
+         || pinNum == BIT7);
+
+    REGW(baseAddr + GPIODATA_REG_OFF + (pinNum << 2), pinNum);
+}
+
+void PAD_GPIOPinClear(uint32_t baseAddr, uint8_t pinNum) {
+    ASSERT( pinNum == BIT0 
+         || pinNum == BIT1
+         || pinNum == BIT2
+         || pinNum == BIT3
+         || pinNum == BIT4
+         || pinNum == BIT5
+         || pinNum == BIT6
+         || pinNum == BIT7);
+    REGW(baseAddr + GPIODATA_REG_OFF + (pinNum << 2), 0);
 }

@@ -20,7 +20,7 @@ VERBOSE = 1
 #
 # Include the common make definitions.
 #
-DEBUG = 1
+DEBUG ?= 1
 include ${PROJECT_PATH}/../padMake.mk
 include ${PROJECT_PATH}/../mkdefflags
 include ${PROJECT_PATH}/../mkdefs

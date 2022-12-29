@@ -58,12 +58,13 @@ static uint32_t getSPIAddr(eSPI_DEV device) {
   }
 }
 
-bool SPI_WriteBytes(uint32_t count, uint8_t *data) {
-  return false;
+extern SPIInterface *spi;
+void SPI_WriteBytes(uint32_t count, uint8_t *data) {
+  spi->write(count, data);
 }
 
-bool SPI_ReadBytes(uint32_t count, uint8_t *data) {
-  return false;
+void SPI_ReadBytes(uint32_t count, uint8_t *data) {
+  spi->read(count, data);
 }
 
 static volatile uint16_t bugBuffer[1024] = {0,};
@@ -84,9 +85,12 @@ SPIInterface::SPIInterface(eSPI_DEV device, eSPI_Mode transMode, uint32_t setClo
   this->rIndex      = 0;
   this->handlerStatus  = 0;
 
-  if(device & this->isInitialized) {
+  if( (1 << device) & this->isInitialized) {
     SystemDebug.log(DEBUG_WRN, "%s %d module is already initialized and used!!", this->deviceName, device);
     return;
+  }
+  else {
+    this->isInitialized = 1 << device;
   }
 
   //devBaseAddr = getSPIAddr(device);
@@ -108,7 +112,7 @@ uint8_t SPIInterface::moduleInitialize(eSPI_DEV eModule) {
   // 1 Enable SSI Clock
   PAD_SysPeripheralClockEnable(SYSCTL_RCGCSSI_ADDR, eModule_0);
   // 2 -> 5 Config SSI pin on port A
-  PAD_GPIOSSIPinConfig();
+  // PAD_GPIOSSIPinConfig();
   // 3 Frame support
   return 0;
 }
@@ -121,7 +125,7 @@ uint8_t SPIInterface::moduleInitialize(eSPI_DEV eModule) {
 // 0 : Capture Data on first clock edge transition
 // 1 : Capture Data on second clock edge transition
 
-static uint8_t getFrameModeValue(eSPI_Mode mode) {
+static uint8_t getSPHSPOValue(eSPI_Mode mode) {
   switch(mode) {
     case SPI_Mode_0:
       return 0x0;
@@ -136,6 +140,22 @@ static uint8_t getFrameModeValue(eSPI_Mode mode) {
   }
 } 
 
+static uint8_t getFrameModeValue(eSPI_Mode mode) {
+  switch(mode) {
+    case SPI_Mode_TI:
+      return 0x1;
+    case SPI_Mode_Microwire:
+      return 0x2;
+    case SPI_Mode_0:
+    case SPI_Mode_1:
+    case SPI_Mode_2:
+    case SPI_Mode_3:
+      return 0x0;
+    default:
+      return 0x0;
+  }
+}
+
 uint8_t SPIInterface::frameSupport(eSPI_Mode transMode, uint8_t bitSize) {
   uint32_t tempVal = 0;
   // Refer 15.4 Frame formats
@@ -144,18 +164,19 @@ uint8_t SPIInterface::frameSupport(eSPI_Mode transMode, uint8_t bitSize) {
   // 2 - Set SSI Master
   SPI_SSICR1 = 0;
   // 3 - Config SSI clock source
-  SPI_SSICC = 4;
+  SPI_SSICC = 0;
   // 4 - Configure clock prescaler 
   SPI_SSICPSR = 4;
   // 5 - Configure SSICR0 -> clock, frame mode, data size
   tempVal = (SysCtlClockGet()/(this->setClock*SPI_SSICPSR)) << 8;
-  tempVal |= getFrameModeValue(transMode) << 6;
-  tempVal |= 0 << 4; // force to use Freescale SPI Frame Format
+  tempVal |= getSPHSPOValue(transMode) << 6;
+  tempVal |= getFrameModeValue(transMode) << 4; // force to use Freescale SPI Frame Format
   tempVal |= bitSize - 1;
   SPI_SSICR0 = tempVal;
   // 6 - Optional uDMA
   // 7 - Enable SSI
   SPI_SSICR1 |= BIT1;
+  PAD_GPIOSSIPinConfig();
   return 0;
 }
 
@@ -167,9 +188,15 @@ uint8_t SPIInterface::write(uint32_t wSize, void *wBuffer) {
     this->wIndex = 0;
     this->wData = (uint8_t *)wBuffer;
 
+    SystemDebug.log(DEBUG_LV0, "[%s] Write request with %d size!!!", this->deviceName, wSize);
     // Write handling
-    while ((this->wSize != this->wIndex) && (0 == (SPI_SSISR & BIT3))) {
+    while ((this->wSize > this->wIndex) && (0 == (SPI_SSISR & BIT3))) {
         SPI_SSIDR = this->wData[this->wIndex++];
+    }
+    if (this->wSize > this->wIndex) {
+      // set transmission interrupt for keep transmit in ISR
+      SystemDebug.log(DEBUG_LV0, "[%s] Write request with 0 size!!!", this->deviceName);
+      SPI_SSIIM |= SSI_TXMIS;
     }
   } 
   else {
@@ -186,6 +213,7 @@ uint8_t SPIInterface::read(uint32_t rSize, void *rBuffer) {
     this->rSize = wSize;
     this->rData = (uint8_t *) rBuffer;
 
+    SystemDebug.log(DEBUG_LV0, "[%s] Read request with %d size!!!", this->deviceName, wSize);
     // Read handling
     while ((this->rSize != this->rIndex) && (SPI_SSISR & BIT2)) {
         this->rData[rIndex++] = SPI_SSIDR;
@@ -203,16 +231,16 @@ void SPIInterface::interruptMaskSet(int flags) {
       || flags & SSI_RTMIS
       || flags & SSI_RXMIS
       || flags & SSI_TXMIS
-         )
-  SPI_SSIIM = flags;
+         );
+  SPI_SSIIM |= flags;
 }
 
-void SPIInterface::interruptClear(eSSI_INT flags) {
+void SPIInterface::interruptClear(int flags) {
   ASSERT(flags & SSI_RORMIS
       || flags & SSI_RTMIS
       || flags & SSI_RXMIS
       || flags & SSI_TXMIS
-         )
+         );
   SPI_SSIICR = flags;
 }
 
@@ -220,6 +248,9 @@ void SPIInterface::rwHandler(void) {
   // Write handling
   while ((this->wSize != this->wIndex) && (0 == (SPI_SSISR & BIT3))) {
       SPI_SSIDR = this->wData[this->wIndex++];
+  }
+  if (this->wSize == this->wIndex) {
+    SPI_SSIMIS &= ~SSI_TXMIS;
   }
 
   // Read handling
@@ -259,8 +290,10 @@ eSSI_HANDLE_STATUS SPIInterface::isReading(void) {
 }
 
 void SPIInterface::interruptHandler(void) {
-  uint32_t status = SPI_SSIIM;
+  uint32_t status = SPI_SSIMIS;
   this->handlerStatus = SPI_SSISR;
+  SystemDebug.log(DEBUG_LV0,"SPI status %08x\r\n", this->handlerStatus);
+  SystemDebug.log(DEBUG_LV0,"SPI interrupt status %08x\r\n", status);
 
   if (status & SSI_RORMIS) {
     // Handle receive over run
@@ -284,4 +317,16 @@ void SPIInterface::interruptHandler(void) {
     rwHandler();
     SPI_SSIICR |= SSI_TXMIS;
   }
+}
+
+void SPIInterface::setUseModuleFssPin(bool isUse) {
+  PAD_GPIOSSICSPinConfig(isUse);
+}
+
+void SPIInterface::setCSPin(void) {
+  PAD_GPIOPinSet(GPIOPA_APB_BASE, BIT3);
+}
+
+void SPIInterface::clearCSPin(void) {
+  PAD_GPIOPinClear(GPIOPA_APB_BASE, BIT3);
 }

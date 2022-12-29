@@ -1,9 +1,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <Global/Include.h>
+
 #include "TivaWare\utils\uartstdio.h"
 
+#include "Global/Include.h"
 #include "INC/debug.h"
 
 
@@ -39,7 +40,7 @@ DebugInterface::DebugInterface(void) {
 }
 
 void DebugInterface::setDebugLevel(DebugLevel level) {
-    if (level >= this->debugLevel && level < DEBUG_MAX_OPT) {
+    if (level < DEBUG_MAX_OPT) {
         this->debugLevel = level;
     }
 }

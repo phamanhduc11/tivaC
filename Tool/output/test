@@ -1,0 +1,226 @@
+Offset data for c file
+#define GPTM_GPTMCFG_OFF 0x000
+#define GPTM_GPTMTAMR_OFF 0x004
+#define GPTM_GPTMTBMR_OFF 0x008
+#define GPTM_GPTMCTL_OFF 0x00C
+#define GPTM_GPTMSYNC_OFF 0x010
+#define GPTM_GPTMIMR_OFF 0x018
+#define GPTM_GPTMRIS_OFF 0x01C
+#define GPTM_GPTMMIS_OFF 0x020
+#define GPTM_GPTMICR_OFF 0x024
+#define GPTM_GPTMTAILR_OFF 0x028
+#define GPTM_GPTMTBILR_OFF 0x02C
+#define GPTM_GPTMTAMATCHR_OFF 0x030
+#define GPTM_GPTMTBMATCHR_OFF 0x034
+#define GPTM_GPTMTAPR_OFF 0x038
+#define GPTM_GPTMTBPR_OFF 0x03C
+#define GPTM_GPTMTAPMR_OFF 0x040
+#define GPTM_GPTMTBPMR_OFF 0x044
+#define GPTM_GPTMTAR_OFF 0x048
+#define GPTM_GPTMTBR_OFF 0x04C
+#define GPTM_GPTMTAV_OFF 0x050
+#define GPTM_GPTMTBV_OFF 0x054
+#define GPTM_GPTMRTCPD_OFF 0x058
+#define GPTM_GPTMTAPS_OFF 0x05C
+#define GPTM_GPTMTBPS_OFF 0x060
+#define GPTM_GPTMTAPV_OFF 0x064
+#define GPTM_GPTMTBPV_OFF 0x068
+#define GPTM_GPTMPP_OFF 0xFC0
+
+cpp_definePHYRegister_prepare
+static PHY_Register GPTMCFG;
+static PHY_Register GPTMTAMR;
+static PHY_Register GPTMTBMR;
+static PHY_Register GPTMCTL;
+static PHY_Register GPTMSYNC;
+static PHY_Register GPTMIMR;
+static PHY_Register GPTMRIS;
+static PHY_Register GPTMMIS;
+static PHY_Register GPTMICR;
+static PHY_Register GPTMTAILR;
+static PHY_Register GPTMTBILR;
+static PHY_Register GPTMTAMATCHR;
+static PHY_Register GPTMTBMATCHR;
+static PHY_Register GPTMTAPR;
+static PHY_Register GPTMTBPR;
+static PHY_Register GPTMTAPMR;
+static PHY_Register GPTMTBPMR;
+static PHY_Register GPTMTAR;
+static PHY_Register GPTMTBR;
+static PHY_Register GPTMTAV;
+static PHY_Register GPTMTBV;
+static PHY_Register GPTMRTCPD;
+static PHY_Register GPTMTAPS;
+static PHY_Register GPTMTBPS;
+static PHY_Register GPTMTAPV;
+static PHY_Register GPTMTBPV;
+static PHY_Register GPTMPP;
+
+regBitInfo data preare
+regBitInfo GPTMCFG_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAMR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBMR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMCTL_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMSYNC_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMIMR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMRIS_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMMIS_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMICR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAILR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBILR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAMATCHR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBMATCHR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAPR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBPR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAPMR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBPMR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBR_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAV_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBV_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMRTCPD_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAPS_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBPS_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTAPV_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMTBPV_Info[] {
+    {"NULL", 32, 32}
+};
+
+regBitInfo GPTMPP_Info[] {
+    {"NULL", 32, 32}
+};
+
+
+cpp_bitList_prepare
+PHY_Reg_Bit GPTMCFG_bitList[sizeof(GPTMCFG_Info)/sizeof(GPTMCFG_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAMR_bitList[sizeof(GPTMTAMR_Info)/sizeof(GPTMTAMR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBMR_bitList[sizeof(GPTMTBMR_Info)/sizeof(GPTMTBMR_Info[0]) - 1];
+PHY_Reg_Bit GPTMCTL_bitList[sizeof(GPTMCTL_Info)/sizeof(GPTMCTL_Info[0]) - 1];
+PHY_Reg_Bit GPTMSYNC_bitList[sizeof(GPTMSYNC_Info)/sizeof(GPTMSYNC_Info[0]) - 1];
+PHY_Reg_Bit GPTMIMR_bitList[sizeof(GPTMIMR_Info)/sizeof(GPTMIMR_Info[0]) - 1];
+PHY_Reg_Bit GPTMRIS_bitList[sizeof(GPTMRIS_Info)/sizeof(GPTMRIS_Info[0]) - 1];
+PHY_Reg_Bit GPTMMIS_bitList[sizeof(GPTMMIS_Info)/sizeof(GPTMMIS_Info[0]) - 1];
+PHY_Reg_Bit GPTMICR_bitList[sizeof(GPTMICR_Info)/sizeof(GPTMICR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAILR_bitList[sizeof(GPTMTAILR_Info)/sizeof(GPTMTAILR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBILR_bitList[sizeof(GPTMTBILR_Info)/sizeof(GPTMTBILR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAMATCHR_bitList[sizeof(GPTMTAMATCHR_Info)/sizeof(GPTMTAMATCHR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBMATCHR_bitList[sizeof(GPTMTBMATCHR_Info)/sizeof(GPTMTBMATCHR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAPR_bitList[sizeof(GPTMTAPR_Info)/sizeof(GPTMTAPR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBPR_bitList[sizeof(GPTMTBPR_Info)/sizeof(GPTMTBPR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAPMR_bitList[sizeof(GPTMTAPMR_Info)/sizeof(GPTMTAPMR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBPMR_bitList[sizeof(GPTMTBPMR_Info)/sizeof(GPTMTBPMR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAR_bitList[sizeof(GPTMTAR_Info)/sizeof(GPTMTAR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBR_bitList[sizeof(GPTMTBR_Info)/sizeof(GPTMTBR_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAV_bitList[sizeof(GPTMTAV_Info)/sizeof(GPTMTAV_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBV_bitList[sizeof(GPTMTBV_Info)/sizeof(GPTMTBV_Info[0]) - 1];
+PHY_Reg_Bit GPTMRTCPD_bitList[sizeof(GPTMRTCPD_Info)/sizeof(GPTMRTCPD_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAPS_bitList[sizeof(GPTMTAPS_Info)/sizeof(GPTMTAPS_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBPS_bitList[sizeof(GPTMTBPS_Info)/sizeof(GPTMTBPS_Info[0]) - 1];
+PHY_Reg_Bit GPTMTAPV_bitList[sizeof(GPTMTAPV_Info)/sizeof(GPTMTAPV_Info[0]) - 1];
+PHY_Reg_Bit GPTMTBPV_bitList[sizeof(GPTMTBPV_Info)/sizeof(GPTMTBPV_Info[0]) - 1];
+PHY_Reg_Bit GPTMPP_bitList[sizeof(GPTMPP_Info)/sizeof(GPTMPP_Info[0]) - 1];
+
+cpp_moduleContructor_prepare
+GPTMCFG.update("GPTMCFG", this->baseModuleAddr, GPTM_GPTMCFG_OFF, GPTMCFG_bitList, GPTMCFG_Info);
+GPTMTAMR.update("GPTMTAMR", this->baseModuleAddr, GPTM_GPTMTAMR_OFF, GPTMTAMR_bitList, GPTMTAMR_Info);
+GPTMTBMR.update("GPTMTBMR", this->baseModuleAddr, GPTM_GPTMTBMR_OFF, GPTMTBMR_bitList, GPTMTBMR_Info);
+GPTMCTL.update("GPTMCTL", this->baseModuleAddr, GPTM_GPTMCTL_OFF, GPTMCTL_bitList, GPTMCTL_Info);
+GPTMSYNC.update("GPTMSYNC", this->baseModuleAddr, GPTM_GPTMSYNC_OFF, GPTMSYNC_bitList, GPTMSYNC_Info);
+GPTMIMR.update("GPTMIMR", this->baseModuleAddr, GPTM_GPTMIMR_OFF, GPTMIMR_bitList, GPTMIMR_Info);
+GPTMRIS.update("GPTMRIS", this->baseModuleAddr, GPTM_GPTMRIS_OFF, GPTMRIS_bitList, GPTMRIS_Info);
+GPTMMIS.update("GPTMMIS", this->baseModuleAddr, GPTM_GPTMMIS_OFF, GPTMMIS_bitList, GPTMMIS_Info);
+GPTMICR.update("GPTMICR", this->baseModuleAddr, GPTM_GPTMICR_OFF, GPTMICR_bitList, GPTMICR_Info);
+GPTMTAILR.update("GPTMTAILR", this->baseModuleAddr, GPTM_GPTMTAILR_OFF, GPTMTAILR_bitList, GPTMTAILR_Info);
+GPTMTBILR.update("GPTMTBILR", this->baseModuleAddr, GPTM_GPTMTBILR_OFF, GPTMTBILR_bitList, GPTMTBILR_Info);
+GPTMTAMATCHR.update("GPTMTAMATCHR", this->baseModuleAddr, GPTM_GPTMTAMATCHR_OFF, GPTMTAMATCHR_bitList, GPTMTAMATCHR_Info);
+GPTMTBMATCHR.update("GPTMTBMATCHR", this->baseModuleAddr, GPTM_GPTMTBMATCHR_OFF, GPTMTBMATCHR_bitList, GPTMTBMATCHR_Info);
+GPTMTAPR.update("GPTMTAPR", this->baseModuleAddr, GPTM_GPTMTAPR_OFF, GPTMTAPR_bitList, GPTMTAPR_Info);
+GPTMTBPR.update("GPTMTBPR", this->baseModuleAddr, GPTM_GPTMTBPR_OFF, GPTMTBPR_bitList, GPTMTBPR_Info);
+GPTMTAPMR.update("GPTMTAPMR", this->baseModuleAddr, GPTM_GPTMTAPMR_OFF, GPTMTAPMR_bitList, GPTMTAPMR_Info);
+GPTMTBPMR.update("GPTMTBPMR", this->baseModuleAddr, GPTM_GPTMTBPMR_OFF, GPTMTBPMR_bitList, GPTMTBPMR_Info);
+GPTMTAR.update("GPTMTAR", this->baseModuleAddr, GPTM_GPTMTAR_OFF, GPTMTAR_bitList, GPTMTAR_Info);
+GPTMTBR.update("GPTMTBR", this->baseModuleAddr, GPTM_GPTMTBR_OFF, GPTMTBR_bitList, GPTMTBR_Info);
+GPTMTAV.update("GPTMTAV", this->baseModuleAddr, GPTM_GPTMTAV_OFF, GPTMTAV_bitList, GPTMTAV_Info);
+GPTMTBV.update("GPTMTBV", this->baseModuleAddr, GPTM_GPTMTBV_OFF, GPTMTBV_bitList, GPTMTBV_Info);
+GPTMRTCPD.update("GPTMRTCPD", this->baseModuleAddr, GPTM_GPTMRTCPD_OFF, GPTMRTCPD_bitList, GPTMRTCPD_Info);
+GPTMTAPS.update("GPTMTAPS", this->baseModuleAddr, GPTM_GPTMTAPS_OFF, GPTMTAPS_bitList, GPTMTAPS_Info);
+GPTMTBPS.update("GPTMTBPS", this->baseModuleAddr, GPTM_GPTMTBPS_OFF, GPTMTBPS_bitList, GPTMTBPS_Info);
+GPTMTAPV.update("GPTMTAPV", this->baseModuleAddr, GPTM_GPTMTAPV_OFF, GPTMTAPV_bitList, GPTMTAPV_Info);
+GPTMTBPV.update("GPTMTBPV", this->baseModuleAddr, GPTM_GPTMTBPV_OFF, GPTMTBPV_bitList, GPTMTBPV_Info);
+GPTMPP.update("GPTMPP", this->baseModuleAddr, GPTM_GPTMPP_OFF, GPTMPP_bitList, GPTMPP_Info);
+

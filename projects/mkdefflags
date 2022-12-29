@@ -71,10 +71,12 @@ LDFLAGS +=--gc-sections
 # Tell the compiler to include debugging information if the DEBUG environment
 # variable is set.
 #
-ifdef DEBUG 
-CFLAGS+=-g -DDEBUG -O0
+ifeq ($(DEBUG), 1)
+CFLAGS+= -g -DDEBUG -O0
+CXXFLAGS+= -g -DDEBUG -O0
 else
-CFLAGS+=-Os
+CFLAGS+= -Os
+CXXFLAGS+= -Os
 endif
 
 # The location of the C compiler

@@ -39,7 +39,7 @@
 
 #ifndef __DRIVERLIB_DEBUG_H__
 #define __DRIVERLIB_DEBUG_H__
-
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C"
 {

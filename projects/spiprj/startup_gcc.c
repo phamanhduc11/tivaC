@@ -46,6 +46,7 @@ extern void UART0IntHandler(void);
 extern void SSI2IntHandler(void);
 extern void I2C0SlaveIntHandler(void);
 extern void SSIInterruptHandler(void);
+extern void Timer0InterruptHandler(void);
 //*****************************************************************************
 //
 // Reserve space for the system stack.
@@ -98,8 +99,8 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    IntDefaultHandler,                      // Timer 0 subtimer A
-    IntDefaultHandler,                      // Timer 0 subtimer B
+    Timer0InterruptHandler,                      // Timer 0 subtimer A
+    Timer0InterruptHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
     IntDefaultHandler,                      // Timer 2 subtimer A

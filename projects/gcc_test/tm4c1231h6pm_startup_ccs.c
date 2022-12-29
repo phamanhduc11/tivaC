@@ -24,6 +24,8 @@
 
 #include <stdint.h>
 #include "utils/uartstdio.h"
+
+#define printf UARTprintf
 //*****************************************************************************
 //
 // Forward declaration of the default fault handlers.
@@ -45,6 +47,7 @@ extern void _c_int00(void);
 extern void Timer0AIntHandler(void);
 extern void UARTIntHandler(void);
 extern void SSIInterruptHandler(void);
+extern void Timer0InterruptHandler(void);
 //*****************************************************************************
 //
 // Linker variable that marks the top of the stack.
@@ -105,9 +108,8 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-//    Timer0AIntHandler,                      // Timer 0 subtimer A
-    IntDefaultHandler,                      // Timer 0 subtimer A
-    IntDefaultHandler,                      // Timer 0 subtimer B
+    Timer0InterruptHandler,                      // Timer 0 subtimer A
+    Timer0InterruptHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
     IntDefaultHandler,                      // Timer 2 subtimer A
@@ -262,6 +264,7 @@ NmiSR(void)
     //
     // Enter an infinite loop.
     //
+    printf("[PAD] NmiSR\r\n");
     while(1)
     {
     }
@@ -280,8 +283,8 @@ FaultISR(void)
     //
     // Enter an infinite loop.
     //
-    //UARTprintf("NVIC_FAULT_STAT=%x, FAULTADDR=%x\n", *(unsigned int*)0xE000ED28, *(unsigned int*)0xE000ED38);
-    //UARTprintf("RCGCGPIO = %x \n", *(unsigned int*)  (0x400FE000 + 0x608));
+    UARTprintf("NVIC_FAULT_STAT=%x, FAULTADDR=%x\n", *(unsigned int*)0xE000ED28, *(unsigned int*)0xE000ED38);
+    UARTprintf("RCGCGPIO = %x \n", *(unsigned int*)  (0x400FE000 + 0x608));
     while(1)
     {
     }
@@ -300,6 +303,7 @@ IntDefaultHandler(void)
     //
     // Go into an infinite loop.
     //
+    printf("[PAD] IntDefaultHandler\r\n");
     while(1)
     {
     }
