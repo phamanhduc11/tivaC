@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-#include "TivaWare\utils\uartstdio.h"
+#include "utils/uartstdio.h"
 
 #include "Global/Include.h"
 #include "INC/debug.h"
