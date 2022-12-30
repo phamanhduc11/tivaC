@@ -20,6 +20,7 @@
 #define GET_RX_ENDPOINT_INT_MASK(x) ((x >> 16) & 0xFF)
 
 struct endpointInfo {
+    USBEndpointType epType;
     bool    isDoubleBuffering;
     int     maxPacketSize;
     int     FIFORamAddr;

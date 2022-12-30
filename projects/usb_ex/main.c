@@ -24,6 +24,8 @@
 #include "utils/uartstdio.h"
 #endif
 
+#include "usbd_framework.h"
+
 #if defined(gcc)
 #ifdef DEBUG
 void
@@ -54,11 +56,14 @@ SimpleDelay(void)
     SysCtlDelay(50000000);
 }
 
+USBDevice usbdevice;
+
 int main()
 {
     MAP_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
                        SYSCTL_XTAL_16MHZ);
     InitConsole();
+    USBDInit(&usbdevice);
     UARTprintf("Test 1 %x\n", SysTickCurrentGet());
     UARTprintf("Test 2\n");
     while(1)

@@ -95,10 +95,10 @@ int main(void){
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
 #endif
     InitConsole();
-    std::vector<uint8_t> test = {1,2,3,4};
+    // std::vector<uint8_t> test = {1,2,3,4};
     //uint8_t *testMalloc = new uint8_t[9];
-    uint8_t *test2Malloc = (uint8_t *) malloc(1 * sizeof(uint8_t));
-    printf("testMalloc = %x %x\r\n", test2Malloc);
+    // uint8_t *test2Malloc = (uint8_t *) malloc(1 * sizeof(uint8_t));
+    // printf("testMalloc = %x %x\r\n", test2Malloc);
     SPIInterface spi0(SPI0_DEV, SPI_Mode_0, 500000, 8);
     TimerModule timer0(GPT_Module_0, GPTM_MODE_PERIOD, 1);
     spi = &spi0;

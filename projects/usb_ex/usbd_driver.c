@@ -207,6 +207,7 @@ static void DeconfigureEndpoint(int EPNum) {
 */
 static void ConfigureINEndpoint(int EPNum, struct endpointInfo epInfo) {
     ASSERT(EPNum != 0);
+    // TODO: missing config EP type
     ConfigureTxRxFIFOSize(EPNum, true, epInfo);
     USBTXIE = USBTXIE | 1 << EPNum;
 }
@@ -217,6 +218,7 @@ static void ConfigureINEndpoint(int EPNum, struct endpointInfo epInfo) {
 */
 static void ConfigureOUTEndpoint(int EPNum, struct endpointInfo epInfo) {
     ASSERT(EPNum != 0);
+    // TODO: missing config EP type
     ConfigureTxRxFIFOSize(EPNum, false, epInfo);
     USBRXIE = USBRXIE | 1 << EPNum;
 }
@@ -396,7 +398,7 @@ static void USBCoreInitialize(void) {
 #define BIT7    BIT0 << 7
 
 
-static void USBIntHandler(unsigned int ui32IntStatus) {
+static void USBDIntHandler(unsigned int ui32IntStatus) {
     // Suspend Handler
     if (ui32IntStatus & USB_GENERAL_INT_DEVICE_SUSPEND) {
     }
@@ -448,5 +450,5 @@ const USBDriver usb_driver = {
     .set_device_address = &USBSetDeviceAdress,
     .get_rcv_packet_size = &USBGetRcvBytes,
     .get_int_status = &USBDeviceGetIntStatus,
-    .polling = &USBIntHandler,
+    .polling = &USBDIntHandler,
 };
