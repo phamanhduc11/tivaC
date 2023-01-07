@@ -16,14 +16,9 @@ const USBEvents usb_events;
 void USBDInit(USBDevice *usb_device) {
 
     usb_driver.initialize_gpio_pins();
-    // USBPinInitialize();
     usb_driver.initialize_core();
-    // USBDeviceInit();
-    // USBInterruptInitialize();
-    // EndpointInitialize();
     usbd_handle = usb_device;
     usb_driver.connect();
-    // USBBusConnect();
 }
 
 void USBDisable(void) {
@@ -157,11 +152,13 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
 
 static void USBDEndpointHandler(unsigned int EPNum, unsigned int u32IntStatus) {
     unsigned int endpointStatus = 0;
-    unsigned short bcnt = 0;
     unsigned char endPointType = 0;
+    unsigned short bcnt = 0;
+    // Get Endpoint control status
     usb_driver.endpoint_ctl_status(EPNum, &endpointStatus);
+    // Get Endpoint received packet size;
     usb_driver.get_rcv_packet_size(EPNum, &bcnt);
-    log_info("endpoint control status of EP%d is 0x%x and bcnt=%d.", EPNum, endpointStatus, bcnt);
+    log_info("Endpoint control status of EP%d is 0x%x and packet size=%d.", EPNum, endpointStatus, bcnt);
     // ToDo: depends on status
     switch (EPNum) {
         case 0:

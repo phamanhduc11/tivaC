@@ -92,6 +92,9 @@
 
 #define SCB_USB_INT_EN  *(unsigned int*) (0xE000E000 + 0x104)
 
+#ifdef ASSERT(x)
+#undef ASSERT(x)
+#endif
 #define ASSERT(x)  while(!x) {}
 static void ConfigureTxRxFIFOSize (int EPNum, bool isTxEndpoint, struct endpointInfo epInfo);
 
@@ -100,7 +103,6 @@ static void USBPinInitialize(void) {
     // Configure alternate function of pin and configure pin to use alt func - 7 steps of GPIO initialization
     RCGCGPIO = RCGCGPIO | (1 << 3);
     for(ui8Delay = 0; ui8Delay < 16; ui8Delay++){
-
     }
     USB_GPIODIR = USB_GPIODIR & ~(1 << 5 | 1 << 4);
     USB_GPIOAFSEL = USB_GPIOAFSEL | (1 << 5 | 1 << 4);
@@ -111,6 +113,7 @@ static void USBPinInitialize(void) {
     USB_GPIODR8R = USB_GPIODR8R & ~( 1 << 5 | 1 << 4);
     USB_GPIOAMSEL = USB_GPIOAMSEL | ( 1 << 5 | 1 << 4);
 }
+
 // legacy usb reset
 #define SRCR2_REG *(unsigned int*)(0x400FE000 + 0x48)
 // or using peripherals specific (USB Peripheral) reset
@@ -184,7 +187,6 @@ static void FlushTxFifo(int EPNum) {
 static void ConfigureEndpoint0(void) {
     // Default value is 1
     USBTXIE = USBTXIE | 1;
-    USBRXIS = USBRXIS | 1;
 
 }
 
@@ -365,16 +367,17 @@ void USBGetRcvBytes(unsigned int EPNum, unsigned short *bcnt) {
 
 static void USBGetEndpointStatus(int EPNum, unsigned int *ret) {
     if (EPNum == 0) {
-        *ret = USBCSRH0 | USBCSRL0;
+        *ret = (USBCSRH0 << 8) | USBCSRL0;
     }
     else {
-                *ret = (unsigned int) (USBTXCSRH(EPNum) << 24 | USBTXCSRL(EPNum) << 16 | USBRXCSRH(EPNum) << 8 | USBRXCSRL(EPNum));
+        *ret = (unsigned int) (USBTXCSRH(EPNum) << 24 | USBTXCSRL(EPNum) << 16 | USBRXCSRH(EPNum) << 8 | USBRXCSRL(EPNum));
     }
 }
 
 static void USBCoreInitialize(void) {
     USBDeviceInit();
     USBInterruptInitialize();
+    ConfigureEndpoint0();
     // EndpointInitialize();
 }
 
@@ -432,7 +435,7 @@ static void USBDIntHandler(unsigned int ui32IntStatus) {
     if ((GET_TX_ENDPOINT_INT_MASK(ui32IntStatus) | GET_RX_ENDPOINT_INT_MASK(ui32IntStatus)) & BIT3 ) {
         usb_events.on_endpoint_handle(3, ui32IntStatus);
     }
-    
+   
 }
 
 const USBDriver usb_driver = {
