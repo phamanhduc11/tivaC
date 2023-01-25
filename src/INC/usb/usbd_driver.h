@@ -3,6 +3,11 @@
 #include <stdbool.h>
 #include "usb_standards.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define USB_FIFO_RAM_SIZE_8     0x0
 #define USB_FIFO_RAM_SIZE_16    0x1
 #define USB_FIFO_RAM_SIZE_32    0x2
@@ -61,4 +66,7 @@ extern const USBEvents usb_events;
 /// Description:
 /// This function will init USB module to Device Mode
 
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -12,23 +12,23 @@
 #define STCTRL_INTEN    0x2
 #define STCTRL_ENABLE   0x1
 
-void SysTickEnable(void) {
+void PAD_SysTickEnable(void) {
     STICK_STCTRL |= STCTRL_ENABLE;
 }
 
-void SysTickDisable(void) {
+void PAD_SysTickDisable(void) {
     STICK_STCTRL &= ~STCTRL_ENABLE;
 }
 
-void SysTickIntEnable(void) {
+void PAD_SysTickIntEnable(void) {
     STICK_STCTRL |= STCTRL_INTEN;
 }
 
-void SysTickIntDisable(void) {
+void PAD_SysTickIntDisable(void) {
     STICK_STCTRL &= ~STCTRL_INTEN;
 }
 
-void SysTickClkSrcSet(unsigned int clkSrc) {
+void PAD_SysTickClkSrcSet(unsigned int clkSrc) {
     STICK_STCTRL &= ~STCTRL_CLKSRC;
     switch (clkSrc)
     {
@@ -43,21 +43,21 @@ void SysTickClkSrcSet(unsigned int clkSrc) {
     }
 }
 
-int SysTickIsCounting(void) {
+int PAD_SysTickIsCounting(void) {
     int ret = 0;
     ret = (STICK_STCTRL & STCTRL_COUNT) != 0 ? 1 : 0;
     return ret;
 }
 
-unsigned int SysTickCurrentGet(void) {
+unsigned int PAD_SysTickCurrentGet(void) {
     return STICK_STCURRENT;
 }
 
-void SysTickPeriodSet(unsigned int period) {
+void PAD_SysTickPeriodSet(unsigned int period) {
     STICK_STRELOAD = period;
 }
 
-unsigned int SysTickPeriodGet(void) {
+unsigned int PAD_SysTickPeriodGet(void) {
     return STICK_STRELOAD;
 }
 /* Systick End */

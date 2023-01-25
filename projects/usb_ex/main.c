@@ -24,18 +24,27 @@
 #include "utils/uartstdio.h"
 #endif
 
-#include "usbd_framework.h"
+#include "INC/usb/usbd_framework.h"
 
-#if defined(gcc)
-#ifdef DEBUG
-void
-__error__(char *pcFilename, uint32_t ui32Line)
-{
-}
-#endif
-#endif
 
 void UART0IntHandler(void){
+}
+
+volatile uint32_t g_ui32Counter = 0;
+
+void
+SysTickIntHandler(void)
+{
+    //
+    // Update the Systick interrupt counter.
+    //
+    g_ui32Counter++;
+    UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
+}
+
+void
+USB0IntHandler(void) {
+    USBInterruptStatus();
 }
 
 void
@@ -48,7 +57,7 @@ InitConsole()
     UARTClockSourceSet(UART0_BASE, UART_CLOCK_SYSTEM);
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
     // UARTStdioConfig(0, 115200, 16000000);
-    UARTStdioConfig(0, 115200, 50000000);
+    UARTStdioConfig(0, 921600, MAP_SysCtlClockGet());
 }
 void
 SimpleDelay(void)
@@ -57,17 +66,60 @@ SimpleDelay(void)
 }
 
 USBDevice usbdevice;
+uint8_t usbIN[256]  = {0,};
+uint8_t usbOUT[256] = {0,};
+
+void USBDeviceDataInit(void) {
+    usbdevice.device_state = 0;
+    usbdevice.control_transfer_stage = 0;
+    usbdevice.configuration_value = 0;
+    usbdevice.ptr_in_buffer = usbIN;
+    usbdevice.ptr_out_buffer = usbOUT;
+    usbdevice.in_data_size = 0;
+    usbdevice.out_data_size = 0;
+}
 
 int main()
 {
-    MAP_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
-                       SYSCTL_XTAL_16MHZ);
+    uint32_t ui32PrevCount = 0;
+    // Set 80MHz
+    MAP_SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
+
     InitConsole();
+    USBDeviceDataInit();
+    SysTickPeriodSet(10000000); //16777215
+    //
+    // Enable interrupts to the processor.
+    //
+    IntMasterEnable();
+
+    //
+    // Enable the SysTick Interrupt.
+    //
+    SysTickIntEnable();
+
+//    IntPrioritySet(FAULT_SYSTICK,0x40);
+//    IntPrioritySet(INT_USB0,0x80);
+    UARTprintf("Interrupt priority Systick = %d USB = %d\r\n", IntPriorityGet(FAULT_SYSTICK), IntPriorityGet(INT_USB0));
+    //
+    // Enable SysTick.
+    //
+    SysTickEnable();
+
     USBDInit(&usbdevice);
-    UARTprintf("Test 1 %x\n", SysTickCurrentGet());
     UARTprintf("Test 2\n");
+    UARTprintf("Sysclock = %d\r\n", SysCtlClockGet());
+    
     while(1)
     {
+        if(ui32PrevCount != g_ui32Counter)
+        {
+            //
+            // Print the interrupt counter.
+            //
+            UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
+            ui32PrevCount = g_ui32Counter;
+        }
     }
 
 }

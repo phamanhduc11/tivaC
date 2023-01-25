@@ -1,6 +1,10 @@
 #ifndef _USB_DESCRIPTORS_H_
 #define _USB_DESCRIPTORS_H_
 #include "usb_standards.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 const USBDescriptor device_descriptor = {
     .bLength            = sizeof(USBDescriptor),
@@ -18,4 +22,8 @@ const USBDescriptor device_descriptor = {
     .iSerialNumber      = 0,
     .bNumConfigurations = 1,
 };
+
+#ifdef __cplusplus
+}
+#endif
 #endif

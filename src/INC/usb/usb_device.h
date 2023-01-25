@@ -2,6 +2,11 @@
 #define _USB_DEVICE_
 #include "usb_standards.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct {
     USBDeviceState device_state;
     USBControlTransferStage control_transfer_stage;
@@ -12,5 +17,7 @@ typedef struct {
     unsigned int in_data_size;
 } USBDevice;
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif

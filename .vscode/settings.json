@@ -13,6 +13,8 @@
         "can.h": "c",
         "i2c.h": "c",
         "string.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "test": "c",
+        "uartstdio.c": "cpp"
     }
 }

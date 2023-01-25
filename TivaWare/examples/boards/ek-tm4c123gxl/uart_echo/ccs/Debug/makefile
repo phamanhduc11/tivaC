@@ -2,7 +2,9 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS
+SHELL = cmd.exe
+
+CG_TOOL_ROOT := C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -10,15 +12,15 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./startup_ccs.obj" \
 "./uart_echo.obj" \
-"/home/paduc/Clone/tivaC/TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/uart_echo_ccs.cmd" \
+"D:/Workspace/tivaC/TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/uart_echo_ccs.cmd" \
 $(GEN_CMDS__FLAG) \
--l"/home/paduc/Clone/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" \
+-l"D:/Workspace/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" \
 -llibc.a \
 
 -include ../makefile.init
 
-RM := rm -rf
-RMDIR := rm -rf
+RM := DEL /F
+RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
@@ -140,16 +142,16 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 uart_echo.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --gen_func_subsections=on --abi=eabi --ual -z -m"uart_echo_ccs.map" --heap_size=0 --stack_size=256 -i"/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/lib" -i"/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uart_echo_linkInfo.xml" --rom_model -o "uart_echo.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --gen_func_subsections=on --abi=eabi --ual -z -m"uart_echo_ccs.map" --heap_size=0 --stack_size=256 -i"C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" -i"C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uart_echo_linkInfo.xml" --rom_model -o "uart_echo.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
 uart_echo.bin: $(EXE_OUTPUTS)
-	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: ARM Hex Utility'
-	"/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armhex" --diag_wrap=off -o "uart_echo.bin" $(EXE_OUTPUTS__QUOTED)
-	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	"C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "uart_echo.bin" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
@@ -162,7 +164,7 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"/home/paduc/ti/ccs1020/ccs/utils/tiobj2bin/tiobj2bin" "uart_echo.out" "uart_echo.bin" "/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armofd" "/home/paduc/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armhex" "/home/paduc/ti/ccs1020/ccs/utils/tiobj2bin/mkhex4bin"
+	-"C:/ti/ccs1110/ccs/utils/tiobj2bin/tiobj2bin" "uart_echo.out" "uart_echo.bin" "C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armofd" "C:/ti/ccs1110/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" "C:/ti/ccs1110/ccs/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents

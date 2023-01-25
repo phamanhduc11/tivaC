@@ -1,0 +1,134 @@
+
+Build/main.axf:     file format elf32-littlearm
+Build/main.axf
+architecture: armv7e-m, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00000425
+
+Program Header:
+    LOAD off    0x00010000 vaddr 0x00000000 paddr 0x00000000 align 2**16
+         filesz 0x00002067 memsz 0x00002067 flags r-x
+    LOAD off    0x00020000 vaddr 0x20000000 paddr 0x00002067 align 2**16
+         filesz 0x00000004 memsz 0x00000004 flags rw-
+    LOAD off    0x00000004 vaddr 0x20000004 paddr 0x0000206c align 2**16
+         filesz 0x00000000 memsz 0x0000224c flags rw-
+private flags = 5000400: [Version5 EABI] [hard-float ABI]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00002067  00000000  00000000  00010000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  20000000  00002067  00020000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000224c  20000004  0000206c  00020004  2**2
+                  ALLOC
+  3 .debug_info   00001e81  00000000  00000000  00020004  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  4 .debug_abbrev 00000c6e  00000000  00000000  00021e85  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  5 .debug_aranges 000002c0  00000000  00000000  00022af3  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  6 .debug_ranges 00000230  00000000  00000000  00022db3  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  7 .debug_line   00001b53  00000000  00000000  00022fe3  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  8 .debug_str    00000ed5  00000000  00000000  00024b36  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  9 .comment      0000004d  00000000  00000000  00025a0b  2**0
+                  CONTENTS, READONLY
+ 10 .ARM.attributes 00000032  00000000  00000000  00025a58  2**0
+                  CONTENTS, READONLY
+ 11 .debug_frame  000009a8  00000000  00000000  00025a8c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+20000000 l    d  .data	00000000 .data
+20000004 l    d  .bss	00000000 .bss
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    df *ABS*	00000000 startup_gcc.c
+20002004 l     O .bss	00000200 pui32Stack
+00000490 l     F .text	00000006 NmiSR
+00000496 l     F .text	00000006 FaultISR
+0000049c l     F .text	00000006 IntDefaultHandler
+00000454 l     F .text	00000000 zero_loop
+00000000 l    df *ABS*	00000000 main.cpp
+00000000 l    df *ABS*	00000000 uartstdio.c
+20002204 l     O .bss	00000004 g_ui32Base
+00001d8c l     O .text	0000000c g_ui32UARTBase
+00001d98 l     O .text	0000000c g_ui32UARTPeriph
+00000000 l    df *ABS*	00000000 gpio.c
+00001da4 l     O .text	00000090 g_pui32GPIOBaseAddrs
+00000000 l    df *ABS*	00000000 sysctl.c
+00001e34 l     O .text	0000006c g_pui32Xtals
+00000000 l    df *ABS*	00000000 uart.c
+00000000 l    df *ABS*	00000000 gpio.cpp
+00000dd4 l     F .text	00000034 GET_SHIFTBITS_MASK
+00000e08 l     F .text	0000003e GET_MASK_POS
+00000000 l    df *ABS*	00000000 i2c.cpp
+00000000 l    df *ABS*	00000000 sys.cpp
+00001408 l     F .text	00000034 GET_SHIFTBITS_MASK
+0000143c l     F .text	0000003e GET_MASK_POS
+00000000 l    df *ABS*	00000000 spi.cpp
+20002208 l     O .bss	00000004 _ZL3spi
+00000000 l    df *ABS*	00000000 eeprom.cpp
+2000220c l     O .bss	00000040 _ZL12eepromBuffer
+00000000 l    df *ABS*	00000000 debug.cpp
+00001ae8 l     F .text	00000074 _ZL21_get_log_level_string10DebugLevel
+00000000 l    df *ABS*	00000000 memset.c
+00001ac8 g     F .text	00000020 __error__
+2000224c g     O .bss	00000004 SystemDebug
+000016f4 g     F .text	00000138 PAD_SysPeripheralClockEnable
+00000e48 g     F .text	000000b8 PAD_GPIOI2CPinConfig
+00000b60 g     F .text	00000018 GPIOPinTypeComparatorOutput
+000005c4 g     F .text	00000408 UARTvprintf
+00001b5c g     F .text	00000088 _ZN14DebugInterface3logE10DebugLevelPKcz
+000019fc g     F .text	0000002c setEEPROMProtocol
+00002067 g       .text	00000000 _etext
+20000000 g     O .data	00000004 deviceMode
+00000dce g     F .text	00000006 UARTClockSourceSet
+00001a28 g     F .text	000000a0 eepromRead
+00000be4 g     F .text	00000020 SysCtlPeripheralEnable
+00000dc4 g     F .text	0000000a UARTCharPut
+00000f00 g     F .text	00000058 I2C_Init
+20002250 g       .bss	00000000 _ebss
+20000004 g     O .bss	00002000 cData
+20000004 g       .bss	00000000 _bss
+00001850 g     F .text	00000024 SPI_ReadBytes
+00000534 g     F .text	00000090 UARTwrite
+00000000 g       .text	00000000 _text
+00001950 g     F .text	000000ac _ZN12SPIInterface4readEmPv
+00001be4 g     F .text	000000a4 memset
+00000360 g     F .text	000000c4 main
+0000147c g     F .text	00000278 PAD_SysClockSet
+00000c04 g     F .text	00000148 SysCtlClockGet
+00001874 g     F .text	000000dc _ZN12SPIInterface5writeEmPv
+00000d62 g     F .text	0000001c UARTDisable
+000004a4 g     F .text	00000090 UARTStdioConfig
+20000000 g       .data	00000000 _data
+0000182c g     F .text	00000024 SPI_WriteBytes
+000009cc g     F .text	00000024 UARTprintf
+000002c0 g     F .text	000000a0 _Z10eepromDumpmPh
+20000004 g       .data	00000000 _edata
+0000026c g     F .text	00000054 _Z11InitConsolev
+00000b78 g     F .text	00000004 GPIOPinTypeUART
+00000000 g     O .text	0000026c g_pfnVectors
+00000424 g     F .text	00000064 ResetISR
+00000b7c g     F .text	00000044 GPIOPinConfigure
+000009f0 g     F .text	00000026 GPIODirModeSet
+000011a0 g     F .text	00000268 I2C_ReadBytes
+00000d7e g     F .text	00000046 UARTConfigSetExpClk
+00000f58 g     F .text	00000248 I2C_WriteBytes
+00000bc0 g     F .text	00000024 SysCtlPeripheralPresent
+00002067 g       *ABS*	00000000 _ldata
+00000a18 g     F .text	00000148 GPIOPadConfigSet
+00000d4c g     F .text	00000016 UARTEnable
+
+

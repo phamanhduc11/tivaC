@@ -1,5 +1,11 @@
 #ifndef _USB_STANDARDS_H_
 #define _USB_STANDARDS_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef enum _USB_Endpoint_Type_ {
     USB_ENDPOINT_TYPE_CONTROL,
     USB_ENDPOINT_TYPE_ISOCHRONOUS,
@@ -144,4 +150,7 @@ typedef struct {
     unsigned char   bNumConfigurations;
 } __attribute__((__packed__)) USBDescriptor;
 
+#ifdef __cplusplus
+}
+#endif
 #endif

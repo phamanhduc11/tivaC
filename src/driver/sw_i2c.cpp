@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 // I2C implement
 //
 // SCL
 // SDA
 //
+
+#define __nop__()
 
 bool gpio_state = false;
 #define SCL_PIN 
@@ -98,9 +102,9 @@ void __i2cDelay(void)
 /**************************************************************************//**
  * Create IIC start pulse.
  ******************************************************************************/
-Bool  __i2cStart(void)
+bool  __i2cStart(void)
 {
-    UCHAR i;
+    uint8_t i;
 
     IIC_SCL_OUT;
     IIC_SDA_HIGH;
@@ -143,12 +147,12 @@ void __i2cStop(void)
  * @param value Data to be sent.
  * @return ACK or NACK.
  ******************************************************************************/
-Bool __i2cWriteByte(BYTE value)
+bool __i2cWriteByte(int8_t value)
 {
-    Bool result = ACK;
+    bool result = ACK;
 
-    UCHAR i = 0;
-    code UCHAR Tbl[] = {BIT7, BIT6, BIT5, BIT4, BIT3, BIT2, BIT1, BIT0};
+    uint8_t i = 0;
+    code uint8_t Tbl[] = {BIT7, BIT6, BIT5, BIT4, BIT3, BIT2, BIT1, BIT0};
 
     for (i = 0 ; i < 8 ; i++)
     {
@@ -211,10 +215,10 @@ Bool __i2cWriteByte(BYTE value)
 }
 
 
-UCHAR __i2cReadByte(UCHAR ack)
+uint8_t __i2cReadByte(uint8_t ack)
 {
 
-    UCHAR i, result = 0;
+    uint8_t i, result = 0;
 
     ack &= BIT0;
     IIC_SDA_IN;
@@ -253,10 +257,10 @@ UCHAR __i2cReadByte(UCHAR ack)
 
 }
 
-UCHAR DrvI2C_Write(USHRT reg_addr, UINT uCount, UCHAR *pbyBuffer)
+uint8_t DrvI2C_Write(uint16_t reg_addr, uint32_t uCount, uint8_t *pbyBuffer)
 {
     ULONG k = 0, i = 0;
-    UCHAR Ret = RET_ERROR;
+    uint8_t Ret = RET_ERROR;
 
     for (i = 0; i < 8; i++)
     {
@@ -312,11 +316,11 @@ UCHAR DrvI2C_Write(USHRT reg_addr, UINT uCount, UCHAR *pbyBuffer)
 
 }
 
-UCHAR DrvI2C_Read(USHRT reg_addr, UCHAR *rData, UCHAR length)
+uint8_t DrvI2C_Read(uint16_t reg_addr, uint8_t *rData, uint8_t length)
 {
-    UCHAR i, j;
-    UCHAR ack;
-    UCHAR Ret = RET_ERROR;
+    uint8_t i, j;
+    uint8_t ack;
+    uint8_t Ret = RET_ERROR;
 
     for (i = 0, j = 0; i < 8; i++)
     {

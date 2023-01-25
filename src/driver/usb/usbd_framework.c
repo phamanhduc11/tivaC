@@ -1,14 +1,15 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "utils/uartstdio.h"
-#include "usbd_framework.h"
-#include "usbd_driver.h"
-#include "usb_standards.h"
-#include "usb_device.h"
-#include "gtimer_driver.h"
-#include "log_debug.h"
-#include "usb_descriptors.h"
-#include "math.h"
+
+#include "INC/usb/usbd_framework.h"
+#include "INC/usb/usbd_driver.h"
+#include "INC/usb/usb_standards.h"
+#include "INC/usb/usb_device.h"
+#include "INC/gtimer_driver.h"
+#include "INC/usb/log_debug.h"
+#include "INC/usb/usb_descriptors.h"
+#include "INC/usb/math.h"
 
 static USBDevice *usbd_handle = 0;
 const USBEvents usb_events;
@@ -29,8 +30,73 @@ void USBDEnable(void) {
     usb_driver.connect();
 }
 
+static void logging_request_info(void)
+{
+    USBRequest const *request = usbd_handle->ptr_out_buffer;
+    uint8_t bmRequestTypeDir = request->bmRequestType & USB_BM_REQUEST_TYPE_DIRECTION_MASK;
+    uint8_t bmRequestTypeType = request->bmRequestType & USB_BM_REQUEST_TYPE_TYPE_MASK;
+    uint8_t bmRequestTypeRecv = request->bmRequestType & USB_BM_REQUEST_TYPE_RECIPIENT_MASK;
+    log_info("bmRequestType info:");
+    log_info("    Direction: %s", (bmRequestTypeDir ? "Device to Host" : "Host to Device"));
+    log_info("    Type: %s", (bmRequestTypeType == USB_BM_REQUEST_TYPE_TYPE_STANDARD ? 
+                                    "Standard" : bmRequestTypeType == USB_BM_REQUEST_TYPE_TYPE_CLASS ?
+                                    "Class" : bmRequestTypeType == USB_BM_REQUEST_TYPE_TYPE_VENDOR ?
+                                    "Vendor" : "Reserved!!!"));
+    log_info("    Recipient: %s", (bmRequestTypeRecv == USB_BM_REQUEST_TYPE_RECIPIENT_DEVICE ?
+                                    "Device" : bmRequestTypeRecv == USB_BM_REQUEST_TYPE_RECIPIENT_INTERFACE ?
+                                    "Interface" : bmRequestTypeRecv == USB_BM_REQUEST_TYPE_RECIPIENT_ENDPOINT ?
+                                    "Endpoint" : bmRequestTypeRecv == USB_BM_REQUEST_TYPE_RECIPIENT_OTHER ?
+                                    "Other" : "Reserved!!!"));
+
+    log_info("bRequest info: ");
+    switch (request->bRequest)
+    {
+    case USB_STANDARD_GET_STATUS:
+        log_info("    GET_STATUS");
+        break;
+    case USB_STANDARD_CLEAR_FEATURE:
+        log_info("    CLEAR_FEATURE");
+        break;
+    case USB_STANDARD_SET_FEATURE:
+        log_info("    SET_FEATURE");
+        break;
+    case USB_STANDARD_SET_ADDRESS:
+        log_info("    SET_ADDRESS");
+        break;
+    case USB_STANDARD_GET_DESCRIPTOR:
+        log_info("    GET_DESCRIPTOR");
+        break;
+    case USB_STANDARD_SET_DESCRIPTOR:
+        log_info("    SET_DESCRIPTOR");
+        break;
+    case USB_STANDARD_GET_CONFIG:
+        log_info("    GET_CONFIG");
+        break;
+    case USB_STANDARD_SET_CONFIG:
+        log_info("    SET_CONFIG");
+        break;
+    case USB_STANDARD_GET_INTERFACE:
+        log_info("    GET_INTERFACE");
+        break;
+    case USB_STANDARD_SET_INTERFACE:
+        log_info("    SET_INTERFACE");
+        break;
+    case USB_STANDARD_SYNCH_FRAME:
+        log_info("    SYNCH_FRAME");
+        break;
+    default:
+        log_error("    Error bRequest value %02x!!!", request->bRequest);
+        break;
+    }
+
+    log_info("wValue  : %02X", request->wValue);
+    log_info("wIndex  : %02X", request->wIndex);
+    log_info("wwLength: %02X", request->wLength);
+}
+
 static void usb_reset_received_handler()
 {
+    log_info("USB Reset set handling!");
 	usbd_handle->in_data_size = 0;
 	usbd_handle->out_data_size = 0;
 	usbd_handle->configuration_value = 0;
@@ -56,6 +122,7 @@ static void process_standard_device_request(void) {
             break;
         }
         break;
+    case USB_STANDARD_GET_CONFIG:
     default:
         log_info("Other request: TODO");
         break;
@@ -64,6 +131,7 @@ static void process_standard_device_request(void) {
 
 static void process_request(void) {
     USBRequest const *request = usbd_handle->ptr_out_buffer;
+    logging_request_info();
     switch(request->bmRequestType & (USB_BM_REQUEST_TYPE_TYPE_MASK | USB_BM_REQUEST_TYPE_RECIPIENT_MASK)) {
         case USB_BM_REQUEST_TYPE_TYPE_STANDARD | USB_BM_REQUEST_TYPE_RECIPIENT_DEVICE:
             process_standard_device_request();
@@ -132,7 +200,7 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
     if(usbd_handle != 0) {
         extern unsigned char debugBuffer[1024];
         extern unsigned char trigger;
-        unsigned int clockTick = SysTickCurrentGet();
+        
         usb_driver.read_packet(EPNum, usbd_handle->ptr_out_buffer, byte_count);
         log_debug_array("SETUP data: ", (unsigned char*)usbd_handle->ptr_out_buffer, byte_count);
         // software setup
@@ -150,7 +218,7 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
 }
 
 
-static void USBDEndpointHandler(unsigned int EPNum, unsigned int u32IntStatus) {
+static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) {
     unsigned int endpointStatus = 0;
     unsigned char endPointType = 0;
     unsigned short bcnt = 0;
@@ -186,10 +254,10 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int u32IntStatus) {
             // 0x100 Flush request
             break;
         default:
-            if (GET_TX_ENDPOINT_INT_MASK(u32IntStatus)) {
+            if (GET_TX_ENDPOINT_INT_MASK(ui32IntStatus)) {
                 log_error("[%s][%d] TODO", __FUNCTION__, __LINE__);
             }
-            else if (GET_RX_ENDPOINT_INT_MASK(u32IntStatus)) {
+            else if (GET_RX_ENDPOINT_INT_MASK(ui32IntStatus)) {
                 log_error("[%s][%d] TODO", __FUNCTION__, __LINE__);
             }
             else {

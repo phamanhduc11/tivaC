@@ -58,7 +58,12 @@ static uint32_t getSPIAddr(eSPI_DEV device) {
   }
 }
 
-extern SPIInterface *spi;
+static SPIInterface *spi;
+
+void SPI_SetDevice(SPIInterface *spidev) {
+  spi = spidev;
+}
+
 void SPI_WriteBytes(uint32_t count, uint8_t *data) {
   spi->write(count, data);
 }

@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//Debug/Global/subdir_rules.mk=UTF-8
+encoding//Debug/Global/subdir_vars.mk=UTF-8
 encoding//Debug/TivaWare/boot_loader/subdir_rules.mk=UTF-8
 encoding//Debug/TivaWare/boot_loader/subdir_vars.mk=UTF-8
 encoding//Debug/TivaWare/driverlib/ccs/Debug/subdir_rules.mk=UTF-8
@@ -2092,6 +2094,8 @@ encoding//Debug/tiva-template/tiva-template/src/subdir_rules.mk=UTF-8
 encoding//Debug/tiva-template/tiva-template/src/subdir_vars.mk=UTF-8
 encoding//Debug/tiva-template/tiva-template/subdir_rules.mk=UTF-8
 encoding//Debug/tiva-template/tiva-template/subdir_vars.mk=UTF-8
+encoding//Release/Global/subdir_rules.mk=UTF-8
+encoding//Release/Global/subdir_vars.mk=UTF-8
 encoding//Release/driver/device/subdir_rules.mk=UTF-8
 encoding//Release/driver/device/subdir_vars.mk=UTF-8
 encoding//Release/driver/subdir_rules.mk=UTF-8

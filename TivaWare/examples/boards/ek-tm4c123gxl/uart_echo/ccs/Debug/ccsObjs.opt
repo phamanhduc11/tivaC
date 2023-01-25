@@ -1,1 +1,1 @@
-"./startup_ccs.obj" "./uart_echo.obj" "/home/paduc/Clone/tivaC/TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/uart_echo_ccs.cmd" -l"/home/paduc/Clone/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" -llibc.a 
+"./startup_ccs.obj" "./uart_echo.obj" "D:/Workspace/tivaC/TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/uart_echo_ccs.cmd" -l"D:/Workspace/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" -llibc.a 

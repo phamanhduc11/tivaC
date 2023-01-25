@@ -5,18 +5,6 @@
 
 #include "Global/Include.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-//APIs
-void SPI_WriteBytes(uint32_t count, uint8_t *data);
-void SPI_ReadBytes(uint32_t count, uint8_t *data);
-
-#ifdef __cplusplus
-}
-#endif
 
 typedef enum {
     SPI0_DEV,
@@ -81,5 +69,21 @@ class SPIInterface {
         void setCSPin(void);
         void clearCSPin(void);
 };
+
+void SPI_SetDevice(SPIInterface *spidev);
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+//APIs
+void SPI_WriteBytes(uint32_t count, uint8_t *data);
+void SPI_ReadBytes(uint32_t count, uint8_t *data);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

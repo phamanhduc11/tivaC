@@ -1,6 +1,6 @@
 PAD_MAKE = PAD_BuildPAD_BUILD_OBJECTS
 PAD_OBJDIR = PAD_Obj
-SELF_DRV = ../..
+SELF_DRV = ../../src
 
 
 
@@ -20,8 +20,12 @@ PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/sys.cpp
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/spi.cpp
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/device/eeprom.cpp
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/debug.cpp
-PAD_DRV_BUILD_FILES += ${PAD_GLOBAL_PATH}/include.cpp
 PAD_DRV_BUILD_FILES += ${PAD_DRV_PATH}/timer.cpp
+PAD_DRV_BUILD_FILES += $(PAD_DRV_PATH)/usb/usbd_driver.c
+PAD_DRV_BUILD_FILES += $(PAD_DRV_PATH)/usb/usbd_framework.c
+PAD_DRV_BUILD_FILES += $(PAD_DRV_PATH)/usb/log_debug.c
+
+PAD_DRV_BUILD_FILES += ${PAD_GLOBAL_PATH}/include.cpp
 
 #
 
@@ -65,6 +69,7 @@ ${PAD_BUILD_OBJECTS}:| ${PAD_OBJDIR}
 ${PAD_OBJDIR}:
 	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/${PAD_DRV_PATH}
 	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/${PAD_DRV_PATH}/device
+	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/${PAD_DRV_PATH}/usb
 	@${MKDIR} ${OUTDIR}/${PAD_OBJDIR}/Global
 
 ${PAD_MAKE}: ${PAD_BUILD_OBJECTS}

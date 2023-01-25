@@ -9,3 +9,10 @@ TivaWare/*
 projects/spiprj/Build/main.dis
 projects/spiprj/Build/main.map
 .vscode/settings.json
+projects/gcc_test/.cproject
+projects/gcc_test/.project
+projects/gcc_test/target_config.ccxml
+TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.ccsproject
+TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.project
+TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.launches/uart_echo.launch
+projects/gcc_test/.launches/gcc_source_test.launch

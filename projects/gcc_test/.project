@@ -51,9 +51,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/usb_ex/log_debug.h</locationURI>
 		</link>
 		<link>
-			<name>main.c</name>
+			<name>main.cpp</name>
 			<type>1</type>
-			<location>D:/Workspace/tivaC/projects/i2cprj/main.c</location>
+			<locationURI>PARENT-1-PROJECT_LOC/spiprj/main.cpp</locationURI>
 		</link>
 		<link>
 			<name>main2.c</name>

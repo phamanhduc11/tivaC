@@ -50,7 +50,7 @@ def output(inputFile, cmpFormat):
 
 
 
-headerPath = os.path.join(os.getcwd(), "../INC")
+headerPath = os.path.join(os.getcwd(), "../src/INC")
 inputFileName = "sys.h"
 inputFile = open(os.path.join(headerPath, inputFileName), 'r')
 if (not inputFile.readable()):

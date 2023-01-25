@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -l"/home/paduc/Clone/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" -llibc.a
+LIBS := -l"D:/Workspace/tivaC/TivaWare/driverlib/ccs/Debug/driverlib.lib" -llibc.a
 

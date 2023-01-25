@@ -1,6 +1,6 @@
 #include "stdint.h"
 #include "stdarg.h"
-#include "log_debug.h"
+#include "INC/usb/log_debug.h"
 #include "utils/uartstdio.h"
 
 
@@ -26,6 +26,7 @@ char const * const _get_log_level_string(LogLevel const log_level)
         case LOG_LEVEL_DEBUG:
             return "DEBUG";
     }
+    return "DEFAULT";
 }
 
 

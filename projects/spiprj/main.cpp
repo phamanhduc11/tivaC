@@ -115,6 +115,7 @@ int main(void){
     timer->setTimerBreakpointDebug(true);
     //timer->enable();
 
+    SPI_SetDevice(spi);
     spi0.setUseModuleFssPin(false);
     spi0.clearCSPin();
     spi0.interruptMaskSet(SSI_RORMIS | SSI_RXMIS);

@@ -1,5 +1,11 @@
 #ifndef _LOG_DEBUG_
 #define _LOG_DEBUG_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef enum
 {
     LOG_LEVEL_ERROR,
@@ -12,4 +18,8 @@ void log_error(char const * const format, ...);
 void log_info(char const * const format, ...);
 void log_debug(char const * const format, ...);
 void log_debug_array(const char * cstring, unsigned char *array, unsigned short bcnt);
+
+#ifdef __cplusplus
+}
+#endif
 #endif
