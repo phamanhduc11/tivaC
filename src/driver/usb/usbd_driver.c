@@ -381,6 +381,10 @@ static void USBCoreInitialize(void) {
     // EndpointInitialize();
 }
 
+void USBIntFlagClear(int EPNum, int intFlags) {
+    
+}
+
 /*
     USB Module Interrupt handler
 */
@@ -445,6 +449,7 @@ const USBDriver usb_driver = {
     .disconnect = &USBBusDisconnect,
     .flush_rxfifo = &FlushRxFifo,
     .flush_txfifo = &FlushTxFifo,
+    .clear_intflag = &USBIntFlagClear,
     .configure_in_endpoint = &ConfigureINEndpoint,
     .configure_out_endpoint = &ConfigureOUTEndpoint,
     .write_packet = &writePacket,

@@ -46,6 +46,7 @@ typedef struct {
     void (*disconnect)(void);
     void (*flush_rxfifo)(int EPNum);
     void (*flush_txfifo)(int EPNum);
+    void (*clear_intflag)(int EPNum, int intFlags);
     void (*configure_in_endpoint)(int EPNum, struct endpointInfo epInfo);
     void (*configure_out_endpoint)(int EPNum, struct endpointInfo EpInfo);
     void (*write_packet)(unsigned int EPNum, void const *buffer, unsigned short size);

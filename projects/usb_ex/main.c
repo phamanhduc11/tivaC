@@ -73,7 +73,8 @@ void USBDeviceDataInit(void) {
     usbdevice.device_state = 0;
     usbdevice.control_transfer_stage = 0;
     usbdevice.configuration_value = 0;
-    usbdevice.ptr_in_buffer = usbIN;
+    // for ptr_in_buffer, we may not need real buffer for this
+    usbdevice.ptr_in_buffer = (unsigned char*) 0;
     usbdevice.ptr_out_buffer = usbOUT;
     usbdevice.in_data_size = 0;
     usbdevice.out_data_size = 0;

@@ -13,6 +13,10 @@ void USBDisable(void);
 void USBEnable(void);
 void USBInterruptStatus(void);
 
+// Get Device descriptor (only get first 8 bytes)
+// Set address - Device address 
+
+
 #ifdef __cplusplus
 }
 #endif

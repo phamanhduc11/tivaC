@@ -116,11 +116,17 @@ static void process_standard_device_request(void) {
         case USB_DESCRIPTOR_TYPE_DEVICE:
             log_info("- Get Device Descriptor.");
             usbd_handle->ptr_in_buffer = &device_descriptor;
+            // todo: descriptor length > real device_descriptor's size
             usbd_handle->in_data_size = descriptor_length;
             log_info("Switch control stage to  IN-DATA.");
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
             break;
         }
+        break;
+    case USB_STANDARD_SET_ADDRESS:
+        unsigned char dev_num = 0;
+        log_info("Standard Set Address request received.");
+        usb_driver.set_device_address(0);
         break;
     case USB_STANDARD_GET_CONFIG:
     default:
@@ -196,6 +202,7 @@ static void in_transfer_completed_handler(unsigned int endpoint_number)
 	// }
 }
 
+// Handle Endpoint 0 process
 static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_count) {
     if(usbd_handle != 0) {
         extern unsigned char debugBuffer[1024];
@@ -218,6 +225,7 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
 }
 
 
+// Todo: check if this process should be done in framework or driver
 static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) {
     unsigned int endpointStatus = 0;
     unsigned char endPointType = 0;
@@ -227,7 +235,7 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) 
     // Get Endpoint received packet size;
     usb_driver.get_rcv_packet_size(EPNum, &bcnt);
     log_info("Endpoint control status of EP%d is 0x%x and packet size=%d.", EPNum, endpointStatus, bcnt);
-    // ToDo: depends on status
+
     switch (EPNum) {
         case 0:
             // Received handle
@@ -265,6 +273,8 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) 
             }
             break;
     }
+    log_info("Clear EP Int flag");
+    usb_driver.clear_intflag(EPNum, endpointStatus);
     
 
 }
