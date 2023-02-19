@@ -124,12 +124,13 @@ static void process_standard_device_request(void) {
         }
         break;
     case USB_STANDARD_SET_ADDRESS:
-        unsigned char dev_num = 0;
+        const unsigned short dev_addr = request->wValue;
         log_info("Standard Set Address request received.");
-        usb_driver.set_device_address(0);
+        usb_driver.set_device_address(dev_addr);
         break;
     case USB_STANDARD_GET_CONFIG:
     default:
+
         log_info("Other request: TODO");
         break;
     }
