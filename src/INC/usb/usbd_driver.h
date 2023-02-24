@@ -50,8 +50,10 @@ typedef struct {
     void (*configure_in_endpoint)(int EPNum, struct endpointInfo epInfo);
     void (*configure_out_endpoint)(int EPNum, struct endpointInfo EpInfo);
     void (*write_packet)(unsigned int EPNum, void const *buffer, unsigned short size);
-    void (*endpoint_ctl_status)(int EPNum, unsigned int *ret);
     void (*read_packet)(unsigned int EPNum, void const *buffer, unsigned short size);
+    unsigned char (*send_ep_data)(unsigned int EPNum, int isLastPacket);
+    void (*ack_ep_rcv)(unsigned int EPNum, int isLastPacket);
+    void (*endpoint_ctl_status)(int EPNum, unsigned int *ret);
     void (*set_device_address)(unsigned char address);
     void (*get_rcv_packet_size)(unsigned int EPNum, unsigned short *bcnt);
     void (*polling)(unsigned int ui32Status);

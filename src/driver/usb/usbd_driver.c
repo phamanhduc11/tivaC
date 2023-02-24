@@ -381,8 +381,58 @@ static void USBCoreInitialize(void) {
     // EndpointInitialize();
 }
 
-void USBIntFlagClear(int EPNum, int intFlags) {
+static void USBIntFlagClear(int EPNum, int intFlags) {
     
+}
+
+#define USBCSRL0_RXRDY_C    0x40
+#define USBCSRL0_TXRDY      0x2
+#define USBCSRL0_DATAEND    0x8
+
+#define USBTXCSRL_TXRDY     0x1
+#define USBTXCSRL_DATAEND   0x0
+
+#define USBRXCSRL_RXRDY   0x1
+
+static unsigned char USBEndpointSend(int EPNum, int isLastPacket) {
+    unsigned short EPTXCSFlags = 0x0;
+    if (0 == EPNum) {
+        EPTXCSFlags =  (USBCSRH0 << 8) | USBCSRL0;
+
+        // In transmit
+        if (USBCSRL0_TXRDY & (EPTXCSFlags & 0xFF)) {
+            return 1;
+        }
+
+        EPTXCSFlags |= USBCSRL0_TXRDY;
+        if (isLastPacket) {
+            EPTXCSFlags |= USBCSRL0_DATAEND;
+        }
+
+        USBCSRL0 = (EPTXCSFlags & 0xFF);
+    }
+    else {
+        EPTXCSFlags = (USBTXCSRH(EPNum) << 8) | USBTXCSRL(EPNum);
+
+        if ( USBTXCSRL_TXRDY & (EPTXCSFlags >> 8)) {
+            return 1;
+        }
+
+        EPTXCSFlags |= USBTXCSRL_TXRDY;
+
+        USBTXCSRL(EPNum) = (EPTXCSFlags & 0xFF);
+    }
+
+    return 0;
+}
+
+static void USBEndpointAck(unsigned int EPNum, int isLastPacket) {
+    if (0 == EPNum) {
+        USBCSRL0 |= USBCSRL0_RXRDY_C | (isLastPacket ? USBCSRL0_DATAEND : 0);
+    }
+    else {
+        USBRXCSRL(EPNum) &= ~USBRXCSRL_RXRDY;   
+    }
 }
 
 /*
@@ -453,8 +503,10 @@ const USBDriver usb_driver = {
     .configure_in_endpoint = &ConfigureINEndpoint,
     .configure_out_endpoint = &ConfigureOUTEndpoint,
     .write_packet = &writePacket,
-    .endpoint_ctl_status = &USBGetEndpointStatus,
     .read_packet = (void (*)(unsigned int, void const*, unsigned short)) &readPacket,
+    .send_ep_data = &USBEndpointSend,
+    .ack_ep_rcv = &USBEndpointAck,
+    .endpoint_ctl_status = &USBGetEndpointStatus,
     .set_device_address = &USBSetDeviceAdress,
     .get_rcv_packet_size = &USBGetRcvBytes,
     .get_int_status = &USBDeviceGetIntStatus,

@@ -109,6 +109,8 @@ static void process_standard_device_request(void) {
     USBRequest const *request = usbd_handle->ptr_out_buffer;
     switch (request->bRequest) {
     case USB_STANDARD_GET_DESCRIPTOR:
+        usb_driver.ack_ep_rcv(0, false);
+
         log_info("Standard Get Descriptor request received.");
         const unsigned char descriptor_type = request->wValue >> 8;
         const unsigned short descriptor_length = request->wLength;
@@ -124,8 +126,10 @@ static void process_standard_device_request(void) {
         }
         break;
     case USB_STANDARD_SET_ADDRESS:
-        const unsigned short dev_addr = request->wValue;
+        usb_driver.ack_ep_rcv(0, true);
+        
         log_info("Standard Set Address request received.");
+        const unsigned short dev_addr = request->wValue;
         usb_driver.set_device_address(dev_addr);
         break;
     case USB_STANDARD_GET_CONFIG:
@@ -164,10 +168,18 @@ static void process_control_transfer_stage() {
 
             if (usbd_handle->in_data_size == 0) {
                 if (data_size == device_descriptor.bMaxPacketSize0) {
+                    if(usb_driver.send_ep_data(0, false)) {
+                        log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
+                    }
+
                     log_info("Switching control stage to IN-DATA ZERO.");
                     usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN_ZERO;
                 }
                 else {
+                    if(1 == usb_driver.send_ep_data(0, true)) {
+                        log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
+                    }
+
                     log_info("Switching control stage to OUT-STATUS.");
                     usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
                 }
@@ -193,6 +205,11 @@ static void in_transfer_completed_handler(unsigned int endpoint_number)
 	else if (usbd_handle->control_transfer_stage == USB_CONTROL_STAGE_DATA_IN_ZERO)
 	{
 		usb_driver.write_packet(0, NULL, 0);
+
+        if(1 == usb_driver.send_ep_data(0, true)) {
+            log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
+        }
+
 		log_info("Switching control stage to OUT-STATUS.");
 		usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
 	}
