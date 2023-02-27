@@ -148,7 +148,39 @@ typedef struct {
     unsigned char   iProduct;
     unsigned char   iSerialNumber;
     unsigned char   bNumConfigurations;
-} __attribute__((__packed__)) USBDescriptor;
+} __attribute__((__packed__)) USBDeviceDescriptor;
+
+typedef struct {
+    unsigned char   bLength;
+    unsigned char   bDescriptorType;
+    unsigned short  wTotalLength;
+    unsigned char   bNumbInterfaces;
+    unsigned char   bConfigurationValue;
+    unsigned char   iConfiguration;
+    unsigned char   bmAttributes;
+    unsigned char   bMaxPower;
+} __attribute__((__packed__)) USBConfigurationDescriptor;
+
+typedef struct {
+    unsigned char   bLength;
+    unsigned char   bDescriptorType;
+    unsigned char   bInterfaceNumber;
+    unsigned char   bAlternateSetting;
+    unsigned char   bNumEndpoints;
+    unsigned char   bInterfaceClass;
+    unsigned char   bInterfaceSubClass;
+    unsigned char   bInterfaceProtocol;
+    unsigned char   iInterface;
+} __attribute__((__packed__)) USBInterfaceDescriptor;
+
+typedef struct {
+    unsigned char   bLength;
+    unsigned char   bDescriptorType;
+    unsigned char   bEndpointAddress;
+    unsigned char   bmAttributes;
+    unsigned short  wMaxPacketSize;
+    unsigned char   bInterval;
+} __attribute__((__packed__)) USBEndpointDescriptor;;
 
 #ifdef __cplusplus
 }

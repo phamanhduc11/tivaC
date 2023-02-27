@@ -22,6 +22,9 @@ void USBDInit(USBDevice *usb_device) {
     usb_driver.connect();
 }
 
+void usbd_configure() {
+    // todo
+}
 void USBDisable(void) {
     usb_driver.disconnect();
 }
@@ -94,6 +97,9 @@ static void logging_request_info(void)
     log_info("wwLength: %02X", request->wLength);
 }
 
+static bool reset_flag = false;
+static unsigned short dev_addr = 0;
+
 static void usb_reset_received_handler()
 {
     log_info("USB Reset set handling!");
@@ -103,6 +109,7 @@ static void usb_reset_received_handler()
 	usbd_handle->device_state = USB_DEVICE_STATE_DEFAULT;
 	usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_SETUP;
 	usb_driver.set_device_address(0);
+    reset_flag = true;
 }
 
 static void process_standard_device_request(void) {
@@ -114,6 +121,8 @@ static void process_standard_device_request(void) {
         log_info("Standard Get Descriptor request received.");
         const unsigned char descriptor_type = request->wValue >> 8;
         const unsigned short descriptor_length = request->wLength;
+        const unsigned char descriptor_index = request->wValue & 0xFF;
+
         switch (descriptor_type) {
         case USB_DESCRIPTOR_TYPE_DEVICE:
             log_info("- Get Device Descriptor.");
@@ -123,18 +132,47 @@ static void process_standard_device_request(void) {
             log_info("Switch control stage to  IN-DATA.");
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
             break;
+
+        case USB_DESCRIPTOR_TYPE_CONFIGURATION:
+            log_info("- Get Config Descriptor.");
+            usbd_handle->ptr_in_buffer = &usb_config_set;
+            usbd_handle->in_data_size = descriptor_length;
+            log_info("Switch control stage to  IN-DATA.");
+            usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
+            break;
+
         default:
             log_error("[%s] TODO descriptorType=%d", __FUNCTION__, descriptor_type);
         }
         break;
     case USB_STANDARD_SET_ADDRESS:
+        {
+            if (true == reset_flag) {
+                reset_flag = false;
+                dev_addr = 0;
+            };
+
+            dev_addr = request->wValue | 0x8000;
+
+            usb_driver.ack_ep_rcv(0, true);
+            log_info("Standard Set Address %X request received.", dev_addr);
+            usbd_handle->device_state = USB_DEVICE_STATE_ADDRESSED;
+            log_info("Switching control transfer stage to IN-STATUS.");
+            usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_IN;
+            break;
+        }
+
+    case USB_STANDARD_SET_CONFIG:
+        log_info("Standard Set Configuration request received.");
+        usbd_handle->configuration_value = request->wValue;
         usb_driver.ack_ep_rcv(0, true);
-        
-        log_info("Standard Set Address request received.");
-        const unsigned short dev_addr = request->wValue;
-        usb_driver.set_device_address(dev_addr);
+
+        usbd_configure();
+
+        usbd_handle->device_state = USB_DEVICE_STATE_CONFIGURED;
+        log_info("Switching control transfer to IN-STATUS.");
+        usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_IN;
         break;
-    case USB_STANDARD_GET_CONFIG:
     default:
 
         log_info("Other request: TODO bRequest=%d", request->bRequest);
@@ -144,6 +182,7 @@ static void process_standard_device_request(void) {
 
 static void process_request(void) {
     USBRequest const *request = usbd_handle->ptr_out_buffer;
+    // UARTprintf("---Dummy log---\r\n");
     logging_request_info();
     switch(request->bmRequestType & (USB_BM_REQUEST_TYPE_TYPE_MASK | USB_BM_REQUEST_TYPE_RECIPIENT_MASK)) {
         case USB_BM_REQUEST_TYPE_TYPE_STANDARD | USB_BM_REQUEST_TYPE_RECIPIENT_DEVICE:
@@ -166,7 +205,7 @@ static void process_control_transfer_stage() {
             usbd_handle->in_data_size -= data_size;
             usbd_handle->ptr_in_buffer += data_size;
 
-            log_info("Switching control stage to IN-DATA IDLE.");
+            log_info("Switching control stage to IN-DATA IDLE after sending %d bytes.", data_size);
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN_IDLE;
 
             if (usbd_handle->in_data_size == 0) {
@@ -198,9 +237,14 @@ static void process_control_transfer_stage() {
                 log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
             }
 
-		    log_info("Switching control stage to OUT-STATUS.");
-		    usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
+            log_info("Switching control stage to OUT-STATUS.");
+            usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
             break;
+
+        case USB_CONTROL_STAGE_STATUS_IN:
+            // move code to in_transfer_completed_handler dev_addr
+            break;
+
         case USB_CONTROL_STAGE_STATUS_OUT:
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_SETUP;
         default:
@@ -234,8 +278,6 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
         in_transfer_completed_handler(0);
         // software setup
         process_request();
-        // software request
-        process_control_transfer_stage();
 
     } 
     else {
@@ -254,10 +296,20 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) 
     usb_driver.endpoint_ctl_status(EPNum, &endpointStatus);
     // Get Endpoint received packet size;
     usb_driver.get_rcv_packet_size(EPNum, &bcnt);
-    log_info("Endpoint control status of EP%d is 0x%x and packet size=%d.", EPNum, endpointStatus, bcnt);
+    log_info("NewStart - Endpoint control status of EP%d is 0x%x and packet size=%d.", EPNum, endpointStatus, bcnt);
 
     switch (EPNum) {
         case 0:
+            // Set address later => temp workaround for set address after finish SET_ADDRESS transaction
+            if (0 == endpointStatus) {
+                log_info("Empty response from Host");
+            }
+            if ((USB_DEVICE_STATE_ADDRESSED == usbd_handle->device_state) && (dev_addr & 0x8000) && (USB_CONTROL_STAGE_STATUS_IN == usbd_handle->control_transfer_stage)) {
+                dev_addr &= 0xFF;
+                usb_driver.set_device_address(dev_addr);
+                log_info("Switching control transfer stage to SETUP after SET_ADDRESS.");
+                usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_SETUP;
+            }
             // Received handle
             if (endpointStatus & 0x1) {
                 usb_events.control_transfer_handle(EPNum, bcnt);
@@ -293,10 +345,8 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) 
             }
             break;
     }
-    log_info("Clear EP Int flag");
-    usb_driver.clear_intflag(EPNum, endpointStatus);
-    
-
+        // software request
+    process_control_transfer_stage();
 }
 
 #define USB_GENERAL_INT_DEVICE_SUSPEND  0x1

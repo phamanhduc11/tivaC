@@ -14,11 +14,12 @@ typedef enum
 } LogLevel;
 
 extern LogLevel system_log_level;
-void log_error(char const * const format, ...);
+void _log_error(char const * const format, ...);
 void log_info(char const * const format, ...);
 void log_debug(char const * const format, ...);
 void log_debug_array(const char * cstring, unsigned char *array, unsigned short bcnt);
 
+#define log_error(fmt, ...) _log_error("[%d]" fmt, __LINE__, ##__VA_ARGS__) 
 #ifdef __cplusplus
 }
 #endif

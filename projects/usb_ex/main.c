@@ -39,7 +39,7 @@ SysTickIntHandler(void)
     // Update the Systick interrupt counter.
     //
     g_ui32Counter++;
-    UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
+    // UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
 }
 
 void
@@ -118,7 +118,7 @@ int main()
             //
             // Print the interrupt counter.
             //
-            UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
+            // UARTprintf("Number of interrupts: %d\r", g_ui32Counter);
             ui32PrevCount = g_ui32Counter;
         }
     }

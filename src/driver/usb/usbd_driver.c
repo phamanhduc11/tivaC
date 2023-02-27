@@ -1,5 +1,6 @@
 #include "INC/usb/usbd_driver.h"
 #include "INC/usb/usb_standards.h"
+#include "INC/usb/log_debug.h"
 
 #define USB_BASE    0x40050000
 
@@ -382,7 +383,7 @@ static void USBCoreInitialize(void) {
 }
 
 static void USBIntFlagClear(int EPNum, int intFlags) {
-    
+    log_info("Clear EP Int flag");
 }
 
 #define USBCSRL0_RXRDY_C    0x40
@@ -428,10 +429,10 @@ static unsigned char USBEndpointSend(int EPNum, int isLastPacket) {
 
 static void USBEndpointAck(unsigned int EPNum, int isLastPacket) {
     if (0 == EPNum) {
-        USBCSRL0 |= USBCSRL0_RXRDY_C | (isLastPacket ? USBCSRL0_DATAEND : 0);
+        USBCSRL0 = USBCSRL0_RXRDY_C | (isLastPacket ? USBCSRL0_DATAEND : 0);
     }
     else {
-        USBRXCSRL(EPNum) &= ~USBRXCSRL_RXRDY;   
+        USBRXCSRL(EPNum) &= ~USBRXCSRL_RXRDY;
     }
 }
 
