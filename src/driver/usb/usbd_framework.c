@@ -123,6 +123,8 @@ static void process_standard_device_request(void) {
             log_info("Switch control stage to  IN-DATA.");
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
             break;
+        default:
+            log_error("[%s] TODO descriptorType=%d", __FUNCTION__, descriptor_type);
         }
         break;
     case USB_STANDARD_SET_ADDRESS:
@@ -135,7 +137,7 @@ static void process_standard_device_request(void) {
     case USB_STANDARD_GET_CONFIG:
     default:
 
-        log_info("Other request: TODO");
+        log_info("Other request: TODO bRequest=%d", request->bRequest);
         break;
     }
 }
@@ -148,6 +150,7 @@ static void process_request(void) {
             process_standard_device_request();
             break;
         default:
+            log_error("[%s]Other request: TODO", __FUNCTION__);
             break;
     }
 }
@@ -188,6 +191,16 @@ static void process_control_transfer_stage() {
             break;
         case USB_CONTROL_STAGE_DATA_IN_IDLE:
             break;
+        case USB_CONTROL_STAGE_DATA_IN_ZERO:
+		    usb_driver.write_packet(0, NULL, 0);
+
+            if(1 == usb_driver.send_ep_data(0, true)) {
+                log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
+            }
+
+		    log_info("Switching control stage to OUT-STATUS.");
+		    usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
+            break;
         case USB_CONTROL_STAGE_STATUS_OUT:
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_SETUP;
         default:
@@ -201,17 +214,6 @@ static void in_transfer_completed_handler(unsigned int endpoint_number)
 	{
 		log_info("Switching control stage to IN-DATA.");
 		usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
-	}
-	else if (usbd_handle->control_transfer_stage == USB_CONTROL_STAGE_DATA_IN_ZERO)
-	{
-		usb_driver.write_packet(0, NULL, 0);
-
-        if(1 == usb_driver.send_ep_data(0, true)) {
-            log_error("[%d]Endpoint is already in transmitting!!!",__LINE__);
-        }
-
-		log_info("Switching control stage to OUT-STATUS.");
-		usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_OUT;
 	}
 
 	// if (endpoint_number == (configuration_descriptor_combination.usb_mouse_endpoint_descriptor.bEndpointAddress & 0x0F))
@@ -228,12 +230,12 @@ static void setup_data_received_handler(unsigned int EPNum, unsigned short byte_
         
         usb_driver.read_packet(EPNum, usbd_handle->ptr_out_buffer, byte_count);
         log_debug_array("SETUP data: ", (unsigned char*)usbd_handle->ptr_out_buffer, byte_count);
+        // update current transfer stage
+        in_transfer_completed_handler(0);
         // software setup
         process_request();
         // software request
         process_control_transfer_stage();
-        // update current transfer stage
-        in_transfer_completed_handler(0);
 
     } 
     else {
