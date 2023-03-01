@@ -154,7 +154,6 @@ static void process_standard_device_request(void) {
 
             dev_addr = request->wValue | 0x8000;
 
-            usb_driver.ack_ep_rcv(0, true);
             log_info("Standard Set Address %X request received.", dev_addr);
             usbd_handle->device_state = USB_DEVICE_STATE_ADDRESSED;
             log_info("Switching control transfer stage to IN-STATUS.");
@@ -165,7 +164,6 @@ static void process_standard_device_request(void) {
     case USB_STANDARD_SET_CONFIG:
         log_info("Standard Set Configuration request received.");
         usbd_handle->configuration_value = request->wValue;
-        usb_driver.ack_ep_rcv(0, true);
 
         usbd_configure();
 
@@ -180,6 +178,32 @@ static void process_standard_device_request(void) {
     }
 }
 
+static void process_class_interface_request() {
+    USBRequest const *request = usbd_handle->ptr_out_buffer;
+    switch (request->bRequest) {
+    case USB_HID_SETIDLE:
+        log_info("Switching control transfer to IN-STATUS.");
+        usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_IN;
+        break;
+    }
+
+}
+
+static process_standard_interface_request() {
+    USBRequest const *request = usbd_handle->ptr_out_buffer;
+    switch (request->wValue >> 8) {
+    case USB_DESCRIPTOR_TYPE_HID_REPORT:
+        usbd_handle->ptr_in_buffer = &hid_report_descriptor;
+        usbd_handle->in_data_size = sizeof(hid_report_descriptor);
+
+        log_info("Switching control transfer to IN-STATUS from %s.", __FUNCTION__);
+        usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
+        break;
+    default:
+        break;
+    }
+}
+
 static void process_request(void) {
     USBRequest const *request = usbd_handle->ptr_out_buffer;
     // UARTprintf("---Dummy log---\r\n");
@@ -188,6 +212,15 @@ static void process_request(void) {
         case USB_BM_REQUEST_TYPE_TYPE_STANDARD | USB_BM_REQUEST_TYPE_RECIPIENT_DEVICE:
             process_standard_device_request();
             break;
+
+        case USB_BM_REQUEST_TYPE_TYPE_CLASS | USB_BM_REQUEST_TYPE_RECIPIENT_INTERFACE:
+            process_class_interface_request();
+            break;
+
+        case USB_BM_REQUEST_TYPE_TYPE_STANDARD | USB_BM_REQUEST_TYPE_RECIPIENT_INTERFACE:
+            process_standard_interface_request();
+            break;
+
         default:
             log_error("[%s]Other request: TODO", __FUNCTION__);
             break;
@@ -242,6 +275,7 @@ static void process_control_transfer_stage() {
             break;
 
         case USB_CONTROL_STAGE_STATUS_IN:
+            usb_driver.ack_ep_rcv(0, true);
             // move code to in_transfer_completed_handler dev_addr
             break;
 
