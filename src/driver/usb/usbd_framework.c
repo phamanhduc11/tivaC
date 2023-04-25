@@ -23,7 +23,17 @@ void USBDInit(USBDevice *usb_device) {
 }
 
 void usbd_configure() {
-    // todo
+    struct endpointInfo ep3Info = {
+        .epType = USB_ENDPOINT_TYPE_INTERRUPT,
+        .isDoubleBuffering = 0,
+        .maxPacketSize = usb_config_set.mouse_endpoint_desc.wMaxPacketSize,
+        .FIFORamAddr = 64,
+        .FIFORamSize = USB_FIFO_RAM_SIZE_64,
+    };
+
+    usb_driver.configure_in_endpoint(0x3, ep3Info);
+
+    usb_driver.send_ep_data(0x3, true);
 }
 void USBDisable(void) {
     usb_driver.disconnect();
@@ -98,7 +108,7 @@ static void logging_request_info(void)
 }
 
 static bool reset_flag = false;
-static unsigned short dev_addr = 0;
+static volatile unsigned short dev_addr = 0;
 
 static void usb_reset_received_handler()
 {
@@ -136,7 +146,7 @@ static void process_standard_device_request(void) {
         case USB_DESCRIPTOR_TYPE_CONFIGURATION:
             log_info("- Get Config Descriptor.");
             usbd_handle->ptr_in_buffer = &usb_config_set;
-            usbd_handle->in_data_size = descriptor_length;
+            usbd_handle->in_data_size = MIN(descriptor_length, sizeof(usb_config_set));
             log_info("Switch control stage to  IN-DATA.");
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
             break;
@@ -153,8 +163,8 @@ static void process_standard_device_request(void) {
             };
 
             dev_addr = request->wValue | 0x8000;
-
             log_info("Standard Set Address %X request received.", dev_addr);
+
             usbd_handle->device_state = USB_DEVICE_STATE_ADDRESSED;
             log_info("Switching control transfer stage to IN-STATUS.");
             usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_STATUS_IN;
@@ -286,6 +296,20 @@ static void process_control_transfer_stage() {
     }
 }
 
+static void write_mouse_report() {
+    log_debug("Sending USB HID mouse report.");
+
+    HIDReport hid_report = {
+        .x = 5,
+    };
+
+    usb_driver.write_packet((usb_config_set.mouse_endpoint_desc.bEndpointAddress & 0x0F),
+                            &hid_report,
+                            sizeof(hid_report));
+    
+    usb_driver.send_ep_data(3, true);
+}
+
 static void in_transfer_completed_handler(unsigned int endpoint_number)
 {
 	if (usbd_handle->in_data_size)
@@ -294,10 +318,10 @@ static void in_transfer_completed_handler(unsigned int endpoint_number)
 		usbd_handle->control_transfer_stage = USB_CONTROL_STAGE_DATA_IN;
 	}
 
-	// if (endpoint_number == (configuration_descriptor_combination.usb_mouse_endpoint_descriptor.bEndpointAddress & 0x0F))
-	// {
-	// 	write_mouse_report();
-	// }
+	if (endpoint_number == (usb_config_set.mouse_endpoint_desc.bEndpointAddress & 0x0F))
+	{
+		write_mouse_report();
+	}
 }
 
 // Handle Endpoint 0 process
@@ -366,6 +390,9 @@ static void USBDEndpointHandler(unsigned int EPNum, unsigned int ui32IntStatus) 
             }
 
             // 0x100 Flush request
+            break;
+        case 3:
+            in_transfer_completed_handler(3);
             break;
         default:
             if (GET_TX_ENDPOINT_INT_MASK(ui32IntStatus)) {

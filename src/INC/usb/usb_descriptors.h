@@ -61,8 +61,8 @@ const unsigned char hid_report_descriptor[] = {
 typedef struct {
     USBConfigurationDescriptor config_desc;
     USBInterfaceDescriptor interface_desc;
-    USBEndpointDescriptor mouse_endpoint_desc;
     USBHIDDescriptor mouse_hid_descriptor;
+    USBEndpointDescriptor mouse_endpoint_desc;
 } USBConfigSet;
 
 const USBConfigSet usb_config_set = {

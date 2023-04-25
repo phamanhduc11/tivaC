@@ -8,15 +8,17 @@ extern "C"
 {
 #endif
 
-#define USB_FIFO_RAM_SIZE_8     0x0
-#define USB_FIFO_RAM_SIZE_16    0x1
-#define USB_FIFO_RAM_SIZE_32    0x2
-#define USB_FIFO_RAM_SIZE_64    0x3
-#define USB_FIFO_RAM_SIZE_128   0x4
-#define USB_FIFO_RAM_SIZE_256   0x5
-#define USB_FIFO_RAM_SIZE_512   0x6
-#define USB_FIFO_RAM_SIZE_1024  0x7
-#define USB_FIFO_RAM_SIZE_2048  0x8
+enum USB_FIFO_RAM_SIZE{
+USB_FIFO_RAM_SIZE_8,
+USB_FIFO_RAM_SIZE_16,
+USB_FIFO_RAM_SIZE_32,
+USB_FIFO_RAM_SIZE_64,
+USB_FIFO_RAM_SIZE_128,
+USB_FIFO_RAM_SIZE_256,
+USB_FIFO_RAM_SIZE_512,
+USB_FIFO_RAM_SIZE_1024,
+USB_FIFO_RAM_SIZE_2048,
+} ;
 
 #define USB_FIFO_ADDR_MODULATE  0x8
 
@@ -28,7 +30,7 @@ struct endpointInfo {
     USBEndpointType epType;
     bool    isDoubleBuffering;
     int     maxPacketSize;
-    int     FIFORamAddr;
+    enum USB_FIFO_RAM_SIZE FIFORamAddr;
     int     FIFORamSize;
 };
 typedef struct {

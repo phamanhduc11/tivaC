@@ -93,6 +93,15 @@
 
 #define SCB_USB_INT_EN  *(unsigned int*) (0xE000E000 + 0x104)
 
+#define BIT0    0x1
+#define BIT1    BIT0 << 1
+#define BIT2    BIT0 << 2
+#define BIT3    BIT0 << 3
+#define BIT4    BIT0 << 4
+#define BIT5    BIT0 << 5
+#define BIT6    BIT0 << 6
+#define BIT7    BIT0 << 7
+
 #ifdef ASSERT(x)
 #undef ASSERT(x)
 #endif
@@ -202,6 +211,17 @@ static void DeconfigureEndpoint(int EPNum) {
     //  Flush FIFOs
     FlushRxFifo(EPNum);
     FlushTxFifo(EPNum);
+}
+
+static void ConfigureEndpointType (int EPNum, enum USB_FIFO_RAM_SIZE epType, int isTransmit) {
+    if (isTransmit) {
+        if (USB_ENDPOINT_TYPE_BULK == epType || USB_ENDPOINT_TYPE_INTERRUPT == epType) {
+            USBRXCSRH(EPNum);
+        }
+        else {
+            USBRXCSRH(EPNum) |= BIT6;
+        }
+    }
 }
 
 /*
@@ -446,17 +466,12 @@ static void USBEndpointAck(unsigned int EPNum, int isLastPacket) {
 #define USB_GENERAL_INT_DEVICE_DISCON   0x20
 
 
-#define BIT0    0x1
-#define BIT1    BIT0 << 1
-#define BIT2    BIT0 << 2
-#define BIT3    BIT0 << 3
-#define BIT4    BIT0 << 4
-#define BIT5    BIT0 << 5
-#define BIT6    BIT0 << 6
-#define BIT7    BIT0 << 7
 
 
 static void USBDIntHandler(unsigned int ui32IntStatus) {
+    if (ui32IntStatus & (~USB_GENERAL_INT_DEVICE_SOF)) {
+        log_debug("\r\nIntStatus = %08x", ui32IntStatus);
+    }
     // Suspend Handler
     if (ui32IntStatus & USB_GENERAL_INT_DEVICE_SUSPEND) {
     }
