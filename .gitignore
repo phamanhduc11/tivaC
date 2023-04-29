@@ -16,3 +16,9 @@ TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.ccsproject
 TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.project
 TivaWare/examples/boards/ek-tm4c123gxl/uart_echo/ccs/.launches/uart_echo.launch
 projects/gcc_test/.launches/gcc_source_test.launch
+projects/sample_bootloader/.settings/com.ti.ccstudio.project.core.prefs
+projects/sample_bootloader/.launches/sample_bootloader.launch
+projects/sample_bootloader/Build/main.dis
+projects/sample_bootloader/Build/main.map
+projects/sample_bootloader/.settings/org.eclipse.core.resources.prefs
+projects/sample_bootloader/.settings/org.eclipse.core.resources.prefs
