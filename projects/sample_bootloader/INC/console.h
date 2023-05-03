@@ -14,3 +14,4 @@ enum {
 };
 
 void ConsoleHandler(void);
+void UARTSend (uint8_t data);

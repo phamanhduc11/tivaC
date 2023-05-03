@@ -56,7 +56,8 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 // To be added by user
 
-extern void UARTHandler(void);
+extern void UART0IntHandler(void);
+extern void SysTickIntHandler(void);
 
 //*****************************************************************************
 //
@@ -84,13 +85,13 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
-    IntDefaultHandler,                      // The SysTick handler
+    SysTickIntHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
     IntDefaultHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
-    UARTHandler,                      // UART0 Rx and Tx
+    UART0IntHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave

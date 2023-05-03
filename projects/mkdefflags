@@ -71,6 +71,8 @@ LDFLAGS +=--gc-sections
 # Tell the compiler to include debugging information if the DEBUG environment
 # variable is set.
 #
+CFLAGS+=${CFLAGSgcc}
+
 ifeq ($(DEBUG), 1)
 CFLAGS+= -g -DDEBUG -O0
 CXXFLAGS+= -g -DDEBUG -O0

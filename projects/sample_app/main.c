@@ -26,7 +26,25 @@
 /**
  * hello.c
  */
+
+void InitConsole()
+{
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    UARTClockSourceSet(UART0_BASE, UART_CLOCK_SYSTEM);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+//    UARTStdioConfig(0, 115200, 80000000);
+    UARTStdioConfig(0, 921600, MAP_SysCtlClockGet());
+}
+
 int main(void)
 {
+	InitConsole();
+
+	UARTprintf("---- APP ----\r\n");
+	UARTprintf("Clock: %dMHz\r\n", SysCtlClockGet()/1000000);
+	while(1);
 	return 0;
 }

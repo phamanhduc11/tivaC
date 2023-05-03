@@ -47,5 +47,5 @@ ${OUTDIR}/%.axf:
 	      '${LIBM}' '${LIBC}' '${LIBGCC}'
 	@${OBJCOPY} -O binary ${@} ${@:.axf=.bin}
 	${OBJDUMP} -x $@ > ${@:.axf=.map}
-	${OBJDUMP} -D $@ > ${@:.axf=.DIS}
+	${OBJDUMP} -D $@ > ${@:.axf=.disall}
 	${OBJDUMP} -d $@ > ${@:.axf=.dis}
